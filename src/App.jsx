@@ -18,7 +18,7 @@ function App() {
         <Route path="/add" element={<Add />} />
         <Route path="/update/:id" element={<Update />} />
         <Route path="/task" element={<Task />} />
-        <Route path="/*" element={<Navigate to='/' />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
     </div>
