@@ -1,6 +1,6 @@
 // file App.jsx
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import "./style.css"
 import Books from './pages/Books';
 import Add from './pages/Add';
@@ -18,6 +18,7 @@ function App() {
         <Route path="/add" element={<Add />} />
         <Route path="/update/:id" element={<Update />} />
         <Route path="/task" element={<Task />} />
+        <Route path="/*" element={<Navigate to='/' />} />
       </Routes>
     </BrowserRouter>
     </div>
