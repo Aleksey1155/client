@@ -4,6 +4,7 @@ import "./style.css"
 import Books from './pages/Books';
 import Add from './pages/Add';
 import Update from './pages/Update';
+import Task from './pages/Task';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Books />} />
         <Route path="/add" element={<Add />} />
         <Route path="/update/:id" element={<Update />} />
+        <Route path="/task" element={<Task />} />
       </Routes>
     </BrowserRouter>
     </div>
