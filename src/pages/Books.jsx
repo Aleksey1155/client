@@ -48,6 +48,10 @@ const Books = () => {
             <button>
                 <Link to="/add">Add new book</Link>
             </button>
+                <br /> <br />
+            <button>
+                <Link to="/task">Task page</Link>
+            </button>
         </div>
     );
 }
