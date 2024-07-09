@@ -8,7 +8,7 @@ const Books = () => {
     useEffect(() => {
         const fetchAllBooks = async () => {
             try {
-                const res = await axios.get("https://backend-ecqm.onrender.com/books");
+                const res = await axios.get("http://localhost:3001/books");
                 setBooks(res.data);
             } catch (err) {
                 console.log(err);
@@ -21,7 +21,7 @@ const Books = () => {
     const handleDelete = async (id)=>{
 
         try{
-            await axios.delete("https://backend-ecqm.onrender.com/books/" + id)
+            await axios.delete("http://localhost:3001/books/" + id)
             window.location.reload()
         }catch{
             console.log(err)
@@ -30,7 +30,7 @@ const Books = () => {
 
     return (
         <div>
-            <h2> MY new Books</h2>
+            <h2>Books</h2>
             <div className="books">
                 {books.map(book => (
                     <div className="book" key={book.id}>
@@ -47,10 +47,6 @@ const Books = () => {
             
             <button>
                 <Link to="/add">Add new book</Link>
-            </button>
-                <br /> <br />
-            <button>
-                <Link to="/task">Task page</Link>
             </button>
         </div>
     );

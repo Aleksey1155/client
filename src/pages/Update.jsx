@@ -22,7 +22,7 @@ const Update = () => {
     const handleClick = async e => {
         e.preventDefault()
         try{
-            await axios.put("https://backend-ecqm.onrender.com/books/" + bookId, book)
+            await axios.put("http://localhost:3001/books/" + bookId, book)
             navigate("/")
         }catch(err){
             console.log(err)

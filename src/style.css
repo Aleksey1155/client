@@ -1,16 +1,15 @@
 .App{
     height: 100vh;
-    padding: 0px 10px;
+    padding: 0px 100px;
     display: flex;
-    align-items: normal;
-    justify-content: left;
-    text-align: left;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .books{
     display: flex;
     gap: 10px;
-    text-align: left;
 }
 
 .book{
@@ -67,8 +66,3 @@ input{
     font-weight: bold;
     cursor: pointer;
 }
-
-.task{
-    text-align: left;
-}
-
