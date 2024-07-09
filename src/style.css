@@ -2,68 +2,82 @@
     height: 100vh;
     padding: 0px 100px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
-.projects-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 1em;
-    min-width: 400px;
+.projects {
+    display: flex;
+    gap: 10px;
 }
 
-.projects-table th, .projects-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    text-align: left;
+.project {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
 }
 
-.projects-table th {
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-.projects-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-}
-
-.projects-table tbody tr:nth-of-type(odd) {
-    background-color: #fff;
+img {
+    width: 100px;
+    height: 200px;
+    object-fit: cover;
+    background-color: rgb(203, 238, 227);
 }
 
 .delete {
     border: none;
-    padding: 5px 10px;
+    padding: 3px 6px;
+    border-color: white;
     cursor: pointer;
-    color: white;
-    background-color: red;
-    margin-right: 5px;
+    color: red;
+    margin-bottom: 5px; /* Додаємо відступ знизу */
 }
 
 .update {
     border: none;
-    padding: 5px 10px;
+    padding: 3px 6px;
+    border-color: white;
     cursor: pointer;
-    color: white;
-    background-color: blue;
-    text-decoration: none;
+    color: blue;
+    margin-top: 5px; /* Додаємо відступ зверху */
 }
 
-button {
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+input {
+    width: 250px;
+    padding: 10px;
+    border: 1px solid gray;
+}
+
+.formButton {
     border: none;
     padding: 10px;
     background-color: rgb(196, 158, 144);
     color: white;
     font-weight: bold;
     cursor: pointer;
+}
+
+.projects-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
 }
 
-button a {
-    color: white;
-    text-decoration: none;
+.projects-table th, .projects-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.projects-table th {
+    background-color: #f2f2f2;
 }

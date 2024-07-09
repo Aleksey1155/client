@@ -62,8 +62,8 @@ const Projects = () => {
                     ))}
                 </tbody>
             </table>
-            <button>
-                <Link to="/add">Add new project</Link>
+            <button  className="formButton">
+                <Link to="/add_project">Add new project</Link>
             </button>
         </div>
     );

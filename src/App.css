@@ -1,44 +1,85 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.App {
+  height: 100vh;
+  padding: 0px 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
-
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.projects {
+  display: flex;
+  gap: 10px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.project {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+img {
+  width: 100px;
+  height: 200px;
+  object-fit: cover;
+  background-color: rgb(203, 238, 227);
 }
 
-.card {
-  padding: 2em;
+.delete {
+  border: none;
+  padding: 3px 6px;
+  border-color: white;
+  cursor: pointer;
+  color: white; /* Додано */
+  background-color: red; /* Додано */
+  margin-bottom: 5px; /* Додаємо відступ знизу */
 }
 
-.read-the-docs {
-  color: #888;
+.update {
+  border: none;
+  padding: 3px 6px;
+  border-color: white;
+  cursor: pointer;
+  color: white; /* Додано */
+  background-color: blue; /* Додано */
+  margin-top: 5px; /* Додаємо відступ зверху */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input {
+  width: 250px;
+  padding: 10px;
+  border: 1px solid gray;
+}
+
+.formButton {
+  border: none;
+  padding: 10px;
+  background-color: rgb(196, 158, 144);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.projects-table th, .projects-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.projects-table th {
+  background-color: #f2f2f2;
 }
