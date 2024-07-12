@@ -21,7 +21,7 @@ const AddProject = () => {
         e.preventDefault()
         try{
             await axios.post("http://localhost:3001/projects", project)
-            navigate("/")
+            navigate("/projects")
         }catch(err){
             console.log(err)
         }
