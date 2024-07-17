@@ -1,51 +1,109 @@
-import React, { useState } from "react";
-import {useNavigate, useLocation} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const UpdateProject = () => {
     const [project, setProject] = useState({
-        title:"",
-        description:"",
-        start_date:"",
-        end_date:"",
-        status_id:"",
-    })
+        title: "",
+        description: "",
+        start_date: "",
+        end_date: "",
+        status_id: "",
+    });
 
-    const navigate = useNavigate()
-    const location = useLocation()
-    const projectId = location.pathname.split("/")[2]
-    
+    const [statuses, setStatuses] = useState([]);
 
-    const handleChange = (e) =>{
-        setProject(prev=>({...prev, [e.target.name]: e.target.value}));
-    }
+    const navigate = useNavigate();
+    const location = useLocation();
+    const projectId = location.pathname.split("/")[2];
 
-    const handleClick = async e => {
-        e.preventDefault()
-        try{
-            await axios.put("http://localhost:3001/projects/" + projectId, project)
-            navigate("/projects")
-        }catch(err){
-            console.log(err)
+    useEffect(() => {
+        const fetchProject = async () => {
+            try {
+                const res = await axios.get(`http://localhost:3001/projects/${projectId}`);
+                const projectData = res.data;
+                setProject({
+                    title: projectData.title,
+                    description: projectData.description,
+                    start_date: projectData.start_date ? new Date(projectData.start_date).toISOString().split('T')[0] : "",
+                    end_date: projectData.end_date ? new Date(projectData.end_date).toISOString().split('T')[0] : "",
+                    status_id: projectData.status_id,
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        const fetchStatuses = async () => {
+            try {
+                const res = await axios.get("http://localhost:3001/project_statuses");
+                setStatuses(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        fetchProject();
+        fetchStatuses();
+    }, [projectId]);
+
+    const handleChange = (e) => {
+        setProject(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleClick = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.put(`http://localhost:3001/projects/${projectId}`, project);
+            navigate("/projects");
+        } catch (err) {
+            console.log(err);
         }
-    }
+    };
 
-    console.log(project)
     return (
-
         <div className="form">
             <h1>Update the Project</h1>
-            <input type="text" placeholder="title" onChange={handleChange} name="title"/>
-            <textarea placeholder="description" onChange={handleChange} name="description" />
-            <input type="date" placeholder="start_date" onChange={handleChange} name="start_date"/>
-            <input type="date" placeholder="end_date" onChange={handleChange} name="end_date"/>
-            <input type="number" placeholder="status_id" onChange={handleChange} name="status_id"/>
-
-            <button className="formButton"  onClick={handleClick}>Update</button>
-
+            <input
+                type="text"
+                placeholder="title"
+                value={project.title}
+                onChange={handleChange}
+                name="title"
+            />
+            <textarea
+                placeholder="description"
+                value={project.description}
+                onChange={handleChange}
+                name="description"
+            />
+            <input
+                type="date"
+                value={project.start_date}
+                onChange={handleChange}
+                name="start_date"
+            />
+            <input
+                type="date"
+                value={project.end_date}
+                onChange={handleChange}
+                name="end_date"
+            />
+            <select
+                value={project.status_id}
+                onChange={handleChange}
+                name="status_id"
+            >
+                <option value="">Вибрати статус</option>
+                {statuses.map(status => (
+                    <option key={status.id} value={status.id}>
+                        {status.status_name}
+                    </option>
+                ))}
+            </select>
+            <button className="formButton" onClick={handleClick}>Update</button>
         </div>
+    );
+};
 
-    )
-}
-
-export default UpdateProject
+export default UpdateProject;
