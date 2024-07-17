@@ -34,10 +34,19 @@ const Projects = () => {
 
     return (
         <div>
+           <br />
+            <div className="nav-links">
+                
+                <Link to="/" className="nav-link">Головна</Link>
+                <Link to="/tasks" className="nav-link">Завдання</Link>
+                <Link to="/users" className="nav-link">Виконавці</Link>
+                <Link to="/assignments" className="nav-link">Призначення</Link>
+            </div>
             <h2>Projects</h2>
             <table className="projects-table">
                 <thead>
                     <tr>
+                        <th>№ Project</th>
                         <th>Title</th>
                         <th>Description</th>
                         <th>Start Date</th>
@@ -47,13 +56,14 @@ const Projects = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {projects.map(project => (
+                    {Array.isArray(projects) && projects.map(project => (
                         <tr key={project.id}>
+                            <td>{project.id}</td>
                             <td>{project.title}</td>
                             <td>{project.description}</td>
                             <td>{formatDate(project.start_date)}</td>
                             <td>{formatDate(project.end_date)}</td>
-                            <td>{project.status}</td>
+                            <td>{project.status_name}</td>
                             <td>
                                 <button className="delete" onClick={() => handleDelete(project.id)}>Delete</button>
                                 <Link to={`/update_project/${project.id}`} className="update">Update</Link>
@@ -62,9 +72,9 @@ const Projects = () => {
                     ))}
                 </tbody>
             </table>
-            <button  className="formButton">
-                <Link to="/add_project">Add new project</Link>
-            </button>
+            <br />
+            <Link to="/add_project" className="nav-addlink">Add new project</Link>
+            
         </div>
     );
 }

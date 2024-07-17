@@ -9,8 +9,8 @@ const AddTask = () => {
         description:"",
         start_date:"",
         end_date:"",
-        priority:"",
-        status:"",
+        priority_id:"",
+        status_id:"",
     })
 
     const navigate = useNavigate()
@@ -33,16 +33,16 @@ const AddTask = () => {
     return (
 
         <div className="form">
-            <h1>Add new project</h1>
+            <h1>Add new task</h1>
             <input type="number" placeholder="project_id" onChange={handleChange} name="project_id"/>
             <input type="text" placeholder="title" onChange={handleChange} name="title"/>
-            <input type="text" placeholder="description" onChange={handleChange} name="description"/>
+            <textarea placeholder="description" onChange={handleChange} name="description" />
             <input type="date" placeholder="start_date" onChange={handleChange} name="start_date"/>
             <input type="date" placeholder="end_date" onChange={handleChange} name="end_date"/>
-            <input type="text" placeholder="priority" onChange={handleChange} name="priority"/>
-            <input type="text" placeholder="status" onChange={handleChange} name="status"/>
+            <input type="number" placeholder="priority_id" onChange={handleChange} name="priority_id"/>
+            <input type="number" placeholder="status_id" onChange={handleChange} name="status_id"/>
 
-            <button className="formButton" onClick={handleClick}>Add</button>
+            <button className="nav-addlink" onClick={handleClick}>Add</button>
 
         </div>
 

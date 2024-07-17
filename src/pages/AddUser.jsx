@@ -7,6 +7,7 @@ const AddUser = () => {
         email:"",
         name:"",
         phone:"",
+        role_id:"",
     })
 
     const navigate = useNavigate()
@@ -33,8 +34,9 @@ const AddUser = () => {
             <input type="text" placeholder="name" onChange={handleChange} name="name"/>
             <input type="text" placeholder="email" onChange={handleChange} name="email"/>
             <input type="text" placeholder="phone" onChange={handleChange} name="phone"/>
+            <input type="number" placeholder="role_id" onChange={handleChange} name="role_id"/>
 
-            <button className="formButton" onClick={handleClick}>Add</button>
+            <button className="nav-addlink" onClick={handleClick}>Add</button>
 
         </div>
 

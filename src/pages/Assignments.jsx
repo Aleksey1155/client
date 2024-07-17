@@ -34,6 +34,12 @@ const Assignments = () => {
 
     return (
         <div>
+             <div className="nav-links">
+                <Link to="/" className="nav-link">Головна</Link>
+                <Link to="/projects" className="nav-link">Проекти</Link>
+                <Link to="/tasks" className="nav-link">Завдання</Link>
+                <Link to="/users" className="nav-link">Виконавці</Link>
+            </div>
             <h2>Assignments</h2>
             <table className="projects-table">
                 <thead>
@@ -48,7 +54,7 @@ const Assignments = () => {
                     {assignments.map(assignment => (
                         <tr key={assignment.id}>
                             <td>{assignment.task_id}</td>
-                            <td>{assignment.user_id}</td>
+                            <td>{assignment.user_name}</td>
                             <td>{formatDate(assignment.assigned_date)}</td>
                             
                             <td>
@@ -59,9 +65,8 @@ const Assignments = () => {
                     ))}
                 </tbody>
             </table>
-            <button  className="formButton">
-                <Link to="/add_assignment">Add new assignment</Link>
-            </button>
+            <br />
+            <Link to="/add_assignment" className="nav-addlink">Add new assignment</Link>
         </div>
     );
 }

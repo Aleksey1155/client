@@ -8,7 +8,7 @@ const UpdateProject = () => {
         description:"",
         start_date:"",
         end_date:"",
-        status:"",
+        status_id:"",
     })
 
     const navigate = useNavigate()
@@ -36,10 +36,10 @@ const UpdateProject = () => {
         <div className="form">
             <h1>Update the Project</h1>
             <input type="text" placeholder="title" onChange={handleChange} name="title"/>
-            <input type="text" placeholder="description" onChange={handleChange} name="description"/>
+            <textarea placeholder="description" onChange={handleChange} name="description" />
             <input type="date" placeholder="start_date" onChange={handleChange} name="start_date"/>
             <input type="date" placeholder="end_date" onChange={handleChange} name="end_date"/>
-            <input type="text" placeholder="status" onChange={handleChange} name="status"/>
+            <input type="number" placeholder="status_id" onChange={handleChange} name="status_id"/>
 
             <button className="formButton"  onClick={handleClick}>Update</button>
 

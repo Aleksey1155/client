@@ -35,7 +35,7 @@ const AddAssignment = () => {
             <input type="number" placeholder="user_id" onChange={handleChange} name="user_id"/>
             <input type="date" placeholder="assigned_date" onChange={handleChange} name="assigned_date"/>
 
-            <button className="formButton" onClick={handleClick}>Add</button>
+            <button className="nav-addlink" onClick={handleClick}>Add</button>
 
         </div>
 

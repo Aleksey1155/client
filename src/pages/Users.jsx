@@ -27,29 +27,35 @@ const Users = () => {
         }
     };
 
-    // const formatDate = (dateString) => {
-    //     const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-    //     return new Date(dateString).toLocaleDateString(undefined, options);
-    // };
 
     return (
         <div>
+            <div className="nav-links">
+                <Link to="/" className="nav-link">Головна</Link>
+                <Link to="/projects" className="nav-link">Проекти</Link>
+                <Link to="/tasks" className="nav-link">Завдання</Link>
+                <Link to="/assignments" className="nav-link">Призначення</Link>
+            </div>
             <h2>Users</h2>
             <table className="projects-table">
                 <thead>
                     <tr>
+                        <th>User ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Role ID</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map(user => (
                         <tr key={user.id}>
+                            <td>{user.id}</td>
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.phone}</td>
+                            <td>{user.role_name}</td>
                             <td>
                                 <button className="delete" onClick={() => handleDelete(user.id)}>Delete</button>
                                 <Link to={`/update_user/${user.id}`} className="update">Update</Link>
@@ -58,9 +64,8 @@ const Users = () => {
                     ))}
                 </tbody>
             </table>
-            <button  className="formButton">
-                <Link to="/add_user">Add new user</Link>
-            </button>
+            <br />
+            <Link to="/add_user" className="nav-addlink">Add new user</Link>
         </div>
     );
 }

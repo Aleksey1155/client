@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-
 const IndexPage = () => {
     const [dashboardData, setDashboardData] = useState([]);
 
@@ -32,8 +31,12 @@ const IndexPage = () => {
                 <Link to="/users" className="nav-link">Виконавці</Link>
                 <Link to="/assignments" className="nav-link">Призначення</Link>
             </div>
+            <div className="nav-addlinks">
+                <h3>Додати проект</h3>
+                <Link to="/add_project" className="nav-addlink">Add new project</Link>
+            </div>
 
-            <h2>Таблиця призначень</h2>
+            <h2>Таблиця завдань та призначень</h2>
             <table className="dashboard-table">
                 <thead>
                     <tr>
@@ -48,7 +51,7 @@ const IndexPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {dashboardData.map((item, index) => (
+                    {Array.isArray(dashboardData) && dashboardData.map((item, index) => (
                         <tr key={index}>
                             <td>{item.task_title}</td>
                             <td>{item.project_title}</td>
