@@ -19,13 +19,17 @@ const Projects = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        try {
-            await axios.delete("http://localhost:3001/projects/" + id);
-            setProjects(projects.filter(project => project.id !== id));
-        } catch (err) {
-            console.log(err);
+        const confirmed = window.confirm("Ви впевнені, що хочете видалити цей проект?");
+        if (confirmed) {
+            try {
+                await axios.delete("http://localhost:3001/projects/" + id);
+                setProjects(projects.filter(project => project.id !== id));
+            } catch (err) {
+                console.log(err);
+            }
         }
     };
+    
 
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };

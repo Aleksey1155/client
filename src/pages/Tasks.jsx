@@ -38,14 +38,18 @@ const Tasks = () => {
     };
 
     const handleDelete = async (id) => {
-        try {
-            await axios.delete("http://localhost:3001/tasks/" + id);
-            setTasks(sortTasks(tasks.filter(task => task.id !== id)));
-        } catch (err) {
-            console.log(err);
+        const confirmed = window.confirm("Ви впевнені, що хочете видалити цей проект?");
+        if (confirmed) {
+            try {
+                await axios.delete("http://localhost:3001/tasks/" + id);
+                setTasks(sortTasks(tasks.filter(task => task.id !== id)));
+            } catch (err) {
+                console.log(err);
+            }
         }
     };
 
+    
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);

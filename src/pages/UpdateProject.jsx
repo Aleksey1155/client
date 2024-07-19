@@ -89,19 +89,16 @@ const UpdateProject = () => {
                 onChange={handleChange}
                 name="end_date"
             />
-            <select
-                value={project.status_id}
-                onChange={handleChange}
-                name="status_id"
-            >
-                <option value="">Вибрати статус</option>
-                {statuses.map(status => (
+            <select name="status_id" 
+            onChange={handleChange} 
+            value={project.status_id}>
+                {statuses.map((status) => (
                     <option key={status.id} value={status.id}>
                         {status.status_name}
                     </option>
                 ))}
             </select>
-            <button className="formButton" onClick={handleClick}>Update</button>
+            <button className="nav-addlink" onClick={handleClick}>Update</button>
         </div>
     );
 };
