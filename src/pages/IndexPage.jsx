@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const IndexPage = () => {
+  // Змінні стану для зберігання даних, отриманих з API та фільтрів
   const [dashboardData, setDashboardData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [taskStatus, setTaskStatus] = useState('');
@@ -12,6 +13,7 @@ const IndexPage = () => {
   const [taskStatuses, setTaskStatuses] = useState([]);
   const [projectStatuses, setProjectStatuses] = useState([]);
 
+  // Виконується при першому рендері для отримання даних з API
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -23,6 +25,7 @@ const IndexPage = () => {
       }
     };
 
+    // Отримання даних про користувачів
     const fetchUsers = async () => {
       try {
         const res = await axios.get("http://localhost:3001/users");
@@ -33,6 +36,7 @@ const IndexPage = () => {
       }
     };
 
+    // Отримання даних про статуси завдань
     const fetchTaskStatuses = async () => {
       try {
         const res = await axios.get("http://localhost:3001/task_statuses");
@@ -43,6 +47,7 @@ const IndexPage = () => {
       }
     };
 
+    // Отримання даних про статуси проектів
     const fetchProjectStatuses = async () => {
       try {
         const res = await axios.get("http://localhost:3001/project_statuses");
@@ -53,16 +58,19 @@ const IndexPage = () => {
       }
     };
 
+    // Викликаємо функції для отримання даних
     fetchDashboardData();
     fetchUsers();
     fetchTaskStatuses();
     fetchProjectStatuses();
   }, []);
 
+  // Виконується при зміні фільтрів
   useEffect(() => {
     filterData();
   }, [taskStatus, projectStatus, userId]);
 
+  // Функція для фільтрації даних відповідно до вибраних фільтрів
   const filterData = () => {
     let filtered = dashboardData;
 
@@ -81,6 +89,7 @@ const IndexPage = () => {
     setFilteredData(filtered);
   };
 
+  // Функція для форматування дати
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -88,23 +97,29 @@ const IndexPage = () => {
 
   return (
     <div>
+      {/* Посилання на сторінку з графіками */}
       <Link to="/graphs" className="graphs-link">
-      <img src="/src/assets/graphs.png" alt="Іконка графіків" />
-      Графіки
-    </Link>
-      <div className="nav-links">
+        <img src="/src/assets/graphs.png" alt="Іконка графіків" />
+        Графіки
+      </Link>
       
+      {/* Навігаційні посилання */}
+      <div className="nav-links">
         <Link to="/projects" className="nav-link">Проекти</Link>
         <Link to="/tasks" className="nav-link">Завдання</Link>
         <Link to="/users" className="nav-link">Виконавці</Link>
         <Link to="/assignments" className="nav-link">Призначення</Link>
       </div>
+      
+      {/* Посилання для додавання проекту */}
       <div className="nav-addlinks">
         <h3>Додати проект</h3>
         <Link to="/add_project" className="nav-addlink">Add new project</Link>
       </div>
 
       <h2>Таблиця завдань та призначень</h2>
+
+      {/* Фільтри для таблиці */}
       <div className="filter-select">
         <p>Фільтр статус завдання &emsp;</p>
         <select name="task-status" onChange={(e) => setTaskStatus(e.target.value)} value={taskStatus}>
@@ -113,6 +128,7 @@ const IndexPage = () => {
             <option key={status.id} value={status.status_name}>{status.status_name}</option>
           ))}
         </select> &emsp;
+
         <p>Фільтр статус проекта &ensp;</p>
         <select name="project-status" onChange={(e) => setProjectStatus(e.target.value)} value={projectStatus}>
           <option value="">Всі</option>
@@ -120,6 +136,7 @@ const IndexPage = () => {
             <option key={status.id} value={status.status_name}>{status.status_name}</option>
           ))}
         </select> &emsp;
+
         <p>Фільтр по виконавцям &ensp;</p>
         <select name="user-select" onChange={(e) => setUserId(e.target.value)} value={userId}>
           <option value="">Всі</option>
@@ -128,6 +145,8 @@ const IndexPage = () => {
           ))}
         </select>
       </div>
+
+      {/* Таблиця з даними */}
       <table className="dashboard-table">
         <thead>
           <tr>
