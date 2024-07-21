@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
+    const [selectedStatus, setSelectedStatus] = useState('');
 
     useEffect(() => {
         const fetchAllProjects = async () => {
@@ -29,24 +30,47 @@ const Projects = () => {
             }
         }
     };
-    
 
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
+    const handleStatusChange = (e) => {
+        setSelectedStatus(e.target.value);
+    };
+
+    const filteredProjects = selectedStatus 
+        ? projects.filter(project => project.status_name === selectedStatus)
+        : projects;
+
+    const truncateDescription = (description, maxLength) => {
+        if (description.length > maxLength) {
+            return description.substring(0, maxLength) + '...';
+        }
+        return description;
+    };
+
     return (
         <div>
-           <br />
             <div className="nav-links">
-                
                 <Link to="/" className="nav-link">Головна</Link>
                 <Link to="/tasks" className="nav-link">Завдання</Link>
                 <Link to="/users" className="nav-link">Виконавці</Link>
                 <Link to="/assignments" className="nav-link">Призначення</Link>
             </div>
+
             <h2>Projects</h2>
+
+            <select name="status-select" onChange={handleStatusChange} value={selectedStatus}>
+                <option value="">Виберіть статус</option>
+                {Array.from(new Set(projects.map(project => project.status_name))).map(status => (
+                    <option key={status} value={status}>
+                        {status}
+                    </option>
+                ))}
+            </select>
+
             <table className="projects-table">
                 <thead>
                     <tr>
@@ -60,11 +84,15 @@ const Projects = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.isArray(projects) && projects.map(project => (
+                    {Array.isArray(filteredProjects) && filteredProjects.map(project => (
                         <tr key={project.id}>
                             <td>{project.id}</td>
-                            <td>{project.title}</td>
-                            <td>{project.description}</td>
+                            <td>
+                                <Link to={`/project/${project.id}`}>
+                                    {project.title}
+                                </Link>
+                            </td>
+                            <td dangerouslySetInnerHTML={{ __html: truncateDescription(project.description, 500) }}></td>
                             <td>{formatDate(project.start_date)}</td>
                             <td>{formatDate(project.end_date)}</td>
                             <td>{project.status_name}</td>
@@ -78,9 +106,8 @@ const Projects = () => {
             </table>
             <br />
             <Link to="/add_project" className="nav-addlink">Add new project</Link>
-            
         </div>
     );
-}
+};
 
 export default Projects;

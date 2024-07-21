@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AddProject = () => {
     const [project, setProject] = useState({
@@ -12,7 +14,6 @@ const AddProject = () => {
     });
 
     const [statuses, setStatuses] = useState([]);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,6 +33,10 @@ const AddProject = () => {
         setProject((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const handleEditorChange = (content) => {
+        setProject(prev => ({ ...prev, description: content }));
+    };
+
     const handleClick = async (e) => {
         e.preventDefault();
         try {
@@ -46,7 +51,26 @@ const AddProject = () => {
         <div className="form">
             <h1>Add new project</h1>
             <input type="text" placeholder="title" onChange={handleChange} name="title" />
-            <textarea placeholder="description" onChange={handleChange} name="description" />
+            <ReactQuill
+                value={project.description}
+                onChange={handleEditorChange}
+                modules={{
+                    toolbar: [
+                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                        [{size: []}],
+                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                        ['link', 'image'],
+                        ['clean']
+                    ],
+                }}
+                formats={[
+                    'header', 'font', 'size',
+                    'bold', 'italic', 'underline', 'strike', 'blockquote',
+                    'list', 'bullet', 'indent',
+                    'link', 'image'
+                ]}
+            />
             <input type="date" placeholder="start_date" onChange={handleChange} name="start_date" />
             <input type="date" placeholder="end_date" onChange={handleChange} name="end_date" />
             <select name="status_id" onChange={handleChange} value={project.status_id}>

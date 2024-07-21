@@ -1,12 +1,11 @@
 .App {
-    
-    padding: 0px 100px;
+   
+    padding: 0px 20px; /* Зменшено відступи */
     display: flex;
+    flex-direction: column; /* Додаємо цю властивість для кращого вирівнювання контенту */
     align-items: center;
-    justify-content: center;
     text-align: center;
     margin-top: 20px;
-   
 }
 
 .projects {
@@ -84,7 +83,6 @@ input {
     background-color: #f2f2f2;
 }
 
-
 .dashboard-table {
     width: 100%;
     border-collapse: collapse;
@@ -100,7 +98,6 @@ input {
     background-color: #f2f2f2;
     color: black;
 }
-
 
 .nav-links {
     display: flex;
@@ -124,7 +121,6 @@ input {
     color: white;
 }
 
-
 .nav-addlinks {
     display: flex;
     align-items: center;
@@ -147,18 +143,13 @@ input {
 }
 
 .textarea {
-    width: 100%; 
-    min-height: 100px; 
-    resize: both; 
-    padding: 10px; 
-    border: 1px solid gray; 
-   
-    box-sizing: border-box; 
+    width: 100%;
+    min-height: 100px;
+    resize: both;
+    padding: 10px;
+    border: 1px solid gray;
+    box-sizing: border-box;
 }
-
-
-
-
 
 .task-title-red {
     color: red;
@@ -174,5 +165,57 @@ input {
 
 .dashboard-links {
     text-align: left;
-   
 }
+
+.filter-select {
+    display: flex;
+    align-items: center;
+}
+
+.canvas-container {
+    width: 100%;
+}
+
+.canvas-container canvas {
+    width: 100%;
+    height: 400px;
+}
+
+.graphs-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none; 
+    color: inherit; 
+}
+
+.graphs-link img {
+    width: 25px;
+    height: 21px;
+    margin-right: 8px;
+}
+
+.dataCard {
+    background-color: #efefef;
+    border-radius: 0.5em;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    padding: 1em;
+  }
+  
+  .revenueCard {
+    width: 92%;
+    height: 20rem;
+  }
+  
+  .customerCard {
+    width: 50%;
+    height: 20rem;
+  }
+  
+  .categoryCard {
+    width: 40%;
+    height: 20rem;
+  }
+
+  .details{
+    text-align: left;
+  }

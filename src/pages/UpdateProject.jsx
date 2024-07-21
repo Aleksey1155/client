@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import Quill styles
 
 const UpdateProject = () => {
     const [project, setProject] = useState({
@@ -51,6 +53,10 @@ const UpdateProject = () => {
         setProject(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const handleEditorChange = (content) => {
+        setProject(prev => ({ ...prev, description: content }));
+    };
+
     const handleClick = async (e) => {
         e.preventDefault();
         try {
@@ -71,11 +77,25 @@ const UpdateProject = () => {
                 onChange={handleChange}
                 name="title"
             />
-            <textarea
-                placeholder="description"
+            <ReactQuill
                 value={project.description}
-                onChange={handleChange}
-                name="description"
+                onChange={handleEditorChange}
+                modules={{
+                    toolbar: [
+                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                        [{size: []}],
+                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                        ['link', 'image'],
+                        ['clean']
+                    ],
+                }}
+                formats={[
+                    'header', 'font', 'size',
+                    'bold', 'italic', 'underline', 'strike', 'blockquote',
+                    'list', 'bullet', 'indent',
+                    'link', 'image'
+                ]}
             />
             <input
                 type="date"
