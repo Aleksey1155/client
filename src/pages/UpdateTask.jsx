@@ -27,7 +27,7 @@ const UpdateTask = () => {
             try {
                 const res = await axios.get(`http://localhost:3001/tasks/${taskId}`);
                 const taskData = res.data;
-                // Змініть формат дати для полів input type="date"
+                
                 taskData.start_date = new Date(taskData.start_date).toISOString().split('T')[0];
                 taskData.end_date = new Date(taskData.end_date).toISOString().split('T')[0];
                 setTask(taskData);
