@@ -56,9 +56,9 @@ const AddTask = () => {
 
     return (
         <div className="form">
-            <h1>Add new task</h1>
-            <input type="number" placeholder="project_id" onChange={handleChange} name="project_id" />
-            <input type="text" placeholder="title" onChange={handleChange} name="title" />
+            <h1>Додати нове завдання</h1>
+            <input type="number" placeholder="id проекту" onChange={handleChange} name="project_id" />
+            <input type="text" placeholder="Назва нового завдання" onChange={handleChange} name="title" />
             <ReactQuill
                 value={task.description}
                 onChange={handleEditorChange}
@@ -82,7 +82,7 @@ const AddTask = () => {
             <input type="date" placeholder="start_date" onChange={handleChange} name="start_date" />
             <input type="date" placeholder="end_date" onChange={handleChange} name="end_date" />
             <select name="priority_id" onChange={handleChange} value={task.priority_id}>
-                <option value="" disabled>Select priority</option>
+                <option value="" disabled>Виберіть приоритет</option>
                 {priorities.map((priority) => (
                     <option key={priority.id} value={priority.id}>
                         {priority.priority_name}
@@ -90,14 +90,14 @@ const AddTask = () => {
                 ))}
             </select>
             <select name="status_id" onChange={handleChange} value={task.status_id}>
-                <option value="" disabled>Select status</option>
+                <option value="" disabled>Виберіть статус</option>
                 {statuses.map((status) => (
                     <option key={status.id} value={status.id}>
                         {status.status_name}
                     </option>
                 ))}
             </select>
-            <button className="nav-addlink" onClick={handleClick}>Add</button>
+            <button className="nav-addlink" onClick={handleClick}>Додати</button>
         </div>
     );
 };

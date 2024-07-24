@@ -64,7 +64,7 @@ const Assignments = () => {
                 <Link to="/tasks" className="nav-link">Завдання</Link>
                 <Link to="/users" className="nav-link">Виконавці</Link>
             </div>
-            <h2>Assignments</h2>
+            <h2>Призначення</h2>
             <select name="filtr-select" onChange={handleFilterChange} value={selectedUser}>
                     <option value="">Всі виконавці</option>
                     {users.map(user => (
@@ -74,10 +74,10 @@ const Assignments = () => {
             <table className="projects-table">
                 <thead>
                     <tr>
-                        <th>Task Id</th>
-                        <th>User Id</th>
-                        <th>Start Date</th>
-                        <th>Actions</th>
+                        <th>Номер Завдання</th>
+                        <th>ПІБ виконавця</th>
+                        <th>Дата призначення</th>
+                        <th>Дії</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,15 +87,15 @@ const Assignments = () => {
                             <td>{assignment.user_name}</td>
                             <td>{formatDate(assignment.assigned_date)}</td>
                             <td>
-                                <button className="delete" onClick={() => handleDelete(assignment.id)}>Delete</button>
-                                <Link to={`/update_assignment/${assignment.id}`} className="update">Update</Link>
+                                <button className="delete" onClick={() => handleDelete(assignment.id)}>Видалити</button>
+                                <Link to={`/update_assignment/${assignment.id}`} className="update">Редагувати</Link>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             <br />
-            <Link to="/add_assignment" className="nav-addlink">Add new assignment</Link>
+            <Link to="/add_assignment" className="nav-addlink">Додати нове призначення</Link>
         </div>
     );
 }

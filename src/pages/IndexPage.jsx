@@ -114,7 +114,7 @@ const IndexPage = () => {
       {/* Посилання для додавання проекту */}
       <div className="nav-addlinks">
         <h3>Додати проект</h3>
-        <Link to="/add_project" className="nav-addlink">Add new project</Link>
+        <Link to="/add_project" className="nav-addlink">Додати новий проект</Link>
       </div>
 
       <h2>Таблиця завдань та призначень</h2>
@@ -150,14 +150,14 @@ const IndexPage = () => {
       <table className="dashboard-table">
         <thead>
           <tr>
-            <th>Task Title</th>
-            <th>Project Title</th>
-            <th>User Name</th>
-            <th>Assigned Date</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Task Status</th>
-            <th>Project Status</th>
+            <th>Назва Завдання</th>
+            <th>Назва проекту</th>
+            <th>ПІБ Виконавця</th>
+            <th>Дата Призначення</th>
+            <th>Початок Завдання</th>
+            <th>Кінець Завдання</th>
+            <th>Статус Завдання</th>
+            <th>Статус Проекту</th>
           </tr>
         </thead>
         <tbody>

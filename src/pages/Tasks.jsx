@@ -99,7 +99,7 @@ const Tasks = () => {
                 <Link to="/users" className="nav-link">Виконавці</Link>
                 <Link to="/assignments" className="nav-link">Призначення</Link>
             </div>
-            <h2>Tasks</h2>
+            <h2>Завдання</h2>
             <div className="filter-select">
                 <p>Фільтр за статусом &emsp;</p>
                 <select name="task-status" onChange={(e) => setSelectedStatus(e.target.value)} value={selectedStatus}>
@@ -120,14 +120,14 @@ const Tasks = () => {
             <table className="projects-table">
                 <thead>
                     <tr>
-                        <th>Project Id</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Номер Проекту</th>
+                        <th>Назва Завдання</th>
+                        <th>Опис Завдання</th>
+                        <th>Дата Початку</th>
+                        <th>Дата Закінчення</th>
+                        <th>Приоритет Завдання</th>
+                        <th>Статус Завдання</th>
+                        <th>Дії</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,15 +145,15 @@ const Tasks = () => {
                             <td>{task.priority_name}</td>
                             <td>{task.status_name}</td>
                             <td>
-                                <button className="delete" onClick={() => handleDelete(task.id)}>Delete</button>
-                                <Link to={`/update_task/${task.id}`} className="update">Update</Link>
+                                <button className="delete" onClick={() => handleDelete(task.id)}>Видалити</button>
+                                <Link to={`/update_task/${task.id}`} className="update">Редагувати</Link>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             <br />
-            <Link to="/add_task" className="nav-addlink">Add new task</Link>
+            <Link to="/add_task" className="nav-addlink">Додати нове завдання</Link>
         </div>
     );
 }

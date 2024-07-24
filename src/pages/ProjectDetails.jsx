@@ -93,27 +93,27 @@ const ProjectDetails = () => {
                 <Link to="/assignments" className="nav-link">Призначення</Link>
             </div>
 
-            <h2>Project Details</h2>
+            <h2>Деталі Проекта</h2>
             <div>
                 <h3>{project.title}</h3>
                 <div dangerouslySetInnerHTML={{ __html: project.description }} />
-                <p>Start Date: {formatDate(project.start_date)}</p>
-                <p>End Date: {formatDate(project.end_date)}</p>
-                <p>Status: {project.status_name}</p>
+                <p>Дата початку проекту : {formatDate(project.start_date)}</p>
+                <p>Дата закінчення проекту: {formatDate(project.end_date)}</p>
+                <p>Статус проекту: {project.status_name}</p>
                 <Link to={`/update_project/${project.id}`} className="nav-addlink">Редагувати проект</Link>
             </div>
             <h2>Завдання для проекту </h2>
             <table className="projects-table">
                 <thead>
                     <tr>
-                        <th>Project Id</th>
-                        <th>Task Title</th>
-                        <th>Description</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Ноиер проекту</th>
+                        <th>Назва завдання</th>
+                        <th>Опис завдання</th>
+                        <th>Дата початку</th>
+                        <th>Дата закінчення</th>
+                        <th>Приоритет завдання</th>
+                        <th>Статус завдання</th>
+                        <th>Дії</th>
                     </tr>
                 </thead>
                 <tbody>

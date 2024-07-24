@@ -43,16 +43,16 @@ const AddAssignment = () => {
 
     return (
         <div className="form">
-            <h1>Add new assignment</h1>
-            <input type="number" placeholder="task_id" onChange={handleChange} name="task_id"/>
+            <h1>Додати нове призначення</h1>
+            <input type="number" placeholder="id завдання" onChange={handleChange} name="task_id"/>
             <select name="user_id" onChange={handleChange} value={assignment.user_id}>
-                <option value="">Select User</option>
+                <option value="">Виберіть виконавця</option>
                 {users.map(user => (
                     <option key={user.id} value={user.id}>{user.name}</option>
                 ))}
             </select>
             <input type="date" placeholder="assigned_date" onChange={handleChange} name="assigned_date"/>
-            <button className="nav-addlink" onClick={handleClick}>Add</button>
+            <button className="nav-addlink" onClick={handleClick}>Додати</button>
         </div>
     );
 };

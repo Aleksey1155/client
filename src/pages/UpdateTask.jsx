@@ -79,7 +79,7 @@ const UpdateTask = () => {
 
     return (
         <div className="form">
-            <h1>Update the Task</h1>
+            <h1>Редагувати Завдання</h1>
             <input type="number" placeholder="project_id" onChange={handleChange} name="project_id" value={task.project_id} />
             <input type="text" placeholder="title" onChange={handleChange} name="title" value={task.title} />
             <ReactQuill
@@ -120,7 +120,7 @@ const UpdateTask = () => {
                     </option>
                 ))}
             </select>
-            <button className="nav-addlink" onClick={handleClick}>Update</button>
+            <button className="nav-addlink" onClick={handleClick}>Редагувати</button>
         </div>
     );
 };

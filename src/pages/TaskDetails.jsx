@@ -73,15 +73,15 @@ const TaskDetails = () => {
                 <Link to="/assignments" className="nav-link">Призначення</Link>
             </div>
 
-            <h2>Task Details</h2>
+            <h2>Деталі Завдання</h2>
             <div>
                 <h3>{task.title}</h3>
                 <div dangerouslySetInnerHTML={{ __html: task.description }} />
                 <Link to={`/update_task/${task.id}`} className="nav-addlink">Редагувати завдання</Link>
-                <p>Start Date: {formatDate(task.start_date)}</p>
-                <p>End Date: {formatDate(task.end_date)}</p>
-                <p>Status: {task.status_name}</p>
-                <p>Priority: {task.priority_name}</p>
+                <p>Дата початку завдання: {formatDate(task.start_date)}</p>
+                <p>Дата закінчення завдання: {formatDate(task.end_date)}</p>
+                <p>Статус завдання: {task.status_name}</p>
+                <p>Приоритет завдання: {task.priority_name}</p>
                 <p>Номер завдання: {task.id}</p>
                 <Link to="/add_assignment" className="nav-addlink">Додати виконавця</Link>
             </div>
@@ -89,10 +89,10 @@ const TaskDetails = () => {
             <table className="projects-table">
                 <thead>
                     <tr>
-                        <th>Task Id</th>
-                        <th>User Name</th>
-                        <th>Assigned Date</th>
-                        <th>Actions</th>
+                        <th>Номер Завдання</th>
+                        <th>ПБ Виконавця</th>
+                        <th>Дата Призначення</th>
+                        <th>Дії</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,8 +104,8 @@ const TaskDetails = () => {
                                 <td>{user ? user.name : "Unknown"}</td>
                                 <td>{formatDate(assignment.assigned_date)}</td>
                                 <td>
-                                    <button className="delete" onClick={() => handleDelete(assignment.id)}>Delete</button>
-                                    <Link to={`/update_assignment/${assignment.id}`} className="update">Update</Link>
+                                    <button className="delete" onClick={() => handleDelete(assignment.id)}>Видалити</button>
+                                    <Link to={`/update_assignment/${assignment.id}`} className="update">Редагувати</Link>
                                 </td>
                             </tr>
                         );

@@ -39,16 +39,16 @@ const Users = () => {
                 <Link to="/tasks" className="nav-link">Завдання</Link>
                 <Link to="/assignments" className="nav-link">Призначення</Link>
             </div>
-            <h2>Users</h2>
+            <h2>Виконавці</h2>
             <table className="projects-table">
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
+                        <th>ID Виконавця</th>
+                        <th>ПІБ Виконавця</th>
                         <th>Email</th>
-                        <th>Phone</th>
-                        <th>Role ID</th>
-                        <th>Actions</th>
+                        <th>Телефон</th>
+                        <th>Посада</th>
+                        <th>Дії</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,15 +60,15 @@ const Users = () => {
                             <td>{user.phone}</td>
                             <td>{user.role_name}</td>
                             <td>
-                                <button className="delete" onClick={() => handleDelete(user.id)}>Delete</button>
-                                <Link to={`/update_user/${user.id}`} className="update">Update</Link>
+                                <button className="delete" onClick={() => handleDelete(user.id)}>Видалити</button>
+                                <Link to={`/update_user/${user.id}`} className="update">Редагувати</Link>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             <br />
-            <Link to="/add_user" className="nav-addlink">Add new user</Link>
+            <Link to="/add_user" className="nav-addlink">Додати нового виконавця</Link>
         </div>
     );
 }

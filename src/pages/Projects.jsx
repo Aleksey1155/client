@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         const fetchAllProjects = async () => {
@@ -40,9 +41,16 @@ const Projects = () => {
         setSelectedStatus(e.target.value);
     };
 
-    const filteredProjects = selectedStatus 
-        ? projects.filter(project => project.status_name === selectedStatus)
-        : projects;
+    const handleSearchChange = (e) => {
+        setSearchText(e.target.value);
+    };
+
+    const filteredProjects = projects.filter(project => {
+        return (
+            (!selectedStatus || project.status_name === selectedStatus) &&
+            project.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+    });
 
     const truncateDescription = (description, maxLength) => {
         if (description.length > maxLength) {
@@ -53,6 +61,13 @@ const Projects = () => {
 
     return (
         <div>
+            <input
+                type="text"
+                placeholder="Пошук..."
+                className="search"
+                value={searchText}
+                onChange={handleSearchChange}
+            />
             <div className="nav-links">
                 <Link to="/" className="nav-link">Головна</Link>
                 <Link to="/tasks" className="nav-link">Завдання</Link>
@@ -60,7 +75,7 @@ const Projects = () => {
                 <Link to="/assignments" className="nav-link">Призначення</Link>
             </div>
 
-            <h2>Projects</h2>
+            <h2>Проекти</h2>
 
             <select name="status-select" onChange={handleStatusChange} value={selectedStatus}>
                 <option value="">Виберіть статус</option>
@@ -74,13 +89,13 @@ const Projects = () => {
             <table className="projects-table">
                 <thead>
                     <tr>
-                        <th>№ Project</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Номер Проекту</th>
+                        <th>Назва Проекту</th>
+                        <th>Опис Проекту</th>
+                        <th>Дата Початку</th>
+                        <th>Дата Закінчення</th>
+                        <th>Статус Проекту</th>
+                        <th>Дії</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -97,15 +112,15 @@ const Projects = () => {
                             <td>{formatDate(project.end_date)}</td>
                             <td>{project.status_name}</td>
                             <td>
-                                <button className="delete" onClick={() => handleDelete(project.id)}>Delete</button>
-                                <Link to={`/update_project/${project.id}`} className="update">Update</Link>
+                                <button className="delete" onClick={() => handleDelete(project.id)}>Видалити</button>
+                                <Link to={`/update_project/${project.id}`} className="update">Редагувати</Link>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             <br />
-            <Link to="/add_project" className="nav-addlink">Add new project</Link>
+            <Link to="/add_project" className="nav-addlink">Додати новий проект</Link>
         </div>
     );
 };

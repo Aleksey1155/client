@@ -69,7 +69,7 @@ const UpdateProject = () => {
 
     return (
         <div className="form">
-            <h1>Update the Project</h1>
+            <h1>Редагувати Проект </h1>
             <input
                 type="text"
                 placeholder="title"
@@ -118,7 +118,7 @@ const UpdateProject = () => {
                     </option>
                 ))}
             </select>
-            <button className="nav-addlink" onClick={handleClick}>Update</button>
+            <button className="nav-addlink" onClick={handleClick}>Редагувати</button>
         </div>
     );
 };

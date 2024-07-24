@@ -45,8 +45,8 @@ const UpdateAssignment = () => {
 
     return (
         <div className="form">
-            <h1>Update the Assignment</h1>
-            <input type="number" placeholder="task_id" onChange={handleChange} name="task_id"/>
+            <h1>Редагування Призначення</h1>
+            <input type="number" placeholder="номер завдання" onChange={handleChange} name="task_id"/>
             <select name="user_id" onChange={handleChange} value={assignment.user_id}>
                 <option value="">Select User</option>
                 {users.map(user => (
@@ -54,7 +54,7 @@ const UpdateAssignment = () => {
                 ))}
             </select>
             <input type="date" placeholder="assigned_date" onChange={handleChange} name="assigned_date"/>
-            <button className="nav-addlink" onClick={handleClick}>Update</button>
+            <button className="nav-addlink" onClick={handleClick}>Редагувати</button>
         </div>
     );
 };

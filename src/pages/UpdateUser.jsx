@@ -55,7 +55,7 @@ const UpdateUser = () => {
 
     return (
         <div className="form">
-            <h1>Update the User</h1>
+            <h1>Редагувати Виконавця</h1>
             <input type="text" placeholder="name" onChange={handleChange} name="name" value={user.name} />
             <input type="text" placeholder="email" onChange={handleChange} name="email" value={user.email} />
             <input type="text" placeholder="phone" onChange={handleChange} name="phone" value={user.phone} />
@@ -67,7 +67,7 @@ const UpdateUser = () => {
                     </option>
                 ))}
             </select>
-            <button className="nav-addlink" onClick={handleClick}>Update</button>
+            <button className="nav-addlink" onClick={handleClick}>Редагувати</button>
         </div>
     );
 };

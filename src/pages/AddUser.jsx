@@ -43,19 +43,19 @@ const AddUser = () => {
 
     return (
         <div className="form">
-            <h1>Add new user</h1>
-            <input type="text" placeholder="name" onChange={handleChange} name="name" />
-            <input type="text" placeholder="email" onChange={handleChange} name="email" />
-            <input type="text" placeholder="phone" onChange={handleChange} name="phone" />
+            <h1>Додати нового виконавця</h1>
+            <input type="text" placeholder="ПІБ нового виконавця" onChange={handleChange} name="name" />
+            <input type="text" placeholder="email нового виконавця" onChange={handleChange} name="email" />
+            <input type="text" placeholder="номер телефону" onChange={handleChange} name="phone" />
             <select name="role_id" onChange={handleChange} value={user.role_id}>
-                <option value="" disabled>Select role</option>
+                <option value="" disabled>Виберіть посаду</option>
                 {roles.map((role) => (
                     <option key={role.id} value={role.id}>
                         {role.name}
                     </option>
                 ))}
             </select>
-            <button className="nav-addlink" onClick={handleClick}>Add</button>
+            <button className="nav-addlink" onClick={handleClick}>Додати</button>
         </div>
     );
 };

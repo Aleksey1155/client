@@ -49,8 +49,8 @@ const AddProject = () => {
 
     return (
         <div className="form">
-            <h1>Add new project</h1>
-            <input type="text" placeholder="title" onChange={handleChange} name="title" />
+            <h1>Додати новий проект</h1>
+            <input type="text" placeholder="Назва нового проекту" onChange={handleChange} name="title" />
             <ReactQuill
                 value={project.description}
                 onChange={handleEditorChange}
@@ -74,14 +74,14 @@ const AddProject = () => {
             <input type="date" placeholder="start_date" onChange={handleChange} name="start_date" />
             <input type="date" placeholder="end_date" onChange={handleChange} name="end_date" />
             <select name="status_id" onChange={handleChange} value={project.status_id}>
-                <option value="" disabled>Select status</option>
+                <option value="" disabled>Виберіть статус</option>
                 {statuses.map((status) => (
                     <option key={status.id} value={status.id}>
                         {status.status_name}
                     </option>
                 ))}
             </select>
-            <button className="nav-addlink" onClick={handleClick}>Add</button>
+            <button className="nav-addlink" onClick={handleClick}>Додати</button>
         </div>
     );
 };
