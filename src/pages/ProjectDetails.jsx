@@ -106,7 +106,7 @@ const ProjectDetails = () => {
             <table className="projects-table">
                 <thead>
                     <tr>
-                        <th>Ноиер проекту</th>
+                        <th>Номер проекту</th>
                         <th>Назва завдання</th>
                         <th>Опис завдання</th>
                         <th>Дата початку</th>

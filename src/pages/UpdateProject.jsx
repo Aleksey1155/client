@@ -24,11 +24,21 @@ const UpdateProject = () => {
             try {
                 const res = await axios.get(`http://localhost:3001/projects/${projectId}`);
                 const projectData = res.data;
+
+                const formatDate = (dateString) => {
+                    if (!dateString) return "";
+                    const date = new Date(dateString);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                };
+
                 setProject({
                     title: projectData.title,
                     description: projectData.description,
-                    start_date: projectData.start_date ? new Date(projectData.start_date).toISOString().split('T')[0] : "",
-                    end_date: projectData.end_date ? new Date(projectData.end_date).toISOString().split('T')[0] : "",
+                    start_date: projectData.start_date ? formatDate(projectData.start_date) : "",
+                    end_date: projectData.end_date ? formatDate(projectData.end_date) : "",
                     status_id: projectData.status_id,
                 });
             } catch (err) {
@@ -69,7 +79,7 @@ const UpdateProject = () => {
 
     return (
         <div className="form">
-            <h1>Редагувати Проект </h1>
+            <h1>Редагувати Проект</h1>
             <input
                 type="text"
                 placeholder="title"
@@ -82,10 +92,10 @@ const UpdateProject = () => {
                 onChange={handleEditorChange}
                 modules={{
                     toolbar: [
-                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                        [{size: []}],
+                        [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                        [{ size: [] }],
                         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                         ['link', 'image'],
                         ['clean']
                     ],
@@ -109,9 +119,9 @@ const UpdateProject = () => {
                 onChange={handleChange}
                 name="end_date"
             />
-            <select name="status_id" 
-            onChange={handleChange} 
-            value={project.status_id}>
+            <select name="status_id"
+                onChange={handleChange}
+                value={project.status_id}>
                 {statuses.map((status) => (
                     <option key={status.id} value={status.id}>
                         {status.status_name}
