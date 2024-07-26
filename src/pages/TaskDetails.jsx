@@ -11,7 +11,7 @@ const TaskDetails = () => {
     useEffect(() => {
         const fetchTask = async () => {
             try {
-                const res = await axios.get(`http://localhost:3001/tasks/${id}`);
+                const res = await axios.get(`https://backend-ecqm.onrender.com/tasks/${id}`);
                 setTask(res.data);
             } catch (err) {
                 console.log(err);
@@ -20,7 +20,7 @@ const TaskDetails = () => {
 
         const fetchAllAssignments = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/assignments");
+                const res = await axios.get("https://backend-ecqm.onrender.com/assignments");
                 // Filter assignments for this task
                 setAssignments(res.data.filter(assignment => assignment.task_id === Number(id)));
             } catch (err) {
@@ -30,7 +30,7 @@ const TaskDetails = () => {
 
         const fetchUsers = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/users");
+                const res = await axios.get("https://backend-ecqm.onrender.com/users");
                 setUsers(res.data);
             } catch (err) {
                 console.log(err);
@@ -51,7 +51,7 @@ const TaskDetails = () => {
         const confirmed = window.confirm("Ви впевнені, що хочете видалити це призначення?");
         if (confirmed) {
             try {
-                await axios.delete(`http://localhost:3001/assignments/${assignmentId}`);
+                await axios.delete(`https://backend-ecqm.onrender.com/assignments/${assignmentId}`);
                 setAssignments(assignments.filter(assignment => assignment.id !== assignmentId));
             } catch (err) {
                 console.log(err);

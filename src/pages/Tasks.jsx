@@ -12,7 +12,7 @@ const Tasks = () => {
     useEffect(() => {
         const fetchAllTasks = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/tasks");
+                const res = await axios.get("https://backend-ecqm.onrender.com/tasks");
                 console.log(res.data);
                 setTasks(sortTasks(res.data));
             } catch (err) {
@@ -22,7 +22,7 @@ const Tasks = () => {
 
         const fetchTaskStatuses = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/task_statuses");
+                const res = await axios.get("https://backend-ecqm.onrender.com/task_statuses");
                 setTaskStatuses(res.data);
             } catch (err) {
                 console.log(err);
@@ -31,7 +31,7 @@ const Tasks = () => {
 
         const fetchTaskPriorities = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/task_priorities");
+                const res = await axios.get("https://backend-ecqm.onrender.com/task_priorities");
                 setTaskPriorities(res.data);
             } catch (err) {
                 console.log(err);
@@ -65,7 +65,7 @@ const Tasks = () => {
         const confirmed = window.confirm("Ви впевнені, що хочете видалити цей проект?");
         if (confirmed) {
             try {
-                await axios.delete("http://localhost:3001/tasks/" + id);
+                await axios.delete("https://backend-ecqm.onrender.com/tasks/" + id);
                 setTasks(sortTasks(tasks.filter(task => task.id !== id)));
             } catch (err) {
                 console.log(err);

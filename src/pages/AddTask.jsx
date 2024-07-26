@@ -23,10 +23,10 @@ const AddTask = () => {
     useEffect(() => {
         const fetchStatusesAndPriorities = async () => {
             try {
-                const statusRes = await axios.get("http://localhost:3001/task_statuses");
+                const statusRes = await axios.get("https://backend-ecqm.onrender.com/task_statuses");
                 setStatuses(statusRes.data);
 
-                const priorityRes = await axios.get("http://localhost:3001/task_priorities");
+                const priorityRes = await axios.get("https://backend-ecqm.onrender.com/task_priorities");
                 setPriorities(priorityRes.data);
             } catch (err) {
                 console.log(err);
@@ -47,7 +47,7 @@ const AddTask = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3001/tasks", task);
+            await axios.post("https://backend-ecqm.onrender.com/tasks", task);
             navigate("/tasks");
         } catch (err) {
             console.log(err);

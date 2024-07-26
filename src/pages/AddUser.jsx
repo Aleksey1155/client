@@ -17,7 +17,7 @@ const AddUser = () => {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/roles");
+                const res = await axios.get("https://backend-ecqm.onrender.com/roles");
                 setRoles(res.data);
             } catch (err) {
                 console.log(err);
@@ -34,7 +34,7 @@ const AddUser = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3001/users", user);
+            await axios.post("https://backend-ecqm.onrender.com/users", user);
             navigate("/users");
         } catch (err) {
             console.log(err);

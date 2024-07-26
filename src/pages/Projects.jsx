@@ -10,7 +10,7 @@ const Projects = () => {
     useEffect(() => {
         const fetchAllProjects = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/projects");
+                const res = await axios.get("https://backend-ecqm.onrender.com/projects");
                 setProjects(res.data);
             } catch (err) {
                 console.log(err);
@@ -24,7 +24,7 @@ const Projects = () => {
         const confirmed = window.confirm("Ви впевнені, що хочете видалити цей проект?");
         if (confirmed) {
             try {
-                await axios.delete("http://localhost:3001/projects/" + id);
+                await axios.delete("https://backend-ecqm.onrender.com/projects/" + id);
                 setProjects(projects.filter(project => project.id !== id));
             } catch (err) {
                 console.log(err);

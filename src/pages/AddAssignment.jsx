@@ -15,7 +15,7 @@ const AddAssignment = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/users");
+                const res = await axios.get("https://backend-ecqm.onrender.com/users");
                 setUsers(res.data);
             } catch (err) {
                 console.log(err);
@@ -32,7 +32,7 @@ const AddAssignment = () => {
     const handleClick = async e => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3001/assignments", assignment);
+            await axios.post("https://backend-ecqm.onrender.com/assignments", assignment);
             navigate("/assignments");
         } catch (err) {
             console.log(err);

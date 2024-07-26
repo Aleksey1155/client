@@ -19,7 +19,7 @@ const UpdateUser = () => {
     useEffect(() => {
         const fetchRoles = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/roles");
+                const res = await axios.get("https://backend-ecqm.onrender.com/roles");
                 setRoles(res.data);
             } catch (err) {
                 console.log(err);
@@ -28,7 +28,7 @@ const UpdateUser = () => {
 
         const fetchUser = async () => {
             try {
-                const res = await axios.get(`http://localhost:3001/users/${userId}`);
+                const res = await axios.get(`https://backend-ecqm.onrender.com/users/${userId}`);
                 setUser(res.data);
             } catch (err) {
                 console.log(err);
@@ -46,7 +46,7 @@ const UpdateUser = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.put("http://localhost:3001/users/" + userId, user);
+            await axios.put("https://backend-ecqm.onrender.com/users/" + userId, user);
             navigate("/users");
         } catch (err) {
             console.log(err);

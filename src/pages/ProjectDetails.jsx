@@ -12,7 +12,7 @@ const ProjectDetails = () => {
     useEffect(() => {
         const fetchProject = async () => {
             try {
-                const res = await axios.get(`http://localhost:3001/projects/${id}`);
+                const res = await axios.get(`https://backend-ecqm.onrender.com/projects/${id}`);
                 setProject(res.data);
             } catch (err) {
                 console.log(err);
@@ -25,7 +25,7 @@ const ProjectDetails = () => {
     useEffect(() => {
         const fetchAllTasks = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/tasks");
+                const res = await axios.get("https://backend-ecqm.onrender.com/tasks");
                 setTasks(res.data.filter(task => task.project_id === Number(id)));
             } catch (err) {
                 console.log(err);
@@ -34,7 +34,7 @@ const ProjectDetails = () => {
 
         const fetchTaskStatuses = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/task_statuses");
+                const res = await axios.get("https://backend-ecqm.onrender.com/task_statuses");
                 setTaskStatuses(res.data);
             } catch (err) {
                 console.log(err);
@@ -43,7 +43,7 @@ const ProjectDetails = () => {
 
         const fetchTaskPriorities = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/task_priorities");
+                const res = await axios.get("https://backend-ecqm.onrender.com/task_priorities");
                 setTaskPriorities(res.data);
             } catch (err) {
                 console.log(err);
@@ -71,7 +71,7 @@ const ProjectDetails = () => {
         const confirmed = window.confirm("Ви впевнені, що хочете видалити це завдання?");
         if (confirmed) {
             try {
-                await axios.delete(`http://localhost:3001/tasks/${taskId}`);
+                await axios.delete(`https://backend-ecqm.onrender.com/tasks/${taskId}`);
                 setTasks(tasks.filter(task => task.id !== taskId));
             } catch (err) {
                 console.log(err);

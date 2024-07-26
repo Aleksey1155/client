@@ -8,7 +8,7 @@ const Users = () => {
     useEffect(() => {
         const fetchAllUsers = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/users");
+                const res = await axios.get("https://backend-ecqm.onrender.com/users");
                 setUsers(res.data);
             } catch (err) {
                 console.log(err);
@@ -22,7 +22,7 @@ const Users = () => {
         const confirmed = window.confirm("Ви впевнені, що хочете видалити цей проект?");
         if (confirmed) {
             try {
-                await axios.delete("http://localhost:3001/users/" + id);
+                await axios.delete("https://backend-ecqm.onrender.com/users/" + id);
                 setUsers(users.filter(user => user.id !== id));
             } catch (err) {
                 console.log(err);

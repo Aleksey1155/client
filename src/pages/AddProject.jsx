@@ -19,7 +19,7 @@ const AddProject = () => {
     useEffect(() => {
         const fetchStatuses = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/project_statuses");
+                const res = await axios.get("https://backend-ecqm.onrender.com/project_statuses");
                 setStatuses(res.data);
             } catch (err) {
                 console.log(err);
@@ -40,7 +40,7 @@ const AddProject = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3001/projects", project);
+            await axios.post("https://backend-ecqm.onrender.com/projects", project);
             navigate("/projects");
         } catch (err) {
             console.log(err);

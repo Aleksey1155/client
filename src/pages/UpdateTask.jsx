@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
+import { DateTime } from 'luxon';
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
 
 const UpdateTask = () => {
@@ -25,12 +26,17 @@ const UpdateTask = () => {
     useEffect(() => {
         const fetchTask = async () => {
             try {
-                const res = await axios.get(`http://localhost:3001/tasks/${taskId}`);
+                const res = await axios.get(`https://backend-ecqm.onrender.com/tasks/${taskId}`);
                 const taskData = res.data;
-                
-                taskData.start_date = new Date(taskData.start_date).toISOString().split('T')[0];
-                taskData.end_date = new Date(taskData.end_date).toISOString().split('T')[0];
-                setTask(taskData);
+                setTask({
+                    project_id: taskData.project_id,
+                    title: taskData.title,
+                    description: taskData.description,
+                    start_date: taskData.start_date ? DateTime.fromISO(taskData.start_date).toISODate() : "",
+                    end_date: taskData.end_date ? DateTime.fromISO(taskData.end_date).toISODate() : "",
+                    priority_id: taskData.priority_id,
+                    status_id: taskData.status_id,
+                });
             } catch (err) {
                 console.log(err);
             }
@@ -38,7 +44,7 @@ const UpdateTask = () => {
 
         const fetchStatuses = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/task_statuses");
+                const res = await axios.get("https://backend-ecqm.onrender.com/task_statuses");
                 setStatuses(res.data);
             } catch (err) {
                 console.log(err);
@@ -47,7 +53,7 @@ const UpdateTask = () => {
 
         const fetchPriorities = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/task_priorities");
+                const res = await axios.get("https://backend-ecqm.onrender.com/task_priorities");
                 setPriorities(res.data);
             } catch (err) {
                 console.log(err);
@@ -70,7 +76,7 @@ const UpdateTask = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3001/tasks/${taskId}`, task);
+            await axios.put(`https://backend-ecqm.onrender.com/tasks/${taskId}`, task);
             navigate("/tasks");
         } catch (err) {
             console.log(err);

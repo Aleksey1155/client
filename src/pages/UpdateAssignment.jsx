@@ -17,7 +17,7 @@ const UpdateAssignment = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/users");
+                const res = await axios.get("https://backend-ecqm.onrender.com/users");
                 setUsers(res.data);
             } catch (err) {
                 console.log(err);
@@ -34,7 +34,7 @@ const UpdateAssignment = () => {
     const handleClick = async e => {
         e.preventDefault();
         try {
-            await axios.put("http://localhost:3001/assignments/" + assignmentId, assignment);
+            await axios.put("https://backend-ecqm.onrender.com/assignments/" + assignmentId, assignment);
             navigate("/assignments");
         } catch (err) {
             console.log(err);

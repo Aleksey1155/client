@@ -10,7 +10,7 @@ const Assignments = () => {
     useEffect(() => {
         const fetchAllAssignments = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/assignments");
+                const res = await axios.get("https://backend-ecqm.onrender.com/assignments");
                 setAssignments(res.data);
             } catch (err) {
                 console.log(err);
@@ -19,7 +19,7 @@ const Assignments = () => {
 
         const fetchUsers = async () => {
             try {
-                const res = await axios.get("http://localhost:3001/users");
+                const res = await axios.get("https://backend-ecqm.onrender.com/users");
                 setUsers(res.data);
             } catch (err) {
                 console.log(err);
@@ -34,7 +34,7 @@ const Assignments = () => {
         const confirmed = window.confirm("Ви впевнені, що хочете видалити цей проект?");
         if (confirmed) {
             try {
-                await axios.delete("http://localhost:3001/assignments/" + id);
+                await axios.delete("https://backend-ecqm.onrender.com/assignments/" + id);
                 setAssignments(assignments.filter(assignment => assignment.id !== id));
             } catch (err) {
                 console.log(err);
