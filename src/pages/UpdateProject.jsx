@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
+import { DateTime } from 'luxon';
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
 
 const UpdateProject = () => {
@@ -27,8 +28,8 @@ const UpdateProject = () => {
                 setProject({
                     title: projectData.title,
                     description: projectData.description,
-                    start_date: projectData.start_date ? new Date(projectData.start_date).toISOString().split('T')[0] : "",
-                    end_date: projectData.end_date ? new Date(projectData.end_date).toISOString().split('T')[0] : "",
+                    start_date: projectData.start_date ? DateTime.fromISO(projectData.start_date).toISODate() : "",
+                    end_date: projectData.end_date ? DateTime.fromISO(projectData.end_date).toISODate() : "",
                     status_id: projectData.status_id,
                 });
             } catch (err) {
