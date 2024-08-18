@@ -1,0 +1,99 @@
+.updateuser {
+  width: 100%;
+  display: flex;
+
+  .updateuserContainer {
+    flex: 6;
+    margin: 20px;
+
+    .top,
+    .bottom {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 10px;
+      display: flex;
+      gap: 20px;
+      .title {
+        font-size: 20px;
+        color: grey;
+        font-weight: bold;
+      }
+
+      .left {
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+      
+        padding: 50px 20px;
+
+        .image {
+          width: 250px;
+          height: 250px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+
+      .right {
+        flex: 2;
+        form {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 30px;
+          justify-content: space-around;
+
+          .formInput {
+            width: 40%;
+
+            input {
+              width: 100%;
+              padding: 5px;
+              border: none;
+              border-bottom: 1px solid gray;
+            }
+
+            label {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              color: gray;
+
+              .icon {
+                cursor: pointer;
+              }
+            }
+
+            textarea {
+              width: 250px; /* Початкова ширина textarea */
+              height: 100px; /* Встановлює висоту textarea */
+              font-size: 16px; /* Розмір тексту всередині textarea */
+              padding: 10px; /* Відступи всередині textarea */
+              border-radius: 5px; /* Закруглення кутів */
+              max-width: 300px; /* Максимальна ширина textarea */
+              max-height: 350px; /* Максимальна висота textarea */
+              min-width: 250px; /* Початкова ширина textarea */
+              min-height: 100px; /* Встановлює висоту textarea */
+              resize: both; /* Дозволяє змінювати розмір у обох напрямках */
+              overflow: auto; /* Вмикає скролінг, якщо вміст перевищує розміри */
+          }
+          }
+
+          button {
+            text-decoration: none;
+            color: #2fa90ae0;
+            padding: 10px 10px;
+            border: 1px solid #228105e0;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            width: 150px;
+          }
+
+          button:hover {
+            background-color: #2fa90ae0;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}

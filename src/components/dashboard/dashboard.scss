@@ -1,0 +1,110 @@
+.dashboard {
+  padding: 10px;
+
+  .tableTitle {
+    color: #555;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center; 
+    
+  }
+  
+
+  .addlinks {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .titleAdd{
+        font-weight: bold;
+        font-size: 25px;
+        color: #555;
+    }
+
+    .addlink {
+        text-decoration: none;
+        color: #2fa90ae0;
+        padding: 10px 20px;
+        border: 1px solid #228105e0;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+    
+      .addlink:hover {
+        background-color: #2fa90ae0;
+        color: white;
+      }
+
+  }
+
+  
+
+  .filtersSelect {
+    display: flex;
+    justify-content: space-between;
+
+    .selectTask,
+    .selectProject,
+    .selectUser {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px;
+        align-items: center;
+       
+      .titleSelect {
+        margin-right: 10px;
+        color: #555;
+      }
+      .select {
+        
+      }
+    }
+  }
+
+
+
+  .table {
+    .cellWrapper {
+      display: flex;
+      align-items: center;
+  
+      .image {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+      }
+    }
+  
+    .status {
+      padding: 5px;
+      border-radius: 5px;
+  
+      &.Виконується {
+        color: green;
+        background-color: rgba(0, 128, 0, 0.151);
+      }
+      &.Завершено {
+        color: goldenrod;
+        background-color: rgba(189, 189, 3, 0.103);
+      }
+      &.Нове {
+        color: rgb(218, 54, 32);
+        background-color: rgba(189, 189, 3, 0.103);
+      }
+    }
+
+      //Дата 2 дня cell in red if the task's end date is within two days of the current date
+    .closeToEnd {
+      background-color: #ffcccc; /* Light red background */
+      color: red; /* Red text color */
+      font-weight: bold;
+    }
+
+
+  }
+
+
+}

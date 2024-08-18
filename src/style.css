@@ -1,14 +1,25 @@
 .App {
-   
-    padding: 0px 20px; 
+     /* padding: 0px 20px; 
     display: flex;
     flex-direction: column; 
     align-items: center;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 20px;  */
+
 }
 
-.projects {
+.layout{
+    display: flex;
+}
+
+.layoutContainer{
+    flex: 6;
+}
+
+a{
+    text-decoration: none;
+}
+/* .projects {
     display: flex;
     gap: 10px;
 }
@@ -34,8 +45,8 @@ img {
     border-color: white;
     cursor: pointer;
     color: red;
-    margin-bottom: 5px; /* Додаємо відступ знизу */
-}
+    margin-bottom: 5px; 
+ }
 
 .update {
     border: none;
@@ -43,7 +54,7 @@ img {
     border-color: white;
     cursor: pointer;
     color: blue;
-    margin-top: 5px; /* Додаємо відступ зверху */
+    margin-top: 5px; 
 }
 
 .form {
@@ -140,7 +151,7 @@ input {
 .nav-addlink:hover {
     background-color: #2fa90ae0;
     color: white;
-}
+} 
 
 .textarea {
     width: 100%;
@@ -149,7 +160,7 @@ input {
     padding: 10px;
     border: 1px solid gray;
     box-sizing: border-box;
-}
+} 
 
 .task-title-red {
     color: red;
@@ -172,50 +183,12 @@ input {
     align-items: center;
 }
 
-.canvas-container {
-    width: 100%;
-}
-
-.canvas-container canvas {
-    width: 100%;
-    height: 400px;
-}
-
-.graphs-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none; 
-    color: inherit; 
-}
-
 .graphs-link img {
     width: 25px;
     height: 21px;
     margin-right: 8px;
 }
 
-.dataCard {
-    background-color: #efefef;
-    border-radius: 0.5em;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    padding: 1em;
-  }
-  
-  .revenueCard {
-    width: 92%;
-    height: 20rem;
-  }
-  
-  .customerCard {
-    width: 50%;
-    height: 20rem;
-  }
-  
-  .categoryCard {
-    width: 40%;
-    height: 20rem;
-  }
-
   .details{
     text-align: left;
-  }
+  } */
