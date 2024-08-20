@@ -4,6 +4,8 @@
   .homeContainer {
     flex: 6;
 
+    
+
     .widgets {
       display: flex;
       padding: 20px;
@@ -12,15 +14,12 @@
   }
 
   .listContainer {
-   padding: 20px;
- 
+    padding: 20px;
 
-    .listTitle{
+    .listTitle {
       font-size: 30px;
       color: #555;
       margin-bottom: 15px;
     }
-
-
   }
 }

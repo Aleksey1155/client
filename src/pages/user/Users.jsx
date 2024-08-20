@@ -36,7 +36,7 @@ const userColumns = [
   },
 ];
 
-const Users = () => {
+const Users = (title) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -107,6 +107,7 @@ const Users = () => {
         rowsPerPageOptions={[9]}
         checkboxSelection
       />
+      
     </div>
   );
 };

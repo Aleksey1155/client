@@ -5,7 +5,6 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import FolderSharedOutlinedIcon from "@mui/icons-material/FolderSharedOutlined";
 import { useEffect, useState } from "react";
-import { json } from "react-router-dom";
 import axios from "axios";
 
 const Widget = ({ type }) => {
@@ -33,7 +32,14 @@ useEffect(() => {
   switch (type) {
     case "user":
       data = {
-        title: users.length > 0 ? users[2].name : "No users",
+         title: "USERS",//(
+        //   users.map(user => (
+        //     <option key={user.id} value={user.id}>{user.phone}</option>
+        // ))
+        
+        
+        
+        // ),
         isMoney: false,
         link: "See all users",
         icon: (

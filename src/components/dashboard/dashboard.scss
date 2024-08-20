@@ -98,10 +98,17 @@
 
       //Дата 2 дня cell in red if the task's end date is within two days of the current date
     .closeToEnd {
-      background-color: #ffcccc; /* Light red background */
-      color: red; /* Red text color */
+      background-color: #cce6ff; /* Light red background  #ffcccc */
+      color: blue; /* Red text color */
       font-weight: bold;
     }
+
+    .endPassedInProgress {
+      background-color: #ffcccc; /* Light blue background */
+      color: red; /* Blue text color */
+      font-weight: bold;
+    }
+    
 
 
   }

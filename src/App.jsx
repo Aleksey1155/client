@@ -49,6 +49,10 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
+        path: "/projects",
+        element: <Projects />,
+      },
+      {
         path: "/",
         element: <Home />,
       },
@@ -56,10 +60,7 @@ const router = createBrowserRouter([
         path: "/users",
         element: <Users />,
       },
-      {
-        path: "/projects",
-        element: <Projects />,
-      },
+      
       {
         path: "/users/:id",
         element: <UserDetails />,
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/add_user",
         element: <AddUser />,
+      },
+      {
+        path: "/tasks",
+        element: <Tasks />,
       },
     ],
   },

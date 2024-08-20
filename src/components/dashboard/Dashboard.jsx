@@ -115,6 +115,15 @@ const Dashboard = () => {
     return diffDays <= 2 && diffDays >= 0;
   };
 
+  // Функція для перевірки, чи дата закінчилась і статус "Виконується"
+  const isEndDatePassedAndInProgress = (endDate, taskStatus) => {
+    const today = new Date();
+    const end = new Date(endDate);
+
+    // Перевірка, чи дата закінчилась і статус завдання "Виконується"
+    return end < today && taskStatus === "Виконується";
+  };
+
   return (
     <div className="dashboard">
       {/* Посилання для додавання проекту */}
@@ -207,10 +216,22 @@ const Dashboard = () => {
                   {formatDate(row.start_date)}
                 </TableCell>
                 <TableCell className="tableCell">
-                <span className={`enddate ${ isCloseToEnd(row.end_date) ? "closeToEnd" : "" }`}>
-                  {formatDate(row.end_date)}
+                  <span
+                    className={`enddate ${
+                      isCloseToEnd(row.end_date)
+                        ? "closeToEnd"
+                        : isEndDatePassedAndInProgress(
+                            row.end_date,
+                            row.task_status
+                          )
+                        ? "endPassedInProgress"
+                        : ""
+                    }`}
+                  >
+                    {formatDate(row.end_date)}
                   </span>
                 </TableCell>
+
                 <TableCell className="tableCell">
                   <span className={`status ${row.task_status}`}>
                     {row.task_status}
