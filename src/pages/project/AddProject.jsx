@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./addproject.scss";
-import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+
+const hostUrl = "http://localhost:3001/upload";
 
 const AddProject = () => {
   const [project, setProject] = useState({
@@ -15,6 +16,8 @@ const AddProject = () => {
     status_id: "",
   });
 
+  const filePicker = useRef(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const navigate = useNavigate();
 
@@ -49,6 +52,40 @@ const AddProject = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles(files); // Зберігаємо файли у стані
+  };
+
+  const handleUpload = async () => {
+    if (selectedFiles.length === 0) {
+      alert("Please select a file");
+      return;
+    }
+
+    const formData = new FormData();
+    selectedFiles.forEach((file) => {
+      formData.append("files", file); // Додаємо всі файли у FormData
+    });
+
+    formData.append("project_id", project.id); // Передаємо project_id
+
+    try {
+      const res = await axios.post(hostUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Files uploaded successfully:", res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handlePick = () => {
+    filePicker.current.click();
+  };
+
   return (
     <div className="addproject">
       <div className="addprojectContainer">
@@ -60,23 +97,42 @@ const AddProject = () => {
         </div>
         <div className="center">
           <div className="left">
-            <img
-              className="image"
-              src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              alt=""
-            />
+            <div>
+              <button onClick={handlePick}>Add file</button>
+              <input
+                className="hidden"
+                ref={filePicker}
+                multiple
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*, .png, .jpg, .web"
+              />
+              <button onClick={handleUpload}>Upload now!</button>
+            </div>
+
+            {selectedFiles.length === 0 && (
+              <img
+                className="noimage"
+                src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                alt="No images"
+              />
+            )}
+
+            {selectedFiles.length > 0 && (
+              <div className="selectedFiles">
+                {selectedFiles.map((file, index) => (
+                  <div key={index} className="selectedFile">
+                    <ul>
+                      <li>Name: {file.name.slice(-15)}</li>
+                      <li>Size: {(file.size / 1024).toFixed(2)} KB</li>
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="right">
             <form>
-              <div className="formInput">
-                <label htmlFor="file">
-                  {" "}
-                  Image:
-                  <FolderOpenOutlinedIcon className="icon" />
-                </label>
-                <input type="file" id="file" style={{ display: "none" }} />
-              </div>
-
               <div className="formInput">
                 <label>Project title</label>
                 <input
@@ -106,7 +162,6 @@ const AddProject = () => {
                 />
               </div>
 
-              
               <div className="formInput">
                 <label>Status</label>
                 <select
@@ -127,10 +182,23 @@ const AddProject = () => {
             </form>
           </div>
         </div>
+        <div className="image-container">
+          <div className="title">Project Images</div>
+          <div className="images">
+            {selectedFiles.map((file, index) => (
+              <img
+                key={index}
+                src={URL.createObjectURL(file)}
+                alt={`Preview ${index}`}
+                className="image-preview"
+              />
+            ))}
+          </div>
+        </div>
+
         <div className="bottom">
-        
-                <label>Description</label>
-              
+          <div className="title">Description</div>
+
           <div className="description">
             <ReactQuill
               value={project.description}
@@ -169,8 +237,6 @@ const AddProject = () => {
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 };
