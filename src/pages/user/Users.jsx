@@ -32,11 +32,11 @@ const userColumns = [
   {
     field: "phone",
     headerName: "Phone",
-    width: 150,
+    width: 120,
   },
 ];
 
-const Users = (title) => {
+const Users = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {

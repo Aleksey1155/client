@@ -1,15 +1,73 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/navbar/Navbar";
-import Sidebar from "../../components/sidebar/Sidebar";
+import { DataGrid } from "@mui/x-data-grid";
 import "./projects.scss";
 
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "numeric", day: "numeric" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
+const projectColumns = [
+  {
+    field: "image_url",
+    headerName: "Image",
+    width: 100,
+
+    renderCell: (params) => {
+      return (
+        <div className="cellWithImg">
+          {params.row.image_url ? (
+            <img
+              className="cellImg"
+              src={params.row.image_url}
+              alt=""
+            />
+          ) : (
+            <span>No image</span>
+          )}
+        </div>
+      );
+    },
+  },
+
+  {
+    field: "title",
+    headerName: "Title",
+    width: 250,
+  },
+
+  {
+    field: "start_date",
+    headerName: "Start Date",
+    width: 150,
+    renderCell: (params) => {
+      return (
+        <div className="cellWithImg">{formatDate(params.row.start_date)}</div>
+      );
+    },
+  },
+  {
+    field: "end_date",
+    headerName: "End Date",
+    width: 150,
+    renderCell: (params) => {
+      return (
+        <div className="cellWithImg">{formatDate(params.row.end_date)}</div>
+      );
+    },
+  },
+  {
+    field: "status_name",
+    headerName: "Status Name",
+    width: 120,
+  },
+];
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const [searchText, setSearchText] = useState("");
+  
 
   useEffect(() => {
     const fetchAllProjects = async () => {
@@ -24,6 +82,9 @@ const Projects = () => {
     fetchAllProjects();
   }, []);
 
+  
+ 
+ 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Ви впевнені, що хочете видалити цей проект?"
@@ -37,27 +98,6 @@ const Projects = () => {
       }
     }
   };
-
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "numeric", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  const handleStatusChange = (e) => {
-    setSelectedStatus(e.target.value);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchText(e.target.value);
-  };
-
-  const filteredProjects = projects.filter((project) => {
-    return (
-      (!selectedStatus || project.status_name === selectedStatus) &&
-      project.title.toLowerCase().includes(searchText.toLowerCase())
-    );
-  });
-
   const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.substring(0, maxLength) + "...";
@@ -65,92 +105,52 @@ const Projects = () => {
     return description;
   };
 
+  const actionColumn = [
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className="cellAction">
+            {/* Link with dynamic routing */}
+            <Link
+              to={`/projects/${params.row.id}`}
+              style={{ textDecoration: "none" }}
+            >
+              <div className="viewButton">Деталі</div>
+            </Link>
+
+            <button
+              className="deleteButton"
+              onClick={() => handleDelete(params.row.id)}
+            >
+              Видалити
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <div className="projects">
-      
-      <div className="homeContainer">
-       
-
-        <input
-          type="text"
-          placeholder="Пошук..."
-          className="search"
-          value={searchText}
-          onChange={handleSearchChange}
-        />
-       
-
-        <h2>Проекти</h2>
-
-        <select
-          name="status-select"
-          onChange={handleStatusChange}
-          value={selectedStatus}
-        >
-          <option value="">Виберіть статус</option>
-          {Array.from(
-            new Set(projects.map((project) => project.status_name))
-          ).map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-
-        <table className="projects-table">
-          <thead>
-            <tr>
-             
-              <th>Назва Проекту</th>
-              <th>Опис Проекту</th>
-              <th>Дата Початку</th>
-              <th>Дата Закінчення</th>
-              <th>Статус Проекту</th>
-              <th>Дії</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(filteredProjects) &&
-              filteredProjects.map((project) => (
-                <tr key={project.id}>
-                  
-                  <td>
-                    <Link to={`/project/${project.id}`}>{project.title}</Link>
-                  </td>
-                  <td
-                    dangerouslySetInnerHTML={{
-                      __html: truncateDescription(project.description, 500),
-                    }}
-                  ></td>
-                  <td>{formatDate(project.start_date)}</td>
-                  <td>{formatDate(project.end_date)}</td>
-                  <td>{project.status_name}</td>
-                  <td>
-                    <button
-                      className="delete"
-                      onClick={() => handleDelete(project.id)}
-                    >
-                      Видалити
-                    </button>
-                    <Link
-                      to={`/update_project/${project.id}`}
-                      className="update"
-                    >
-                      Редагувати
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <br />
-        <Link to="/add_project" className="nav-addlink">
-          Додати новий проект
+      <div className="datatableTitle">
+        Projects
+        <Link to="/add_project" className="link">
+          Add New
         </Link>
-
-             
-
       </div>
+      <div className="dataGrid"></div>
+      <DataGrid
+        className="datagrid"
+        rows={projects}
+        columns={projectColumns.concat(actionColumn)}
+        pageSize={9}
+        rowsPerPageOptions={[9]}
+        checkboxSelection
+      />
+     
     </div>
   );
 };

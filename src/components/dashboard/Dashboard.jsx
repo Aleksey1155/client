@@ -37,7 +37,7 @@ const Dashboard = () => {
     const fetchUsers = async () => {
       try {
         const res = await axios.get("http://localhost:3001/users");
-        console.log("Users Data:", res.data);
+        // console.log("Users Data:", res.data);
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -48,7 +48,7 @@ const Dashboard = () => {
     const fetchTaskStatuses = async () => {
       try {
         const res = await axios.get("http://localhost:3001/task_statuses");
-        console.log("Task Statuses Data:", res.data);
+        // console.log("Task Statuses Data:", res.data);
         setTaskStatuses(res.data);
       } catch (err) {
         console.log(err);
@@ -59,7 +59,7 @@ const Dashboard = () => {
     const fetchProjectStatuses = async () => {
       try {
         const res = await axios.get("http://localhost:3001/project_statuses");
-        console.log("Project Statuses Data:", res.data);
+        // console.log("Project Statuses Data:", res.data);
         setProjectStatuses(res.data);
       } catch (err) {
         console.log(err);

@@ -31,7 +31,7 @@ const UserDetails = () => {
           <div className="left">
             <div className="edit">
               <Link to={`/update_user/${user.id}`} className="update">
-                Редагувати
+                EditUser
               </Link>
             </div>
             <h1 className="title">Information</h1>

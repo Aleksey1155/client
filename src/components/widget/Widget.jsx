@@ -14,7 +14,7 @@ useEffect(() => {
       try {
           const res = await axios.get("http://localhost:3001/users");
           setUsers(res.data);
-          console.log("Users Data:", res.data);
+          // console.log("Users Data:", res.data);
       } catch (err) {
           console.log(err);
       }

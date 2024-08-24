@@ -2,10 +2,7 @@ import {
   createBrowserRouter,
   Outlet,
   RouterProvider,
-  BrowserRouter,
-  Routes,
-  Route,
-  Link,
+ 
 } from "react-router-dom";
 import "./style.css";
 
@@ -30,28 +27,17 @@ import Navbar from "./components/navbar/Navbar";
 import Sidebar from "./components/sidebar/Sidebar";
 import UserDetails from "./pages/user/UserDetails";
 import UserDatatable from "./pages/user/UserDatatable";
+import Layout from "./pages/Layout";  // шлях до Layout 
+import ImageCarousel from "./components/carousel/ImageCarousel";
+import Upload from "./components/upload/Upload.jsx";
 
-const Layout = () => {
-  return (
-    <div className="layout">
-      <Sidebar />
-      <div className="layoutContainer">
-        <Navbar />
-        <Outlet />
-      </div>
-    </div>
-  );
-};
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      {
-        path: "/projects",
-        element: <Projects />,
-      },
+      
       {
         path: "/",
         element: <Home />,
@@ -70,6 +56,22 @@ const router = createBrowserRouter([
         element: <UpdateUser />,
       },
       {
+        path: "/projects",
+        element: <Projects />,
+      },
+      {
+        path: "/projects/:id",
+        element: <ProjectDetails />,
+      },
+      {
+        path: "/add_project",
+        element: <AddProject />,
+      },
+      {
+        path: "//update_project/:id",
+        element: <UpdateProject />,
+      },
+      {
         path: "/add_user",
         element: <AddUser />,
       },
@@ -77,6 +79,8 @@ const router = createBrowserRouter([
         path: "/tasks",
         element: <Tasks />,
       },
+      
+
     ],
   },
   {
@@ -88,10 +92,10 @@ const router = createBrowserRouter([
     element: <Login />,
   },
 
-  // {
-  //   path: "/users/:id/datatable",
-  //   element: <UserDatatable />,
-  // }
+  {
+    path: "/upload",
+    element: <Upload />,
+  }
 
  
 ]);

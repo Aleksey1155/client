@@ -52,7 +52,7 @@ const UpdateUser = () => {
     e.preventDefault();
     try {
       await axios.put("http://localhost:3001/users/" + userId, user);
-      navigate("/users");
+      navigate(`/users/${userId}`);
     } catch (err) {
       console.log(err);
     }
@@ -63,6 +63,9 @@ const UpdateUser = () => {
       <div className="updateuserContainer">
         <div className="top">
           <p className="title">Update user</p>
+          <button className="nav-addlink" onClick={handleClick}>
+                Редагувати
+              </button>
         </div>
         <div className="bottom">
           <div className="left">
@@ -162,9 +165,7 @@ const UpdateUser = () => {
                   ))}
                 </select>
               </div>
-              <button className="nav-addlink" onClick={handleClick}>
-                Редагувати
-              </button>
+              
             </form>
           </div>
         </div>
