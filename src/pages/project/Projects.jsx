@@ -10,20 +10,16 @@ const formatDate = (dateString) => {
 };
 
 const projectColumns = [
+  { field: "orderNumber", headerName: "N", width: 12 }, // Колонка з порядковим номером
   {
     field: "image_url",
     headerName: "Image",
-    width: 100,
-
+    width: 0,
     renderCell: (params) => {
       return (
         <div className="cellWithImg">
           {params.row.image_url ? (
-            <img
-              className="cellImg"
-              src={params.row.image_url}
-              alt=""
-            />
+            <img className="cellImg" src={params.row.image_url} alt="" />
           ) : (
             <span>No image</span>
           )}
@@ -31,31 +27,25 @@ const projectColumns = [
       );
     },
   },
-
   {
     field: "title",
     headerName: "Title",
     width: 250,
   },
-
   {
     field: "start_date",
     headerName: "Start Date",
-    width: 150,
+    width: 120,
     renderCell: (params) => {
-      return (
-        <div className="cellWithImg">{formatDate(params.row.start_date)}</div>
-      );
+      return <div className="cellWithImg">{formatDate(params.row.start_date)}</div>;
     },
   },
   {
     field: "end_date",
     headerName: "End Date",
-    width: 150,
+    width: 120,
     renderCell: (params) => {
-      return (
-        <div className="cellWithImg">{formatDate(params.row.end_date)}</div>
-      );
+      return <div className="cellWithImg">{formatDate(params.row.end_date)}</div>;
     },
   },
   {
@@ -67,13 +57,17 @@ const projectColumns = [
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
-  
 
   useEffect(() => {
     const fetchAllProjects = async () => {
       try {
         const res = await axios.get("http://localhost:3001/projects");
-        setProjects(res.data);
+        // Додаємо порядковий номер для кожного проекту
+        const projectsWithOrderNumber = res.data.map((project, index) => ({
+          ...project,
+          orderNumber: index + 1, // Порядковий номер
+        }));
+        setProjects(projectsWithOrderNumber);
       } catch (err) {
         console.log(err);
       }
@@ -82,9 +76,6 @@ const Projects = () => {
     fetchAllProjects();
   }, []);
 
-  
- 
- 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Ви впевнені, що хочете видалити цей проект?"
@@ -98,12 +89,6 @@ const Projects = () => {
       }
     }
   };
-  const truncateDescription = (description, maxLength) => {
-    if (description.length > maxLength) {
-      return description.substring(0, maxLength) + "...";
-    }
-    return description;
-  };
 
   const actionColumn = [
     {
@@ -114,17 +99,11 @@ const Projects = () => {
         return (
           <div className="cellAction">
             {/* Link with dynamic routing */}
-            <Link
-              to={`/projects/${params.row.id}`}
-              style={{ textDecoration: "none" }}
-            >
+            <Link to={`/projects/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">Деталі</div>
             </Link>
 
-            <button
-              className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
-            >
+            <button className="deleteButton" onClick={() => handleDelete(params.row.id)}>
               Видалити
             </button>
           </div>
@@ -145,12 +124,16 @@ const Projects = () => {
       <DataGrid
         className="datagrid"
         rows={projects}
-        columns={projectColumns.concat(actionColumn)}
+        columns={projectColumns.concat(actionColumn)} // Колонка `id` не включена
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
+        initialState={{
+          sorting: {
+            sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
+          },
+        }}
       />
-     
     </div>
   );
 };

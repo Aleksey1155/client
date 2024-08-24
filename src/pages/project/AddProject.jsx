@@ -5,7 +5,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./addproject.scss";
 
-const hostUrl = "http://localhost:3001/upload";
+const hostUrl = "http://localhost:3001";
 
 const AddProject = () => {
   const [project, setProject] = useState({
@@ -24,7 +24,7 @@ const AddProject = () => {
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/project_statuses");
+        const res = await axios.get(`${hostUrl}/project_statuses`);
         setStatuses(res.data);
       } catch (err) {
         console.log(err);
@@ -42,45 +42,44 @@ const AddProject = () => {
     setProject((prev) => ({ ...prev, description: content }));
   };
 
-  const handleClick = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:3001/projects", project);
-      navigate("/projects");
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles(files); // Зберігаємо файли у стані
   };
 
-  const handleUpload = async () => {
-    if (selectedFiles.length === 0) {
-      alert("Please select a file");
-      return;
-    }
-
-    const formData = new FormData();
-    selectedFiles.forEach((file) => {
-      formData.append("files", file); // Додаємо всі файли у FormData
-    });
-
-    formData.append("project_id", project.id); // Передаємо project_id
-
+  const handleClick = async (e) => {
+    e.preventDefault();
+    
     try {
-      const res = await axios.post(hostUrl, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Files uploaded successfully:", res.data);
+      // 1. Додаємо проект
+      const projectRes = await axios.post(`${hostUrl}/projects`, project);
+      const projectId = projectRes.data.insertId; // Отримуємо id нового проекту
+    
+      // 2. Якщо вибрано файли, додаємо їх до таблиці project_images
+      if (selectedFiles.length > 0) {
+        const formData = new FormData();
+        selectedFiles.forEach((file) => {
+          formData.append("files", file);
+        });
+    
+        formData.append("project_id", projectId);
+    
+        await axios.post(`${hostUrl}/upload`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
+    
+      // Після успішного додавання проекту та зображень перенаправляємо користувача
+      navigate("/projects");
     } catch (err) {
-      console.log(err);
+      console.error(err); // Логування помилки
+      alert('An error occurred while adding the project.'); // Повідомлення користувача
     }
   };
+  
+  
 
   const handlePick = () => {
     filePicker.current.click();
@@ -107,7 +106,6 @@ const AddProject = () => {
                 onChange={handleFileChange}
                 accept="image/*, .png, .jpg, .web"
               />
-              <button onClick={handleUpload}>Upload now!</button>
             </div>
 
             {selectedFiles.length === 0 && (
