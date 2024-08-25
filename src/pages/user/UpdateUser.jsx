@@ -7,7 +7,7 @@ import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 const UpdateUser = () => {
   const [user, setUser] = useState({
     email: "",
-    password: "",
+   
     name: "",
     phone: "",
     img: "",
@@ -107,16 +107,8 @@ const UpdateUser = () => {
                   value={user.email}
                 />
               </div>
-              <div className="formInput">
-                <label>Password</label>
-                <input
-                  type="text"
-                  placeholder="password"
-                  onChange={handleChange}
-                  name="password"
-                  value={user.password}
-                />
-              </div>
+              
+              
               <div className="formInput">
                 <label>Phone</label>
                 <input
@@ -128,16 +120,7 @@ const UpdateUser = () => {
                 />
               </div>
 
-              <div className="formInput">
-                <label>Photo</label>
-                <input
-                  type="text"
-                  placeholder="photo"
-                  onChange={handleChange}
-                  name="img"
-                  value={user.img}
-                />
-              </div>
+              
               <div className="formInput">
                 <label>Description</label>
                 <textarea
@@ -146,6 +129,16 @@ const UpdateUser = () => {
                   onChange={handleChange}
                   name="descr"
                   value={user.descr}
+                />
+              </div>
+              <div className="formInput">
+                <label>Photo</label>
+                <input
+                  type="text"
+                  placeholder="photo"
+                  onChange={handleChange}
+                  name="img"
+                  value={user.img}
                 />
               </div>
               <div className="formInput">
