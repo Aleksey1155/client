@@ -53,7 +53,7 @@ const AddProject = () => {
     try {
       // 1. Додаємо проект
       const projectRes = await axios.post(`${hostUrl}/projects`, project);
-      const projectId = projectRes.data.insertId; // Отримуємо id нового проекту
+      const projectId = projectRes.data.insertId; // Отримуємо з серверу id нового проекту
     
       // 2. Якщо вибрано файли, додаємо їх до таблиці project_images
       if (selectedFiles.length > 0) {

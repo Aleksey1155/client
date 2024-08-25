@@ -28,6 +28,10 @@
         flex-direction: column;
         gap: 30px;
       }
+
+      .error{
+        color: red;
+      }
       input {
         border: none;
         border-bottom: 1px solid lightgray;
