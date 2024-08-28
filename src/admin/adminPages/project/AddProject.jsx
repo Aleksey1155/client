@@ -72,7 +72,7 @@ const AddProject = () => {
       }
     
       // Після успішного додавання проекту та зображень перенаправляємо користувача
-      navigate("/projects");
+      navigate("/admin/projects");
     } catch (err) {
       console.error(err); // Логування помилки
       alert('An error occurred while adding the project.'); // Повідомлення користувача

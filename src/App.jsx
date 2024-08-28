@@ -6,83 +6,110 @@ import {
 } from "react-router-dom";
 import "./style.css";
 
-import Projects from "./pages/project/Projects";
-import Tasks from "./pages/task/Tasks";
-import Users from "./pages/user/Users";
-import Assignments from "./pages/assignment/Assignments";
-import AddProject from "./pages/project/AddProject";
-import AddTask from "./pages/task/AddTask";
-import AddUser from "./pages/user/AddUser";
-import AddAssignment from "./pages/assignment/AddAssignment";
-import UpdateProject from "./pages/project/UpdateProject";
-import UpdateTask from "./pages/task/UpdateTask";
-import UpdateUser from "./pages/user/UpdateUser";
-import UpdateAssignment from "./pages/assignment/UpdateAssignment";
-import ProjectDetails from "./pages/project/ProjectDetails";
-import TaskDetails from "./pages/task/TaskDetails";
+import Projects from "./admin/adminPages/project/Projects";
+import Tasks from "./admin/adminPages/task/Tasks";
+import Users from "./admin/adminPages/user/Users";
+import Assignments from "./admin/adminPages/assignment/Assignments";
+import AddProject from "./admin/adminPages/project/AddProject";
+import AddTask from "./admin/adminPages/task/AddTask";
+import AddUser from "./admin/adminPages/user/AddUser";
+import AddAssignment from "./admin/adminPages/assignment/AddAssignment";
+import UpdateProject from "./admin/adminPages/project/UpdateProject";
+import UpdateTask from "./admin/adminPages/task/UpdateTask";
+import UpdateUser from "./admin/adminPages/user/UpdateUser";
+import UpdateAssignment from "./admin/adminPages/assignment/UpdateAssignment";
+import ProjectDetails from "./admin/adminPages/project/ProjectDetails";
+import TaskDetails from "./admin/adminPages/task/TaskDetails";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
-import Home from "./pages/home/Home";
-import Navbar from "./components/navbar/Navbar";
-import Sidebar from "./components/sidebar/Sidebar";
-import UserDetails from "./pages/user/UserDetails";
-import UserDatatable from "./pages/user/UserDatatable";
-import Layout from "./pages/Layout";  // шлях до Layout 
-import ImageCarousel from "./components/carousel/ImageCarousel";
-import Upload from "./components/upload/Upload.jsx";
+import Home from "./admin/adminPages/home/Home";
+import UserDetails from "./admin/adminPages/user/UserDetails";
+import UserDatatable from "./admin/adminPages/user/UserDatatable";
+import LayoutAdmin from "./admin/adminPages/LayoutAdmin";   
+import LayoutUser from "./pages/LayoutUser";   
+import ImageCarousel from "./admin/adminComponents/carousel/ImageCarousel";
+import Upload from "./admin/adminComponents/upload/Upload";
+import UserHome from "./pages/UserHome";
+import ProtectedRoute from "./admin/adminComponents/ProtectedRoute";
 
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
+    path: "/admin",
+    element: (
+      <ProtectedRoute component={LayoutAdmin} role="admin" />
+    ),
     children: [
       
       {
-        path: "/",
+        path: "/admin",
         element: <Home />,
       },
       {
-        path: "/users",
+        path: "/admin/users",
         element: <Users />,
       },
       
       {
-        path: "/users/:id",
+        path: "/admin/users/:id",
         element: <UserDetails />,
       },
       {
-        path: "/update_user/:id",
+        path: "update_user/:id",
         element: <UpdateUser />,
       },
+      
       {
-        path: "/projects",
+        path: "/admin/projects",
         element: <Projects />,
       },
       {
-        path: "/projects/:id",
+        path: "/admin/projects/:id",
         element: <ProjectDetails />,
       },
       {
-        path: "/add_project",
+        path: "/admin/add_project",
         element: <AddProject />,
       },
       {
-        path: "//update_project/:id",
+        path: "/admin/update_project/:id",
         element: <UpdateProject />,
       },
       {
-        path: "/add_user",
+        path: "/admin/add_user",
         element: <AddUser />,
       },
       {
-        path: "/tasks",
+        path: "/admin/tasks",
         element: <Tasks />,
       },
-      
-
+      {
+        path: "/admin/assignments",
+        element: <Assignments />,
+      },
     ],
   },
+
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute component={LayoutUser} role="user" />
+    ),
+    children: [
+      {
+        path: "/",
+        element: <UserHome />,
+      },
+
+      {
+        path: "/update_project/:id",
+        element: <UpdateProject />,
+      },
+      
+    ],
+  },
+
+  
   {
     path: "/register",
     element: <Register />,
@@ -95,7 +122,8 @@ const router = createBrowserRouter([
   {
     path: "/upload",
     element: <Upload />,
-  }
+  },
+  
 
  
 ]);
@@ -141,3 +169,6 @@ export default App;
 // }
 
 // export default App;
+
+
+

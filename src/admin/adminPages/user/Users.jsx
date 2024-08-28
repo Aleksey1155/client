@@ -75,7 +75,7 @@ const Users = () => {
         return (
           <div className="cellAction">
             {/* Link with dynamic routing */}
-           <Link to={`/users/${params.row.id}`} style={{ textDecoration: "none" }}>
+           <Link to={`/admin/users/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">Деталі</div>
             </Link>
            
@@ -95,7 +95,7 @@ const Users = () => {
     <div className="users">
       <div className="datatableTitle">
          Users
-        <Link to="/add_user" className="link">
+        <Link to="/admin/add_user" className="link">
           Add New
         </Link>
       </div>

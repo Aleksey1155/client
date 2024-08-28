@@ -99,7 +99,7 @@ const Projects = () => {
         return (
           <div className="cellAction">
             {/* Link with dynamic routing */}
-            <Link to={`/projects/${params.row.id}`} style={{ textDecoration: "none" }}>
+            <Link to={`/admin/projects/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">Деталі</div>
             </Link>
 
@@ -116,7 +116,7 @@ const Projects = () => {
     <div className="projects">
       <div className="datatableTitle">
         Projects
-        <Link to="/add_project" className="link">
+        <Link to="/admin/add_project" className="link">
           Add New
         </Link>
       </div>

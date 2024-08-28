@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import { DateTime } from "luxon";
@@ -28,8 +28,9 @@ const UpdateProject = () => {
   const [images, setImages] = useState([]);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const projectId = location.pathname.split("/")[2];
+  // const location = useLocation();
+  // const projectId = location.pathname.split("/")[2];
+  const { id: projectId } = useParams();
 
   console.log("selectedFile --" + selectedFile); //--------------------
 
@@ -94,7 +95,7 @@ const UpdateProject = () => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:3001/projects/${projectId}`, project);
-      navigate(`/projects/${projectId}`);
+      navigate(`/admin/projects/${projectId}`);
     } catch (err) {
       console.log(err);
     }
@@ -120,6 +121,7 @@ const UpdateProject = () => {
     setSelectedFile(file);
   };
 
+  //*********************************************************** */
   const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file");
@@ -127,13 +129,18 @@ const UpdateProject = () => {
     }
 
     const formData = new FormData();
-    formData.append("file", selectedFile);
+    formData.append("files", selectedFile);
     formData.append("project_id", projectId); // Передаємо project_id
+   
+
+  
 
     const res = await fetch(hostUrl, {
       method: "POST",
       body: formData,
     });
+
+    console.log("Selected File: ", selectedFile);
 
     const data = await res.json();
     setUploaded(data);
@@ -142,6 +149,7 @@ const UpdateProject = () => {
       navigate(0); // Перенаправляємо на ту ж сторінку для оновлення
     }, 1000); // 1000 мс = 1 секунда
   };
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const handlePick = () => {
     filePicker.current.click();
@@ -188,10 +196,14 @@ const UpdateProject = () => {
               </div>
             )}
 
-            {uploaded && (
+            {uploaded && uploaded.uploadedFiles.length > 0 && (
               <div>
-                <h2>{uploaded.fileName}</h2>
-                <img className="image" src={uploaded.filePath} alt="" />
+                <h2>{uploaded.uploadedFiles[0].fileName}</h2>
+                <img
+                  className="image"
+                  src={uploaded.uploadedFiles[0].filePath}
+                  alt=""
+                />
               </div>
             )}
 

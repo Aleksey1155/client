@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import "./updateuser.scss";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
@@ -18,8 +18,11 @@ const UpdateUser = () => {
   const [roles, setRoles] = useState([]);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const userId = location.pathname.split("/")[2];
+  // const location = useLocation();
+  // const userId = location.pathname.split("/")[2];
+  
+  const { id: userId } = useParams();
+
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -51,12 +54,13 @@ const UpdateUser = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.put("http://localhost:3001/users/" + userId, user);
-      navigate(`/users/${userId}`);
+      await axios.put(`http://localhost:3001/users/${userId}`, user);
+      navigate(`/admin/users/${userId}`);
     } catch (err) {
       console.log(err);
     }
   };
+  
 
   return (
     <div className="updateuser">

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import ProjectDatatable from "./ProjectDatatable";
 import "./projectdetails.scss";
-import ImageCarousel from "../../components/carousel/ImageCarousel";
+import ImageCarousel from "../../adminComponents/carousel/ImageCarousel";
 
 const ProjectDetails = () => {
   const { id } = useParams();
@@ -107,7 +107,7 @@ const ProjectDetails = () => {
         <div className="top">
           <div className="left">
             <div className="edit">
-              <Link to={`/update_project/${project.id}`} className="update">
+              <Link to={`/admin/update_project/${project.id}`} className="update">
                 EditProject
               </Link>
             </div>
@@ -138,7 +138,7 @@ const ProjectDetails = () => {
           <div className="right">
             <div className="title">Project Pictures</div>
             <div className="carousel">
-              {" "}
+              {/* {" "} */}
               <ImageCarousel images={images} />
             </div>
           </div>

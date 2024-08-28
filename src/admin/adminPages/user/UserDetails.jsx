@@ -30,7 +30,7 @@ const UserDetails = () => {
         <div className="top">
           <div className="left">
             <div className="edit">
-              <Link to={`/update_user/${user.id}`} className="update">
+              <Link to={`/admin/update_user/${user.id}`} className="update">
                 EditUser
               </Link>
             </div>

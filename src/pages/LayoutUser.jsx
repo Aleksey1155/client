@@ -1,9 +1,8 @@
-
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/navbar/Navbar";
 import Sidebar from "../components/sidebar/Sidebar";
 
-const Layout = () => {
+const LayoutUser = () => {
  
   
     return (
@@ -11,10 +10,10 @@ const Layout = () => {
         <Sidebar />
         <div className="layoutContainer">
           <Navbar />
-          <Outlet  />  {/* Тут ми передаємо searchText у Outlet */}
+          <Outlet  />  
         </div>
       </div>
     );
   };
 
-export default Layout;
+export default LayoutUser;

@@ -30,39 +30,39 @@ function Sidebar() {
   return (
     <div className="sidebar">
       <div className="top">
-        <Link to="/">
+        <Link to="/admin">
           <span className="logo">AdminPanel</span>
         </Link>
       </div>
       <div className="center">
         <ul>
           <p className="title">MAIN</p>
-          <Link to="/">
+          <Link to="/admin">
             <li>
               <DashboardIcon className="icon" />
               <span>Dashboard</span>
             </li>
           </Link>
           <p className="title">LIST</p>
-          <Link to="/users">
+          <Link to="/admin/users">
           <li>
             <PersonOutlineIcon className="icon" />
             <span>Users</span>
           </li>
           </Link>
-          <Link to="/projects">
+          <Link to="/admin/projects">
           <li>
             <FolderSharedOutlinedIcon className="icon" />
             <span>Projects</span>
           </li>
           </Link>
-          <Link to="/tasks">
+          <Link to="/admin/tasks">
           <li>
             <AssignmentOutlinedIcon className="icon" />
             <span>Tasks</span>
           </li>
           </Link>
-          <Link to="/assignments">
+          <Link to="/admin/assignments">
           <li>
             <CheckBoxOutlinedIcon className="icon" />
             <span>Assignments</span>

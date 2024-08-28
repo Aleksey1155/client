@@ -40,7 +40,7 @@ const AddUser = () => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:3001/users", user);
-      navigate("/users");
+      navigate("/admin/users");
     } catch (err) {
       console.log(err);
     }

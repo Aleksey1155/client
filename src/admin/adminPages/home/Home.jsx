@@ -1,8 +1,8 @@
 import React from "react";
 import "./home.scss";
-import Widget from "../../components/widget/Widget";
-import Dashboard from "../../components/dashboard/Dashboard";
-import Graphs from "../../components/graph/Graphs";
+import Widget from "../../adminComponents/widget/Widget";
+import Dashboard from "../../adminComponents/dashboard/Dashboard";
+import Graphs from "../../adminComponents/graph/Graphs";
 
 
 function Home() {
