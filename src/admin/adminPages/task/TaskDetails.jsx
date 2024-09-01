@@ -1,119 +1,105 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
+import "./taskdetails.scss";
+import TaskDatatable from "./TaskDatatable";
+import ImageCarousel from "../../adminComponents/carousel/ImageCarousel";
 
 const TaskDetails = () => {
-    const { id } = useParams();
-    const [task, setTask] = useState(null);
-    const [assignments, setAssignments] = useState([]);
-    const [users, setUsers] = useState([]);
+  const { id } = useParams();
+  const [task, setTask] = useState(null);
+  const [images, setImages] = useState([]);
 
-    useEffect(() => {
-        const fetchTask = async () => {
-            try {
-                const res = await axios.get(`http://localhost:3001/tasks/${id}`);
-                setTask(res.data);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-
-        const fetchAllAssignments = async () => {
-            try {
-                const res = await axios.get("http://localhost:3001/assignments");
-                // Filter assignments for this task
-                setAssignments(res.data.filter(assignment => assignment.task_id === Number(id)));
-            } catch (err) {
-                console.log(err);
-            }
-        };
-
-        const fetchUsers = async () => {
-            try {
-                const res = await axios.get("http://localhost:3001/users");
-                setUsers(res.data);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-
-        fetchTask();
-        fetchAllAssignments();
-        fetchUsers();
-    }, [id]);
-
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+  useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/tasks/${id}`);
+        setTask(res.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
 
-    const handleDelete = async (assignmentId) => {
-        const confirmed = window.confirm("Ви впевнені, що хочете видалити це призначення?");
-        if (confirmed) {
-            try {
-                await axios.delete(`http://localhost:3001/assignments/${assignmentId}`);
-                setAssignments(assignments.filter(assignment => assignment.id !== assignmentId));
-            } catch (err) {
-                console.log(err);
-            }
-        }
+    const fetchImages = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/task_images`);
+        // setImages(res.data);  // This will now contain images specific to the current project
+        setImages(res.data.filter((image) => image.task_id === Number(id)));
+      } catch (err) {
+        console.log(err);
+      }
     };
 
-    if (!task) {
-        return <div>Loading...</div>;
-    }
+    fetchImages();
 
-    return (
-        <div className="details">
-            <div className="nav-links">
-                <Link to="/" className="nav-link">Головна</Link>
-                <Link to="/projects" className="nav-link">Проекти</Link>
-                <Link to="/tasks" className="nav-link">Завдання</Link>
-                <Link to="/users" className="nav-link">Виконавці</Link>
-                <Link to="/assignments" className="nav-link">Призначення</Link>
-            </div>
+    fetchTask();
+  }, [id]);
 
-            <h2>Деталі Завдання</h2>
-            <div>
-                <h3>{task.title}</h3>
-                <div dangerouslySetInnerHTML={{ __html: task.description }} />
-                <Link to={`/update_task/${task.id}`} className="nav-addlink">Редагувати завдання</Link>
-                <p>Дата початку завдання: {formatDate(task.start_date)}</p>
-                <p>Дата закінчення завдання: {formatDate(task.end_date)}</p>
-                <p>Статус завдання: {task.status_name}</p>
-                <p>Приоритет завдання: {task.priority_name}</p>
-                <p>Номер завдання: {task.id}</p>
-                <Link to="/add_assignment" className="nav-addlink">Додати виконавця</Link>
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  if (!task) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="taskDetails">
+      <div className="userContainer">
+        <div className="top">
+          <div className="left">
+            <div className="edit">
+              <Link to={`/admin/update_task/${task.id}`} className="update">
+                EditTask
+              </Link>
             </div>
-            <h2>Виконавці завдання</h2>
-            <table className="projects-table">
-                <thead>
-                    <tr>
-                        <th>Номер Завдання</th>
-                        <th>ПБ Виконавця</th>
-                        <th>Дата Призначення</th>
-                        <th>Дії</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {assignments.map(assignment => {
-                        const user = users.find(user => user.id === assignment.user_id);
-                        return (
-                            <tr key={assignment.id}>
-                                <td>{assignment.task_id}</td>
-                                <td>{user ? user.name : "Unknown"}</td>
-                                <td>{formatDate(assignment.assigned_date)}</td>
-                                <td>
-                                    <button className="delete" onClick={() => handleDelete(assignment.id)}>Видалити</button>
-                                    <Link to={`/update_assignment/${assignment.id}`} className="update">Редагувати</Link>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            <div className="title">Information</div>
+            <div className="item">
+              <img
+                src={images.length > 0 ? images[0].url : ""}
+                alt=""
+                className="itemImg"
+              />
+              <div className="details">
+                <div className="itemTitle">{task.title}</div>
+                <div className="detailItem">
+                  <span className="itemKey">Start Date:</span>
+                  <span className="itemValue">
+                    {formatDate(task.start_date)}
+                  </span>
+                  <span className="itemKey">End Date:</span>
+                  <span className="itemValue">{formatDate(task.end_date)}</span>
+                  <span className="itemKey">Task Status:</span>
+                  <span className="itemValue">{task.status_name}</span>
+                  <span className="itemKey">Task Priority:</span>
+                  <span className="itemValue">{task.priority_name}</span>
+                  <span className="itemKey">Project Title:</span>
+                  <span className="itemProject">{task.project_title}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="right">
+            <div className="title">Task Pictures</div>
+            <div className="carousel">
+              {/* {" "} */}
+              <ImageCarousel images={images} />
+            </div>
+          </div>
         </div>
-    );
+        <div className="bottom">
+          <div className="title">Task Description</div>
+          <div dangerouslySetInnerHTML={{ __html: task.description }} />
+        </div>
+        <div className="taskDatatable">
+          <TaskDatatable taskId={id} />
+        </div>
+      </div>
+
+     
+    </div>
+  );
 };
 
 export default TaskDetails;

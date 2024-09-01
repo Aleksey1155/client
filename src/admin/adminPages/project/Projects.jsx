@@ -99,7 +99,7 @@ const Projects = () => {
         return (
           <div className="cellAction">
             {/* Link with dynamic routing */}
-            <Link to={`/admin/projects/${params.row.id}`} style={{ textDecoration: "none" }}>
+            <Link to={`/admin/project/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">Деталі</div>
             </Link>
 
@@ -120,7 +120,7 @@ const Projects = () => {
           Add New
         </Link>
       </div>
-      <div className="dataGrid"></div>
+      <div className="dataGrid">
       <DataGrid
         className="datagrid"
         rows={projects}
@@ -134,6 +134,7 @@ const Projects = () => {
           },
         }}
       />
+      </div>
     </div>
   );
 };

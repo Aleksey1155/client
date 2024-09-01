@@ -47,8 +47,8 @@ const projectColumns = [
 const ProjectDatatable = ({ projectId }) => {
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [taskStatuses, setTaskStatuses] = useState([]);
-  const [taskPriorities, setTaskPriorities] = useState([]);
+  // const [taskStatuses, setTaskStatuses] = useState([]);
+  // const [taskPriorities, setTaskPriorities] = useState([]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -73,37 +73,37 @@ const ProjectDatatable = ({ projectId }) => {
       }
     };
 
-    const fetchTaskStatuses = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/task_statuses");
-        setTaskStatuses(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    // const fetchTaskStatuses = async () => {
+    //   try {
+    //     const res = await axios.get("http://localhost:3001/task_statuses");
+    //     setTaskStatuses(res.data);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
 
-    const fetchTaskPriorities = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/task_priorities");
-        setTaskPriorities(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    // const fetchTaskPriorities = async () => {
+    //   try {
+    //     const res = await axios.get("http://localhost:3001/task_priorities");
+    //     setTaskPriorities(res.data);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
     fetchProject();
     fetchAllTasks();
-    fetchTaskStatuses();
-    fetchTaskPriorities();
+    // fetchTaskStatuses();
+    // fetchTaskPriorities();
   }, [projectId]);
 
   
 
-  const truncateDescription = (description, maxLength) => {
-    if (description.length > maxLength) {
-      return description.substring(0, maxLength) + "...";
-    }
-    return description;
-  };
+  // const truncateDescription = (description, maxLength) => {
+  //   if (description.length > maxLength) {
+  //     return description.substring(0, maxLength) + "...";
+  //   }
+  //   return description;
+  // };
 
   const handleDelete = async (taskId) => {
     const confirmed = window.confirm(
@@ -133,7 +133,7 @@ const ProjectDatatable = ({ projectId }) => {
           <div className="cellAction">
             {/* Link with dynamic routing */}
             <Link
-              to={`/tasks/${params.row.id}`}
+              to={`/admin/task/${params.row.id}`}
               style={{ textDecoration: "none" }}
             >
               <div className="view-Button">Деталі</div>

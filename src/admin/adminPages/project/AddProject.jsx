@@ -21,6 +21,7 @@ const AddProject = () => {
   const [statuses, setStatuses] = useState([]);
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
@@ -64,7 +65,7 @@ const AddProject = () => {
     
         formData.append("project_id", projectId);
     
-        await axios.post(`${hostUrl}/upload`, formData, {
+        await axios.post(`${hostUrl}/upload_project`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -140,6 +141,8 @@ const AddProject = () => {
                   name="title"
                 />
               </div>
+
+              <div className="formInput"></div>
 
               <div className="formInput">
                 <label>Start Date</label>

@@ -9,7 +9,7 @@ import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import Zoom from "react-medium-image-zoom";
 
-const hostUrl = "http://localhost:3001/upload";
+const hostUrl = "http://localhost:3001/upload_project";
 
 const UpdateProject = () => {
   const [project, setProject] = useState({
@@ -31,6 +31,7 @@ const UpdateProject = () => {
   // const location = useLocation();
   // const projectId = location.pathname.split("/")[2];
   const { id: projectId } = useParams();
+  
 
   console.log("selectedFile --" + selectedFile); //--------------------
 
@@ -95,7 +96,7 @@ const UpdateProject = () => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:3001/projects/${projectId}`, project);
-      navigate(`/admin/projects/${projectId}`);
+      navigate(`/admin/project/${projectId}`);
     } catch (err) {
       console.log(err);
     }
@@ -213,7 +214,7 @@ const UpdateProject = () => {
           </div>
           <div className="right">
             <form>
-              <div className="formInput"></div>
+             
 
               <div className="formInput">
                 <label>Project Title</label>
@@ -225,11 +226,12 @@ const UpdateProject = () => {
                   value={project.title}
                 />
               </div>
+              <div className="formInput"></div>
 
               <div className="formInput">
                 <label>start_date</label>
                 <input
-                  type="text"
+                  type="date"
                   placeholder="start_date"
                   onChange={handleChange}
                   name="start_date"
@@ -239,7 +241,7 @@ const UpdateProject = () => {
               <div className="formInput">
                 <label>end_date</label>
                 <input
-                  type="text"
+                  type="date"
                   placeholder="end_date"
                   onChange={handleChange}
                   name="end_date"

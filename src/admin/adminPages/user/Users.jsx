@@ -25,8 +25,8 @@ const userColumns = [
     width: 200,
   },
   {
-    field: "role_name",
-    headerName: "Role Name",
+    field: "job_name",
+    headerName: "Job ",
     width: 200,
   },
   {

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./adduser.scss";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+
+const hostUrl = "http://localhost:3001";
 
 const AddUser = () => {
   const [user, setUser] = useState({
@@ -10,19 +12,22 @@ const AddUser = () => {
     password: "",
     name: "",
     phone: "",
-    img: "",
+    img: "", // поле для зребеження зображення користувача
     descr: "",
     role_id: "",
   });
 
+  const filePicker = useRef(null);
   const [roles, setRoles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null); // Оновлено
+  const [uploaded, setUploaded] = useState();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/roles");
+        const res = await axios.get(`${hostUrl}/roles`);
         setRoles(res.data);
       } catch (err) {
         console.log(err);
@@ -36,14 +41,48 @@ const AddUser = () => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
+
     try {
-      await axios.post("http://localhost:3001/users", user);
+      // 1. Додаємо користувача
+      const userRes = await axios.post(`${hostUrl}/users`, user);
+      const userId = userRes.data.insertId; // Отримуємо ID нового користувача з відповіді сервера
+      console.log(userId);
+      // 2. Якщо вибрано файли, додаємо їх
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("files", selectedFile);
+        formData.append("userId", userId); // Передаємо userId на сервер
+
+        const res = await fetch(`${hostUrl}/upload_user`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+        console.log("Uploaded files:", data.uploadedFiles);
+
+        if (data.uploadedFiles) {
+          setUploaded(data.uploadedFiles);
+        }
+      }
+
+      // Після успішного додавання користувача та зображення перенаправляємо
       navigate("/admin/users");
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      alert("An error occurred while adding the user.");
     }
+  };
+
+  const handlePick = () => {
+    filePicker.current.click();
   };
 
   return (
@@ -54,23 +93,58 @@ const AddUser = () => {
         </div>
         <div className="bottom">
           <div className="left">
-            <img
-              className="image"
-              src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              alt=""
-            />
+            <div>
+              <button onClick={handlePick}>Add file</button>
+              <input
+                className="hidden"
+                ref={filePicker}
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+            </div>
+
+            {!selectedFile && (
+              <img
+                className="noimage"
+                src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                alt=""
+              />
+            )}
+
+            {selectedFile && !uploaded && (
+              <div className="selectedFile">
+                <div>
+                  <ul>
+                    <li>Name: {selectedFile.name}</li>
+                    <li>Type: {selectedFile.type}</li>
+                    <li>Size: {selectedFile.size}</li>
+                  </ul>
+                </div>
+                <div>
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Preview"
+                    className="image-preview"
+                  />
+                </div>
+              </div>
+            )}
+
+            {uploaded && uploaded.uploadedFiles.length > 0 && (
+              <div>
+                <h2>{uploaded.uploadedFiles[0].fileName}</h2>
+                <img
+                  className="image"
+                  src={uploaded.uploadedFiles[0].filePath}
+                  alt=""
+                />
+              </div>
+            )}
           </div>
+
           <div className="right">
             <form>
-              <div className="formInput">
-                <label htmlFor="file">
-                  {" "}
-                  Image:
-                  <FolderOpenOutlinedIcon className="icon" />
-                </label>
-                <input type="file" id="file" style={{ display: "none" }} />
-              </div>
-
               <div className="formInput">
                 <label>Username</label>
                 <input
@@ -90,6 +164,7 @@ const AddUser = () => {
                   name="email"
                 />
               </div>
+
               <div className="formInput">
                 <label>Password</label>
                 <input
@@ -99,6 +174,7 @@ const AddUser = () => {
                   name="password"
                 />
               </div>
+
               <div className="formInput">
                 <label>Phone</label>
                 <input
@@ -110,15 +186,6 @@ const AddUser = () => {
               </div>
 
               <div className="formInput">
-                <label>Photo</label>
-                <input
-                  type="text"
-                  placeholder="фото"
-                  onChange={handleChange}
-                  name="img"
-                />
-              </div>
-              <div className="formInput">
                 <label>Description</label>
                 <textarea
                   type="text"
@@ -127,6 +194,7 @@ const AddUser = () => {
                   name="descr"
                 />
               </div>
+
               <div className="formInput">
                 <label>Assignment</label>
                 <select
@@ -151,8 +219,6 @@ const AddUser = () => {
           </div>
         </div>
       </div>
-
-     
     </div>
   );
 };

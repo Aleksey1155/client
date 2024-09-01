@@ -91,10 +91,12 @@ function Sidebar() {
             <span>Settings</span>
           </li>
           <p className="title">USER</p>
+          <Link to="/admin/profile">
           <li>
             <AccountBoxOutlinedIcon className="icon" />
             <span>Profile</span>
           </li>
+          </Link>
           <li onClick={handleLogout}>
             <LogoutOutlinedIcon className="icon" />
             <span>Logout</span>

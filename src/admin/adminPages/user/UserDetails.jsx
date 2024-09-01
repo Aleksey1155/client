@@ -45,7 +45,7 @@ const UserDetails = () => {
                   <span className="itemKey">Phone:</span>
                   <span className="itemValue">{user.phone}</span>
                   <span className="itemKey">Role:</span>
-                  <span className="itemValue">{user.role_name}</span>
+                  <span className="itemValue">{user.job_name}</span>
                 </div>
               </div>
             </div>

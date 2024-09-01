@@ -22,15 +22,14 @@ import ProjectDetails from "./admin/adminPages/project/ProjectDetails";
 import TaskDetails from "./admin/adminPages/task/TaskDetails";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
-import Home from "./admin/adminPages/home/Home";
+import AdminHome from "./admin/adminPages/home/AdminHome";
 import UserDetails from "./admin/adminPages/user/UserDetails";
-import UserDatatable from "./admin/adminPages/user/UserDatatable";
 import LayoutAdmin from "./admin/adminPages/LayoutAdmin";   
 import LayoutUser from "./pages/LayoutUser";   
-import ImageCarousel from "./admin/adminComponents/carousel/ImageCarousel";
 import Upload from "./admin/adminComponents/upload/Upload";
 import UserHome from "./pages/UserHome";
 import ProtectedRoute from "./admin/adminComponents/ProtectedRoute";
+import Profile from "./pages/login/Profile";
 
 
 const router = createBrowserRouter([
@@ -43,7 +42,7 @@ const router = createBrowserRouter([
       
       {
         path: "/admin",
-        element: <Home />,
+        element: <AdminHome />,
       },
       {
         path: "/admin/users",
@@ -64,7 +63,7 @@ const router = createBrowserRouter([
         element: <Projects />,
       },
       {
-        path: "/admin/projects/:id",
+        path: "/admin/project/:id",
         element: <ProjectDetails />,
       },
       {
@@ -84,8 +83,32 @@ const router = createBrowserRouter([
         element: <Tasks />,
       },
       {
+        path: "/admin/add_task",
+        element: <AddTask />,
+      },
+      {
+        path: "/admin/task/:id",
+        element: <TaskDetails />,
+      },
+      {
+        path: "/admin/update_task/:id",
+        element: <UpdateTask />,
+      },
+      {
         path: "/admin/assignments",
         element: <Assignments />,
+      },
+      {
+        path: "/admin/add_assignment",
+        element: <AddAssignment />,
+      },
+      {
+        path: "/admin/update_assignment/:id",
+        element: <UpdateAssignment />,
+      },
+      {
+        path: "/admin/profile",
+        element: <Profile />,
       },
     ],
   },

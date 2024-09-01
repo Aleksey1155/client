@@ -8,9 +8,9 @@ import ImageCarousel from "../../adminComponents/carousel/ImageCarousel";
 const ProjectDetails = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
-  const [tasks, setTasks] = useState([]);
-  const [taskStatuses, setTaskStatuses] = useState([]);
-  const [taskPriorities, setTaskPriorities] = useState([]);
+  // const [tasks, setTasks] = useState([]);
+  // const [taskStatuses, setTaskStatuses] = useState([]);
+  // const [taskPriorities, setTaskPriorities] = useState([]);
   const [images, setImages] = useState([]);
 
   useEffect(() => {
@@ -27,32 +27,32 @@ const ProjectDetails = () => {
   }, [id]);
 
   useEffect(() => {
-    const fetchAllTasks = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/tasks");
-        setTasks(res.data.filter((task) => task.project_id === Number(id)));
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    // const fetchAllTasks = async () => {
+    //   try {
+    //     const res = await axios.get("http://localhost:3001/tasks");
+    //     setTasks(res.data.filter((task) => task.project_id === Number(id)));
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
 
-    const fetchTaskStatuses = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/task_statuses");
-        setTaskStatuses(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    // const fetchTaskStatuses = async () => {
+    //   try {
+    //     const res = await axios.get("http://localhost:3001/task_statuses");
+    //     setTaskStatuses(res.data);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
 
-    const fetchTaskPriorities = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/task_priorities");
-        setTaskPriorities(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    // const fetchTaskPriorities = async () => {
+    //   try {
+    //     const res = await axios.get("http://localhost:3001/task_priorities");
+    //     setTaskPriorities(res.data);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
 
     const fetchImages = async () => {
       try {
@@ -66,9 +66,9 @@ const ProjectDetails = () => {
 
     fetchImages();
 
-    fetchAllTasks();
-    fetchTaskStatuses();
-    fetchTaskPriorities();
+    // fetchAllTasks();
+    // fetchTaskStatuses();
+    // fetchTaskPriorities();
   }, [id]);
 
   const formatDate = (dateString) => {
@@ -76,26 +76,26 @@ const ProjectDetails = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  const truncateDescription = (description, maxLength) => {
-    if (description.length > maxLength) {
-      return description.substring(0, maxLength) + "...";
-    }
-    return description;
-  };
+  // const truncateDescription = (description, maxLength) => {
+  //   if (description.length > maxLength) {
+  //     return description.substring(0, maxLength) + "...";
+  //   }
+  //   return description;
+  // };
 
-  const handleDelete = async (taskId) => {
-    const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити це завдання?"
-    );
-    if (confirmed) {
-      try {
-        await axios.delete(`http://localhost:3001/tasks/${taskId}`);
-        setTasks(tasks.filter((task) => task.id !== taskId));
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
+  // const handleDelete = async (taskId) => {
+  //   const confirmed = window.confirm(
+  //     "Ви впевнені, що хочете видалити це завдання?"
+  //   );
+  //   if (confirmed) {
+  //     try {
+  //       await axios.delete(`http://localhost:3001/tasks/${taskId}`);
+  //       setTasks(tasks.filter((task) => task.id !== taskId));
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // };
 
   if (!project) {
     return <div>Loading...</div>;
