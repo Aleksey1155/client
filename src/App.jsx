@@ -22,14 +22,15 @@ import ProjectDetails from "./admin/adminPages/project/ProjectDetails";
 import TaskDetails from "./admin/adminPages/task/TaskDetails";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
-import AdminHome from "./admin/adminPages/home/AdminHome";
 import UserDetails from "./admin/adminPages/user/UserDetails";
 import LayoutAdmin from "./admin/adminPages/LayoutAdmin";   
 import LayoutUser from "./pages/LayoutUser";   
 import Upload from "./admin/adminComponents/upload/Upload";
-import UserHome from "./pages/UserHome";
+import UserHome from "./pages/userhome/UserHome";
 import ProtectedRoute from "./admin/adminComponents/ProtectedRoute";
-import Profile from "./pages/login/Profile";
+import Profile from "./pages/profile/Profile";
+import Statistics from "./admin/adminPages/useful/Statistics";
+import AdminDashboard from "./admin/adminPages/home/AdminDashboard";
 
 
 const router = createBrowserRouter([
@@ -42,7 +43,11 @@ const router = createBrowserRouter([
       
       {
         path: "/admin",
-        element: <AdminHome />,
+        element: <UserHome />,
+      },
+      {
+        path: "/admin/dashboard",
+        element: <AdminDashboard />,
       },
       {
         path: "/admin/users",
@@ -107,6 +112,14 @@ const router = createBrowserRouter([
         element: <UpdateAssignment />,
       },
       {
+        path: "/admin/profile/:id",
+        element: <Profile />,
+      },
+      {
+        path: "/admin/statistics",
+        element: <Statistics/>,
+      },
+      {
         path: "/admin/profile",
         element: <Profile />,
       },
@@ -116,7 +129,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute component={LayoutUser} role="user" />
+      <ProtectedRoute component={LayoutUser} role="user"  />
     ),
     children: [
       {
@@ -125,8 +138,8 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/update_project/:id",
-        element: <UpdateProject />,
+        path: "/profile/:id",
+        element: <Profile />,
       },
       
     ],

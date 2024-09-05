@@ -37,7 +37,9 @@ const projectColumns = [
     headerName: "Start Date",
     width: 120,
     renderCell: (params) => {
-      return <div className="cellWithImg">{formatDate(params.row.start_date)}</div>;
+      return (
+        <div className="cellWithImg">{formatDate(params.row.start_date)}</div>
+      );
     },
   },
   {
@@ -45,7 +47,9 @@ const projectColumns = [
     headerName: "End Date",
     width: 120,
     renderCell: (params) => {
-      return <div className="cellWithImg">{formatDate(params.row.end_date)}</div>;
+      return (
+        <div className="cellWithImg">{formatDate(params.row.end_date)}</div>
+      );
     },
   },
   {
@@ -99,11 +103,17 @@ const Projects = () => {
         return (
           <div className="cellAction">
             {/* Link with dynamic routing */}
-            <Link to={`/admin/project/${params.row.id}`} style={{ textDecoration: "none" }}>
+            <Link
+              to={`/admin/project/${params.row.id}`}
+              style={{ textDecoration: "none" }}
+            >
               <div className="viewButton">Деталі</div>
             </Link>
 
-            <button className="deleteButton" onClick={() => handleDelete(params.row.id)}>
+            <button
+              className="deleteButton"
+              onClick={() => handleDelete(params.row.id)}
+            >
               Видалити
             </button>
           </div>
@@ -114,26 +124,28 @@ const Projects = () => {
 
   return (
     <div className="projects">
-      <div className="datatableTitle">
-        Projects
-        <Link to="/admin/add_project" className="link">
-          Add New
-        </Link>
-      </div>
-      <div className="dataGrid">
-      <DataGrid
-        className="datagrid"
-        rows={projects}
-        columns={projectColumns.concat(actionColumn)} // Колонка `id` не включена
-        pageSize={9}
-        rowsPerPageOptions={[9]}
-        checkboxSelection
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
-          },
-        }}
-      />
+      <div className="container">
+        <div className="datatableTitle">
+          Projects
+          <Link to="/admin/add_project" className="link">
+            Add New
+          </Link>
+        </div>
+        <div className="dataGrid">
+          <DataGrid
+            className="datagrid"
+            rows={projects}
+            columns={projectColumns.concat(actionColumn)} // Колонка `id` не включена
+            pageSize={9}
+            rowsPerPageOptions={[9]}
+            checkboxSelection
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
+              },
+            }}
+          />
+        </div>
       </div>
     </div>
   );

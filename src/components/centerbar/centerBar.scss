@@ -1,0 +1,17 @@
+.centerBar {
+  flex: 8;
+  // padding: 10px;
+  position: sticky;
+  top: 70;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  background: rgb(250, 250, 250);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+}

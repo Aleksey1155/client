@@ -12,13 +12,24 @@
     display: flex;
 }
 
-.layoutContainer{
+.container{
     flex: 6;
 }
 
 a{
     text-decoration: none;
 }
+
+body {
+    
+    margin-top: 0;
+    
+
+}
+
+
+  
+
 /* .projects {
     display: flex;
     gap: 10px;

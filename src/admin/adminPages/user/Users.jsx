@@ -44,6 +44,7 @@ const Users = () => {
       try {
         const res = await axios.get("http://localhost:3001/users");
         setUsers(res.data);
+        console.log(res.data)
       } catch (err) {
         console.log(err);
       }

@@ -5,6 +5,10 @@
     align-items: center;
     font-size: 14px;
     color: #555;
+    z-index: 9999;
+    position: sticky;
+    top: 0;
+    background-color: white;
 
     .wrapper{
         width: 100%;

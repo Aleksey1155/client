@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./userHome.scss";
+import Stories from "../../components/stories/Stories";
+import Posts from "../../components/posts/Posts";
+import RightBar from "../../components/rightbar/RightBar";
 
 function UserHome() {
   const [userData, setUserData] = useState(null);
@@ -15,7 +19,7 @@ function UserHome() {
           navigate("/login");
           return;
         }
-        
+
         const response = await axios.get("http://localhost:3001/me", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -28,10 +32,9 @@ function UserHome() {
         setLoading(false);
       }
     };
-  
+
     fetchUserData();
   }, [navigate]);
-  
 
   if (loading) {
     return <div>Loading...</div>; // Можна відобразити спіннер або повідомлення про завантаження
@@ -40,15 +43,26 @@ function UserHome() {
   if (!userData) {
     return <div>No user data available.</div>; // Повідомлення, якщо дані користувача відсутні
   }
-
   return (
-    <div>
-      Welcome, {userData.name}!<p>Email: {userData.email}</p>
-      {/* Додаткова інформація про користувача */}
-    </div>
+    <div className="userHome">
+      
+      <div className="container">
+        <Stories userId = {userData.id} />
+        <Posts />
+     
+      <div className="user">
+        <p> Welcome, {userData.name}!</p>
+        <p>
+          Email: {userData.email} ID: {userData.id}
+        </p>
+        {/* Додаткова інформація про користувача */}
+      </div>
+      </div>
+        <RightBar />
+      </div>
+    
+ 
   );
 }
 
 export default UserHome;
-
-

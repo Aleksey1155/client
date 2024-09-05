@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "./dashboard.scss";
+import "./dashboardtable.scss";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,7 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const Dashboard = () => {
+const DashboardTable = () => {
   // Змінні стану для зберігання даних, отриманих з API та фільтрів
   const [dashboardData, setDashboardData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -125,11 +125,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="dashboardTable">
+      <div className="dashboardContainer">
+        <div className="top">
       {/* Посилання для додавання проекту */}
       <div className="addlinks">
         <p className="titleAdd">Додати проект</p>
-        <Link to="/add_project" className="addlink">
+        <Link to="/admin/add_project" className="addlink">
           Додати новий проект
         </Link>
       </div>
@@ -183,7 +185,7 @@ const Dashboard = () => {
           </select>
         </div>
       </div>
-
+      </div>
       {/* Таблиця з даними */}
 
       <TableContainer component={Paper} className="table">
@@ -245,8 +247,9 @@ const Dashboard = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default DashboardTable;

@@ -9,7 +9,7 @@ const LayoutAdmin = () => {
     return (
       <div className="layout">
         <Sidebar />
-        <div className="layoutContainer">
+        <div className="container">
           <Navbar />
           <Outlet  />  
         </div>

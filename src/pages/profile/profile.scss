@@ -1,0 +1,108 @@
+.profile {
+  display: flex;
+  padding: 10px;
+
+  .container {
+    flex: 8;
+    position: sticky;
+    top: 70;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    background: rgb(250, 250, 250);
+    overflow: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .images {
+      width: 100%;
+      height: 300px;
+      position: relative;
+
+      .cover {
+        width: 100%;
+        height: 100%;
+      }
+
+      .profilePic {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 150px;
+      }
+    }
+    .profileContainer {
+      padding: 50px 20px 30px;
+      .userInfo {
+        height: 150px;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+
+        .left {
+          flex: 1;
+          display: flex;
+          gap: 10px;
+          a {
+            color: #555;
+          }
+        }
+        .center {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          color: #555;
+
+          span {
+            font-size: 30px;
+            font-weight: 500;
+          }
+          .info {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            .item {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              color: #555;
+
+              span {
+                font-size: 12px;
+              }
+            }
+          }
+          button {
+            border: none;
+            background-color: #7498fd;
+            color: white;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+        }
+        .right {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 10px;
+        }
+      }
+    }
+  }
+}
