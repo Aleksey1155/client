@@ -21,11 +21,10 @@ const UpdateTask = () => {
     status_id: "",
   });
 
-
   const filePicker = useRef(null);
   const [statuses, setStatuses] = useState([]);
   const [priorities, setPriorities] = useState([]);
-  
+  const [projects, setProjects] = useState([]);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploaded, setUploaded] = useState();
@@ -78,18 +77,25 @@ const UpdateTask = () => {
     };
 
     const fetchImages = async () => {
-        try {
-          const res = await axios.get(`http://localhost:3001/task_images`);
-          setImages(
-            res.data.filter((image) => image.task_id === Number(taskId))
-          );
-        } catch (err) {
-          console.log(err);
-        }
-      };
-  
-      fetchImages();
+      try {
+        const res = await axios.get(`http://localhost:3001/task_images`);
+        setImages(res.data.filter((image) => image.task_id === Number(taskId)));
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
+    const fetchAllProjects = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/projects"); // Запит на отримання всіх проєктів
+        setProjects(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchAllProjects();
+    fetchImages();
     fetchTask();
     fetchStatuses();
     fetchPriorities();
@@ -232,7 +238,23 @@ const UpdateTask = () => {
                   value={task.title}
                 />
               </div>
-              <div className="formInput"></div>
+              <div className="formInput">
+                <label>Project</label>
+                <select
+                  name="project_id"
+                  onChange={handleChange}
+                  value={task.project_id}
+                >
+                  <option value="" disabled>
+                    Виберіть проект
+                  </option>
+                  {projects.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.title} 
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className="formInput">
                 <label>start_date</label>
                 <input

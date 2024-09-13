@@ -3,7 +3,6 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import "./updateuser.scss";
 
-
 const hostUrl = "http://localhost:3001";
 
 const UpdateUser = () => {
@@ -169,9 +168,23 @@ const UpdateUser = () => {
               </div>
             )}
 
-            {/* {uploaded && (
-              <img className="image" src={uploaded.filePath} alt="" />
-            )} */}
+
+           {/* ------------------------ Для Cloudinary ------------------- */}
+
+            {/* {uploaded &&
+              uploaded.uploadedFiles &&
+              uploaded.uploadedFiles.length > 0 && (
+                <div>
+                  <h2>{uploaded.uploadedFiles[0].fileName}</h2>
+                  <img
+                    className="image"
+                    src={uploaded.uploadedFiles[0].filePath}
+                    alt=""
+                  />
+                </div>
+              )} */}
+
+            
           </div>
           <div className="right">
             <form>

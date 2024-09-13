@@ -8,8 +8,7 @@ import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import RightBar from "../../components/rightbar/RightBar";
-import CenterBar from "../../components/centerbar/CenterBar";
+import GeneralChat from "../../components/generalchat/GeneralChat";
 import Posts from "../../components/posts/Posts";
 
 function Profile() {
@@ -67,7 +66,7 @@ function Profile() {
         </div>
         <Posts/>
       </div>
-      <RightBar/>
+      <GeneralChat/>
     </div>
   );
 }

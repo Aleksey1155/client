@@ -8,13 +8,18 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import Comments from "../comments/Comments";
 import "./post.scss";
 
-function Post({ post }) {
-  const [commentOpen, setCommentOpen] = useState(false);
-  const liked = true;
-  const location = useLocation(); // Get the current location
 
+function Post({ post }) {
+  const location = useLocation(); // Get the current location
   // Check if the current path includes '/admin'
   const isAdmin = location.pathname.includes("/admin");
+
+  const [commentOpen, setCommentOpen] = useState(false);
+ 
+
+  const liked = true;
+
+ 
 
   return (
     <div className="post">
@@ -24,7 +29,11 @@ function Post({ post }) {
             <img src={post.profilePic} alt="" />
             <div className="details">
               <Link
-                to={isAdmin ? `/admin/profile/${post.userId}` : `/profile/${post.userId}`}
+                to={
+                  isAdmin
+                    ? `/admin/profile/${post.userId}`
+                    : `/profile/${post.userId}`
+                }
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <span className="name">{post.name}</span>

@@ -31,6 +31,7 @@ import ProtectedRoute from "./admin/adminComponents/ProtectedRoute";
 import Profile from "./pages/profile/Profile";
 import Statistics from "./admin/adminPages/useful/Statistics";
 import AdminDashboard from "./admin/adminPages/home/AdminDashboard";
+import Social from "./pages/social/Social";
 
 
 const router = createBrowserRouter([
@@ -120,9 +121,10 @@ const router = createBrowserRouter([
         element: <Statistics/>,
       },
       {
-        path: "/admin/profile",
-        element: <Profile />,
+        path: "/admin/social",
+        element: <Social />,
       },
+
     ],
   },
 
@@ -135,6 +137,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <UserHome />,
+      },
+      {
+        path: "/social",
+        element: <Social />,
       },
 
       {

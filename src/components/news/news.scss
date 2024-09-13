@@ -1,0 +1,42 @@
+.news {
+    flex: 3;
+    
+    height: calc(100vh - 70px);
+    overflow: scroll;
+    padding: 10px;
+    background: rgb(255, 255, 255);
+  
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  
+    .container {
+      flex-direction: column;
+      margin: 10px;
+      
+  
+      .chatName {
+        font-size: 20px;
+        color: #555;
+      }
+  
+      .blockMessage {
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        background-color: white;
+        padding: 5px;
+        margin-top: 10px;
+        color: #555;
+
+        .message{
+          padding: 5px;
+          
+        }
+        
+  
+      }
+    }
+  }
+  

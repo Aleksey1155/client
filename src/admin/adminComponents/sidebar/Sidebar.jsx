@@ -14,6 +14,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -47,6 +48,12 @@ function Sidebar() {
               <li>
                 <DashboardIcon className="icon" />
                 <span>Dashboard</span>
+              </li>
+            </Link>
+            <Link to="/admin/social">
+              <li>
+                <InterestsOutlinedIcon className="icon" />
+                <span>Social</span>
               </li>
             </Link>
             <p className="title">LIST</p>

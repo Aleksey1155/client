@@ -2,17 +2,13 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./sidebar.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
-import FolderSharedOutlinedIcon from "@mui/icons-material/FolderSharedOutlined";
-import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
-import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -42,31 +38,15 @@ function Sidebar() {
                 <span>Dashboard</span>
               </li>
             </Link>
+            <Link to="/social">
+              <li>
+                <InterestsOutlinedIcon className="icon" />
+                <span>Social</span>
+              </li>
+            </Link>
             <p className="title">LIST</p>
-            <Link to="/users">
-              <li>
-                <PersonOutlineIcon className="icon" />
-                <span>Users</span>
-              </li>
-            </Link>
-            <Link to="/projects">
-              <li>
-                <FolderSharedOutlinedIcon className="icon" />
-                <span>Projects</span>
-              </li>
-            </Link>
-            <Link to="/tasks">
-              <li>
-                <AssignmentOutlinedIcon className="icon" />
-                <span>Tasks</span>
-              </li>
-            </Link>
-            <Link to="/assignments">
-              <li>
-                <CheckBoxOutlinedIcon className="icon" />
-                <span>Assignments</span>
-              </li>
-            </Link>
+            
+            
             <p className="title">USEFUL</p>
             <li>
               <BarChartOutlinedIcon className="icon" />
@@ -81,10 +61,7 @@ function Sidebar() {
               <span>Finance</span>
             </li>
             <p className="title">SERVICE</p>
-            <li>
-              <ListOutlinedIcon className="icon" />
-              <span>Logs</span>
-            </li>
+            
             <li>
               <SettingsOutlinedIcon className="icon" />
               <span>Settings</span>

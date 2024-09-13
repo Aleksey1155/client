@@ -1,5 +1,5 @@
 import React from "react";
-import "./rightBar.scss";
+import "./generalChat.scss";
 
 const messages = [
   {
@@ -46,7 +46,7 @@ const messages = [
   },
 ];
 
-function RightBar() {
+function GeneralChat() {
   return (
     <div className="rightBar">
       <div className="container">
@@ -64,4 +64,4 @@ function RightBar() {
   );
 }
 
-export default RightBar;
+export default GeneralChat;

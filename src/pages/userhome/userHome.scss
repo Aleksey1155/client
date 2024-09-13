@@ -1,25 +1,154 @@
-.userHome{
-    display: flex;
+.userHome {
+  display: flex;
   padding: 10px;
 
-   
-  
-   
-  
-    .container {
-        flex: 8;
-        // padding: 10px;
-        position: sticky;
-        top: 70;
-        height: calc(100vh - 70px);
-        overflow-y: auto;
-        background: rgb(250, 250, 250);
-      flex-direction: column;
+  .container {
+    flex: 8;
 
-      
-  &::-webkit-scrollbar {
-    display: none;
-  }
+    position: sticky;
+    top: 70;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    background: rgb(250, 250, 250);
+
+    .title {
+      font-size: 30px;
+      color: #555;
     }
 
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .top {
+      display: flex;
+      margin: 20px 20px 50px 0px;
+
+      gap: 20px;
+      background-color: white;
+
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+      span {
+        font-size: 20px;
+        color: #555;
+      }
+      .topProjects {
+      }
+      .topTasks {
+      }
+      .topDiscussions {
+      }
+      .topFiles {
+      }
+    }
+
+    .project {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      margin: 20px 20px 20px 0px;
+      padding-left: 20px;
+   
+      background-color: white;
+      .projectbord {
+        display: flex;
+        align-items: center;
+        .projectTitle {
+          font-size: 20px;
+          color: #555;
+        }
+        .projectInfo {
+          margin-left: auto;
+          .projectStatus {
+            padding: 5px;
+            color: #555;
+          }
+          .projectEndDate {
+            padding: 5px;
+            align-items: flex-end;
+            color: #555;
+          }
+        }
+      }
+    }
+    .taskbord {
+      display: flex;
+  flex-wrap: wrap; /* Дозволяє завданням переноситися на новий рядок */
+  gap: 20px; /* Відступи між завданнями */
+  width: 100%; /* Ширина контейнера */
+
+      .task {
+     flex: 0 1 180px; /* Фіксована ширина завдань */
+     
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    margin: 10px 0; /* Відступ між завданнями по вертикалі */
+    padding: 20px;
+
+
+        .taskTitle {
+          font-size: 20px;
+          color: #555;
+          padding: 5px;
+        }
+
+        .taskDesc {
+         
+          font-size: 12px;
+          color: #555;
+        }
+
+        .usersImg {
+          padding-top: 20px;
+          margin-top: auto; /* Позиціонування донизу */
+          align-self: flex-start;
+          img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
+        .taskInfo{
+          display: flex;
+          flex-direction: column;
+          .taskStatus{
+            align-self: flex-end; /* Вирівнювання по правому краю */
+            &.Виконується {
+              color: rgb(6, 158, 6);
+              background-color: rgba(255, 255, 255, 0.151);
+            }
+            &.Завершено {
+              color: goldenrod;
+              background-color: rgba(189, 189, 3, 0.103);
+            }
+            &.Нове {
+              color: rgb(218, 54, 32);
+              background-color: rgba(189, 189, 3, 0.103);
+            }
+          }
+        .taskEndDate {
+          
+          align-self: flex-end; /* Вирівнювання по правому краю */
+          &.closeToEnd {
+            background-color: #cce6ff; /* Light red background  #ffcccc */
+            color: blue; /* Red text color */
+            font-weight: bold;
+          }
+    
+          &.endPassedInProgress {
+            background-color: #f3f3f3; /* Light blue background */
+            color: red; /* Blue text color */
+            font-weight: bold;
+          }
+        }
+      }
+      }
+    }
   }
+}
