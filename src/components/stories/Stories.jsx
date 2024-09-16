@@ -45,7 +45,7 @@ function Stories({userId}) {
   }, [userId]);
 
 
-
+  console.log("---------" + userId)
 
 console.log(user)
   return (

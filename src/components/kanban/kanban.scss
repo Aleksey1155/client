@@ -1,0 +1,135 @@
+.top {
+  justify-content: space-between;
+  margin: 10px;
+  .close {
+    padding: 5px;
+    margin: 10px;
+  }
+}
+
+.iconDel {
+  color: rgb(192, 23, 23);
+  float: right;
+}
+
+.centerTodo {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid lightgrey;
+
+  .todo {
+    padding: 10px;
+    flex: 1;
+    flex-direction: column;
+    border-right: 1px solid lightgrey;
+
+    .titleTodo {
+      color: rgb(192, 23, 23);
+      font-size: 20px;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      color: #555;
+      .task_description {
+        margin: 10px;
+        padding: 5px;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(119, 119, 119, 0.47);
+
+        
+      
+      }
+    }
+  }
+
+  .doing {
+    border-right: 1px solid lightgrey;
+    padding: 10px;
+    flex: 1;
+    flex-direction: column;
+    .titleDoing {
+      color: #5f8ee7;
+      font-size: 20px;
+    }
+
+    .list {
+      color: #555;
+
+      .task_description {
+        margin: 10px;
+        padding: 5px;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(119, 119, 119, 0.47);
+
+        
+      
+      }
+
+      .doneButt{
+        margin-left: 70px;
+      }
+    }
+  }
+
+  .done {
+    padding: 10px;
+    flex: 1;
+    flex-direction: column;
+    .titleDone {
+      color: chartreuse;
+      font-size: 20px;
+    }
+
+    .list {
+      color: #555;
+      .task_description {
+        margin: 10px;
+        padding: 5px;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(119, 119, 119, 0.47);
+
+        
+      
+      }
+    }
+  }
+}
+
+form {
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+
+  textarea {
+    margin: 20px;
+    width: 250px; /* Початкова ширина textarea */
+    height: 100px; /* Встановлює висоту textarea */
+    font-size: 16px; /* Розмір тексту всередині textarea */
+    padding: 10px; /* Відступи всередині textarea */
+    border-radius: 5px; /* Закруглення кутів */
+    max-width: 300px; /* Максимальна ширина textarea */
+    max-height: 200px; /* Максимальна висота textarea */
+    min-width: 250px; /* Початкова ширина textarea */
+    min-height: 50px; /* Встановлює висоту textarea */
+    resize: both; /* Дозволяє змінювати розмір у обох напрямках */
+    overflow: auto; /* Вмикає скролінг, якщо вміст перевищує розміри */
+  }
+
+  .addTask {
+    margin: 20px;
+    padding: 5px;
+    color: forestgreen;
+    border: 1px solid green;
+    border-radius: 5px;
+  }
+  .deleteKanban {
+    margin: 20px;
+    padding: 5px;
+    color: rgb(192, 23, 23);
+    border: 1px solid rgb(128, 0, 0);
+    border-radius: 5px;
+  }
+}

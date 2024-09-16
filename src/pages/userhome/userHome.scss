@@ -34,9 +34,10 @@
         font-size: 20px;
         color: #555;
       }
-      .topProjects {
+      .topCalendar {
       }
-      .topTasks {
+      .topKanban {
+        cursor: pointer;
       }
       .topDiscussions {
       }
@@ -107,8 +108,8 @@
           margin-top: auto; /* Позиціонування донизу */
           align-self: flex-start;
           img {
-            width: 20px;
-            height: 20px;
+            width: 40px;
+            height: 40px;
             margin-right: 10px;
             object-fit: cover;
             border-radius: 50%;

@@ -71,10 +71,6 @@ const projectColumns = [
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  // const [taskStatuses, setTaskStatuses] = useState([]);
-  // const [taskPriorities, setTaskPriorities] = useState([]);
-  // const [selectedStatus, setSelectedStatus] = useState("");
-  // const [selectedPriority, setSelectedPriority] = useState("");
 
   useEffect(() => {
     const fetchAllTasks = async () => {
@@ -87,27 +83,7 @@ const Tasks = () => {
       }
     };
 
-    // const fetchTaskStatuses = async () => {
-    //   try {
-    //     const res = await axios.get("http://localhost:3001/task_statuses");
-    //     setTaskStatuses(res.data);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
-
-    // const fetchTaskPriorities = async () => {
-    //   try {
-    //     const res = await axios.get("http://localhost:3001/task_priorities");
-    //     setTaskPriorities(res.data);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
-
     fetchAllTasks();
-    // fetchTaskStatuses();
-    // fetchTaskPriorities();
   }, []);
 
   const sortTasks = (tasks) => {
@@ -141,27 +117,6 @@ const Tasks = () => {
       }
     }
   };
-
-  // const formatDate = (dateString) => {
-  //   const options = { year: "numeric", month: "numeric", day: "numeric" };
-  //   return new Date(dateString).toLocaleDateString(undefined, options);
-  // };
-
-  // const filteredTasks = tasks.filter((task) => {
-  //   const statusMatch = selectedStatus
-  //     ? task.status_name === selectedStatus
-  //     : true;
-  //   const priorityMatch = selectedPriority
-  //     ? task.priority_name === selectedPriority
-  //     : true;
-  //   return statusMatch && priorityMatch;
-  // });
-  // const truncateDescription = (description, maxLength) => {
-  //   if (description.length > maxLength) {
-  //     return description.substring(0, maxLength) + "...";
-  //   }
-  //   return description;
-  // };
 
   const actionColumn = [
     {

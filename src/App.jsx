@@ -32,6 +32,7 @@ import Profile from "./pages/profile/Profile";
 import Statistics from "./admin/adminPages/useful/Statistics";
 import AdminDashboard from "./admin/adminPages/home/AdminDashboard";
 import Social from "./pages/social/Social";
+import UserTaskDetails from "./pages/usertaskdetails/UserTaskDetails";
 
 
 const router = createBrowserRouter([
@@ -124,6 +125,10 @@ const router = createBrowserRouter([
         path: "/admin/social",
         element: <Social />,
       },
+      {
+        path: "/admin/task_details/:id",
+        element: <UserTaskDetails />,
+      },
 
     ],
   },
@@ -142,7 +147,10 @@ const router = createBrowserRouter([
         path: "/social",
         element: <Social />,
       },
-
+      {
+        path: "/task_details/:id",
+        element: <UserTaskDetails />,
+      },
       {
         path: "/profile/:id",
         element: <Profile />,

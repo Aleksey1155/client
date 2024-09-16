@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./userHome.scss";
 import News from "../../components/news/News";
+import CalendarModal from "../../components/calendarmodal/CalendarModal";
+import Kanban from "../../components/kanban/Kanban";
 
 function UserHome() {
   const [userData, setUserData] = useState(null);
@@ -10,6 +12,8 @@ function UserHome() {
   const [homeData, setHomeData] = useState([]);
 
   const navigate = useNavigate();
+
+  const isAdmin = location.pathname.includes("/admin");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -25,6 +29,7 @@ function UserHome() {
             Authorization: `Bearer ${token}`,
           },
         });
+
         setUserData(response.data);
         setLoading(false);
       } catch (error) {
@@ -42,8 +47,8 @@ function UserHome() {
         }
 
         const res = await axios.get("http://localhost:3001/home");
-        console.log("Home data:", res.data); // Log the data to check its structure
-        setHomeData(Array.isArray(res.data) ? res.data : []); // Ensure it's an array
+        // console.log("Home data:", res.data); // Лог для перевірки даних
+        setHomeData(Array.isArray(res.data) ? res.data : []); // array
       } catch (err) {
         console.log(err);
       }
@@ -53,6 +58,8 @@ function UserHome() {
     fetchUserData();
   }, [navigate]);
 
+  // console.log(homeData);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -61,7 +68,7 @@ function UserHome() {
     return <div>No user data available.</div>;
   }
 
-  // Групуємо завдання за проектами і збираємо зображення користувачів у масив
+  // Групуємо завдання за проектами і збираємо зображення користувачів та їх id у масиви
   const projectsMap = homeData.reduce((acc, item) => {
     const {
       project_id,
@@ -71,8 +78,10 @@ function UserHome() {
       task_id,
       task_title,
       task_description,
+      task_start_date,
       task_end_date,
       user_image,
+      user_id,
       task_status,
     } = item;
 
@@ -94,10 +103,13 @@ function UserHome() {
         task_end_date,
         task_status,
         user_images: [],
+        user_ids: [], // Додаємо масив для user_id
       };
     }
 
+    // Додаємо зображення користувача та його id до відповідних масивів
     acc[project_id].tasks[task_id].user_images.push(user_image);
+    acc[project_id].tasks[task_id].user_ids.push(user_id); // Додаємо user_id до масиву user_ids
 
     return acc;
   }, {});
@@ -106,7 +118,6 @@ function UserHome() {
     ...project,
     tasks: Object.values(project.tasks),
   }));
-
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -131,17 +142,27 @@ function UserHome() {
     return end < today && taskStatus === "Виконується";
   };
 
+  const uniqueTasks = homeData.reduce((acc, current) => {
+    const x = acc.find((item) => item.task_id === current.task_id);
+    if (!x) {
+      return acc.concat([current]);
+    } else {
+      return acc;
+    }
+  }, []);
 
   return (
     <div className="userHome">
       <div className="container">
         <span className="title">User Home</span>
         <div className="top">
-          <div className="topProjects">
-            <span className="title">Projects</span>
+          <div className="topCalendar">
+            <CalendarModal tasks={uniqueTasks} />
+            {/* додав CalendarModal */}
           </div>
-          <div className="topTasks">
-            <span className="title">Tasks</span>
+
+          <div className="topKanban">
+            <Kanban userId={userData.id} />
           </div>
           <div className="topDiscussions">
             <span className="title">Discussions</span>
@@ -154,14 +175,23 @@ function UserHome() {
         {/* Фільтруємо проекти і завдання для користувачів */}
         {projects
           .filter((project) => {
+            console.log("Projects before filtering:", project);
+
             // Якщо роль - admin, показуємо всі проекти
             if (userData.role_name === "admin") {
               return true;
             }
+
             // Інакше фільтруємо лише ті, в яких користувач бере участь
-            return project.tasks.some((task) =>
-              task.user_images.some((image) => image === userData.img)
+            const isUserInvolved = project.tasks.some(
+              (task) => task.user_ids.includes(userData.id) // Перевіряємо, чи є user_id у масиві user_ids
             );
+            console.log(
+              `User ${userData.id} involved in project ${project.project_id}:`,
+              isUserInvolved
+            );
+
+            return isUserInvolved;
           })
           .map((project) => (
             <div key={project.project_id} className="project">
@@ -176,33 +206,48 @@ function UserHome() {
                   </span>
                 </div>
               </div>
+
               <div className="taskbord">
                 {project.tasks.map((task) => (
                   <div key={task.task_id} className="task">
-                    <span className="taskTitle">{task.task_title}</span>
+                    <Link
+                      to={
+                        isAdmin
+                          ? `/admin/task_details/${task.task_id}`
+                          : `/task_details/${task.task_id}`
+                      }
+                    >
+                      <span className="taskTitle">{task.task_title}</span>
+                    
                     <div
-                      className="taskDesc"
-                      dangerouslySetInnerHTML={{
-                        __html: task.task_description,
-                      }}
-                    />
-                    <span className="usersImg">
+                        className="taskDesc"
+                        dangerouslySetInnerHTML={{
+                          __html: task.task_description,
+                        }}
+                      />
+                      </Link>
+                    <div className="usersImg">
                       {task.user_images.map((image, index) => (
                         <img key={index} src={image} alt="" />
                       ))}
-                    </span>
+                    </div>
+
                     <div className="taskInfo">
-                      <span className={`taskStatus ${task.task_status}`}>{task.task_status}</span>
-                      <span className={`taskEndDate ${
-                      isCloseToEnd(task.task_end_date)
-                        ? "closeToEnd"
-                        : isEndDatePassedAndInProgress(
-                            task.task_end_date,
-                            task.task_status
-                          )
-                        ? "endPassedInProgress"
-                        : ""
-                    }`}>
+                      <span className={`taskStatus ${task.task_status}`}>
+                        {task.task_status}
+                      </span>
+                      <span
+                        className={`taskEndDate ${
+                          isCloseToEnd(task.task_end_date)
+                            ? "closeToEnd"
+                            : isEndDatePassedAndInProgress(
+                                task.task_end_date,
+                                task.task_status
+                              )
+                            ? "endPassedInProgress"
+                            : ""
+                        }`}
+                      >
                         {formatDate(task.task_end_date)}
                       </span>
                     </div>
