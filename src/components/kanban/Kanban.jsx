@@ -91,8 +91,10 @@ function Kanban({ userId }) {
       const res = await axios.get(`http://localhost:3001/kanban/${userId}`);
       setTasks(res.data);
   
-      // Очист поле вводу 
-      setAddtask((prev) => ({ ...prev, task_description: "" }));
+      // Очист поле вводу 2 варіанти
+      // setAddtask((prev) => ({ ...prev, task_description: "" }));
+      
+      setAddtask({ task_description: "" });
     } catch (err) {
       console.log("Error while adding task:", err);
     }

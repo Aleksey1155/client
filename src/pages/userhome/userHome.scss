@@ -50,7 +50,7 @@
       box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
       margin: 20px 20px 20px 0px;
       padding-left: 20px;
-   
+
       background-color: white;
       .projectbord {
         display: flex;
@@ -75,30 +75,53 @@
     }
     .taskbord {
       display: flex;
-  flex-wrap: wrap; /* Дозволяє завданням переноситися на новий рядок */
-  gap: 20px; /* Відступи між завданнями */
-  width: 100%; /* Ширина контейнера */
+      flex-wrap: wrap; /* Дозволяє завданням переноситися на новий рядок */
+      gap: 20px; /* Відступи між завданнями */
+      width: 100%; /* Ширина контейнера */
 
       .task {
-     flex: 0 1 180px; /* Фіксована ширина завдань */
-     
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-    margin: 10px 0; /* Відступ між завданнями по вертикалі */
-    padding: 20px;
+        flex: 0 1 180px; /* Фіксована ширина завдань */
 
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        margin: 10px 0; /* Відступ між завданнями по вертикалі */
+        padding: 20px;
 
-        .taskTitle {
-          font-size: 20px;
-          color: #555;
-          padding: 5px;
+        .topTaskTitle {
+          display: flex;
+          .taskTitle {
+            width: 150px;
+            font-size: 20px;
+            color: #555;
+            padding: 5px;
+          }
+          .stateTask {
+            height: 15px;
+            width: 15px;
+            border-radius: 50%;
+            border: 1px solid #555;
+            &.closeToEnd {
+              border: 1px solid blue;
+              background-color: blue /* Light blue background   */
+            }
+
+            &.endPassedInProgress {
+              border: 1px solid red;
+              background-color: red; /* Light red background */
+            }
+
+            &.progress {
+              border: 1px solid green;
+              background-color: green; /* Light red background */
+            }
+           
+          }
         }
 
         .taskDesc {
-         
           font-size: 12px;
           color: #555;
         }
@@ -115,10 +138,10 @@
             border-radius: 50%;
           }
         }
-        .taskInfo{
+        .taskInfo {
           display: flex;
           flex-direction: column;
-          .taskStatus{
+          .taskStatus {
             align-self: flex-end; /* Вирівнювання по правому краю */
             &.Виконується {
               color: rgb(6, 158, 6);
@@ -133,22 +156,21 @@
               background-color: rgba(189, 189, 3, 0.103);
             }
           }
-        .taskEndDate {
-          
-          align-self: flex-end; /* Вирівнювання по правому краю */
-          &.closeToEnd {
-            background-color: #cce6ff; /* Light red background  #ffcccc */
-            color: blue; /* Red text color */
-            font-weight: bold;
-          }
-    
-          &.endPassedInProgress {
-            background-color: #f3f3f3; /* Light blue background */
-            color: red; /* Blue text color */
-            font-weight: bold;
+          .taskEndDate {
+            align-self: flex-end; /* Вирівнювання по правому краю */
+            &.closeToEnd {
+              background-color: #cce6ff; /* Light red background  #ffcccc */
+              color: blue; /* Red text color */
+              font-weight: bold;
+            }
+
+            &.endPassedInProgress {
+              background-color: #f3f3f3; /* Light blue background */
+              color: red; /* Blue text color */
+              font-weight: bold;
+            }
           }
         }
-      }
       }
     }
   }

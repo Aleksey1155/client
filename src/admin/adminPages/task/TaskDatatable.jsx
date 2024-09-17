@@ -10,6 +10,7 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString(); // Форматування дати в локальному форматі
 };
 
+
 const taskColumns = [
   { field: "task_id", headerName: "TaskId", width: 100 },
   {
@@ -37,12 +38,14 @@ const taskColumns = [
 function TaskDatatable({ taskId }) {
   const [assignment, setAssignment] = useState([]);
 
+  // Перевірка чи це сторінка адміністратора
+  const isAdmin = window.location.pathname.includes("/admin");
 
   useEffect(() => {
     const fetchAllAssignment = async () => {
       try {
         const res = await axios.get("http://localhost:3001/assignments");
-        // Filter assignments for this task
+        // Фільтрація призначень для цього завдання
         setAssignment(
           res.data.filter((assignment) => assignment.task_id === Number(taskId))
         );
@@ -51,12 +54,8 @@ function TaskDatatable({ taskId }) {
       }
     };
 
-    
     fetchAllAssignment();
-   
   }, [taskId]);
-
-  
 
   const handleDelete = async (assignmentId) => {
     const confirmed = window.confirm(
@@ -82,9 +81,9 @@ function TaskDatatable({ taskId }) {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/* Link with dynamic routing */}
+            {/* Link з динамічним роутингом */}
             <Link
-              to={`/admin/update_assignment/${assignment.id}`}
+              to={`/admin/update_assignment/${params.row.id}`}
               style={{ textDecoration: "none" }}
             >
               <div className="view-Button">Деталі</div>
@@ -102,6 +101,9 @@ function TaskDatatable({ taskId }) {
     },
   ];
 
+  // Умовно додаємо actionColumn лише для адміністратора
+  const columns = isAdmin ? taskColumns.concat(actionColumn) : taskColumns;
+
   return (
     <div>
       <div className="projectTitle">Assignment</div>
@@ -110,7 +112,7 @@ function TaskDatatable({ taskId }) {
         <DataGrid
           className="datagrid"
           rows={assignment}
-          columns={taskColumns.concat(actionColumn)}
+          columns={columns} // Використовуємо колонки з умовним додаванням
           pageSize={9}
           rowsPerPageOptions={[9]}
           checkboxSelection
@@ -122,3 +124,6 @@ function TaskDatatable({ taskId }) {
 }
 
 export default TaskDatatable;
+
+
+

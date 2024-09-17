@@ -28,11 +28,11 @@ function Sidebar() {
   };
 
   return (
-    <div className="sidebar">
-      <div className="container">
-        <div className="top">
+    <div className="sidebarAdmin">
+      <div className="containerAdmin">
+        <div className="topAdmin">
           <Link to="/admin">
-            <span className="logo">AdminPanel</span>
+            <span className="logoAdmin">AdminPanel</span>
           </Link>
         </div>
         <div className="center">
@@ -101,10 +101,12 @@ function Sidebar() {
               <ListOutlinedIcon className="icon" />
               <span>Logs</span>
             </li>
+            <Link to="/admin/settings">
             <li>
               <SettingsOutlinedIcon className="icon" />
               <span>Settings</span>
             </li>
+            </Link>
             <p className="title">USER</p>
             <Link to="/admin/profile">
               <li>
@@ -118,7 +120,7 @@ function Sidebar() {
             </li>
           </ul>
         </div>
-        <div className="bottom">
+        <div className="bottomAdmin">
           <div className="colorOption"></div>
           <div className="colorOption"></div>
         </div>

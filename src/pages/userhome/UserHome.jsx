@@ -65,7 +65,7 @@ function UserHome() {
   }
 
   if (!userData) {
-    return <div>No user data available.</div>;
+    return <div>Дані користувача відсутні.</div>;
   }
 
   // Групуємо завдання за проектами і збираємо зображення користувачів та їх id у масиви
@@ -123,6 +123,7 @@ function UserHome() {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+
   // Функція для перевірки, чи є дата кінця завдання близькою до поточної дати (2 дні)
   const isCloseToEnd = (endDate) => {
     const today = new Date();
@@ -141,6 +142,18 @@ function UserHome() {
     // Перевірка, чи дата закінчилась і статус завдання "Виконується"
     return end < today && taskStatus === "Виконується";
   };
+
+  // Функція для перевірки, чи дата за два дні до кінця і статус "Виконується"
+  const isProgress = (endDate, taskStatus) => {
+    const today = new Date();
+    const end = new Date(endDate);
+    const diffTime = end - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+    // Перевіряємо чи більше ніж 2 дні і чи статус "Виконується"
+    return diffDays > 2 && taskStatus === "Виконується";
+  };
+  
 
   const uniqueTasks = homeData.reduce((acc, current) => {
     const x = acc.find((item) => item.task_id === current.task_id);
@@ -174,8 +187,9 @@ function UserHome() {
 
         {/* Фільтруємо проекти і завдання для користувачів */}
         {projects
+          .sort((a, b) => b.project_id - a.project_id) // Сортуємо проекти в зворотньому порядку за project_id
           .filter((project) => {
-            console.log("Projects before filtering:", project);
+            // console.log("Projects before filtering:", project);
 
             // Якщо роль - admin, показуємо всі проекти
             if (userData.role_name === "admin") {
@@ -217,15 +231,32 @@ function UserHome() {
                           : `/task_details/${task.task_id}`
                       }
                     >
-                      <span className="taskTitle">{task.task_title}</span>
-                    
-                    <div
+                      <div className="topTaskTitle">
+                      <div className="taskTitle">{task.task_title}</div>
+                      <div className={`stateTask ${
+                         isCloseToEnd(task.task_end_date)
+                         ? "closeToEnd"
+                         : isEndDatePassedAndInProgress(
+                             task.task_end_date,
+                             task.task_status
+                           )
+                         ? "endPassedInProgress"
+                         : isProgress(
+                          task.task_end_date,
+                          task.task_status
+                        )
+                          ? "progress"
+                          : ""
+
+                        }`}></div>
+                      </div>
+                      <div
                         className="taskDesc"
                         dangerouslySetInnerHTML={{
                           __html: task.task_description,
                         }}
                       />
-                      </Link>
+                    </Link>
                     <div className="usersImg">
                       {task.user_images.map((image, index) => (
                         <img key={index} src={image} alt="" />

@@ -1,64 +1,155 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./news.scss";
+import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 
-const messages = [
-  {
-    id: 1,
-    name: "admin",
-    date: "10.01.2025",
-    message:
-      "Відкрито новий проєкт! Ми раді повідомити, що наш відділ отримав нове замовлення на дизайн . Проєкт включає розробку сучасного дизайну для  сайту офісу з акцентом на  ключові деталі, екологічність, мінімалізм. Більш детальну інформацію буде надано на командній зустрічі о 10:00 в середу 12.01.2025.",
-  },
-  {
-    id: 2,
-    name: "admin",
-    date: "20.12.2024",
-    message:
-      "Завершення поточного проєкту! Нагадуємо, що нам потрібно завершити роботу над проєктом [назва проєкту] до [дата]. Просимо всіх залучених співробітників активізувати зусилля для своєчасного виконання завдань. Якщо виникають питання або потрібна допомога, звертайтеся до керівника проєкту. Дякуємо за вашу плідну роботу та відданість! Разом досягнемо нових вершин у розробці завдань. ",
-  },
-  {
-    id: 3,
-    name: "admin",
-    date: "15.11.2024",
-    message:
-      "Шановні колеги! Нагадуємо про важливість підтримки високого рівня обслуговування клієнтів. Просимо вас уважно стежити за дотриманням дедлайнів, вчасно відповідати на запити та підтримувати ефективну комунікацію з нашими клієнтами. Якщо у вас виникають складнощі або запитання, будь ласка, звертайтеся до керівника відділу для швидкого вирішення ситуацій. Якість нашого обслуговування – запорука успіху! ",
-  },
-  {
-    id: 4,
-    name: "admin",
-    date: "22.10.2024",
-    message:
-      "Шановні колеги! Нагадуємо, що завтра, [дата], ми святкуємо день народження нашого колеги, [ім'я]. Запрошуємо всіх приєднатися до привітань та святкового чаювання, яке відбудеться о [час] в зоні відпочинку. Не забудьте привітати [ім'я] з цим чудовим днем! З повагою, [ ім'я]Керівник відділу дизайну",
-  },
-  {
-    id: 5,
-    name: "admin",
-    date: "11.09.2024",
-    message:
-      "Шановні колеги! Нагадуємо про важливість підтримки високої продуктивності в нашій команді. Зараз у нас на руках кілька важливих проєктів, і їх своєчасне виконання залежить від кожного з нас. Просимо вас максимально ефективно використовувати робочий час, планувати завдання і стежити за дедлайнами. Якщо виникають труднощі або є пропозиції щодо покращення процесів, не соромтеся звертатися до керівництва. Ваша продуктивність – це наш спільний успіх!",
-  },
-  {
-    id: 6,
-    name: "admin",
-    date: "1.09.2024",
-    message:
-      "Шановні колеги! З нагоди Дня знань вітаємо всіх, хто має дітей або сам навчається! 1 вересня – це символ нових починань і можливостей, тому бажаємо вам успіхів у всіх справах, як особистих, так і професійних. Підтримуйте баланс між роботою і навчанням ваших дітей. Нехай новий навчальний рік буде легким і продуктивним для всіх! З повагою,[ім'я] Керівник відділу дизайну",
-  },
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 function News() {
+  const [newss, setNewss] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [filteredNews, setFilteredNews] = useState([]);
+  const currentYear = new Date().getFullYear();
+  const previousYear = currentYear - 1;
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
+
+  const isAdmin = window.location.pathname.includes("/admin");
+
+  useEffect(() => {
+    const fetchAllNews = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/news");
+        // Сортуємо новини від біл до менш id і беремо останні 10
+        const sortedNews = res.data.sort((a, b) => b.id - a.id).slice(0, 10);
+        setNewss(res.data);
+        setFilteredNews(sortedNews); // Встановлюємо відсорт новини як початковий стан
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAllNews();
+  }, []);
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const handleDeleteNews = async (id) => {
+    const confirmed = window.confirm(
+      "Ви впевнені, що хочете видалити цей Task?"
+    );
+    if (confirmed) {
+      try {
+        await axios.delete(`http://localhost:3001/news/${id}`);
+        window.location.reload();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleMonthSelect = (month, year) => {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+    filterNewsByMonth(month, year);
+    setShowDropdown(false); // Закриваємо селект після вибору місяця
+  };
+
+  const filterNewsByMonth = (month, year) => {
+    const filtered = newss.filter((news) => {
+      const newsDate = new Date(news.news_date);
+      return (
+        newsDate.getFullYear() === year && newsDate.getMonth() === months.indexOf(month)
+      );
+    });
+
+    setFilteredNews(filtered.length ? filtered : []);
+  };
+
   return (
     <div className="news">
-      <div className="container">
-        <div className="chatName">Our News</div>
-        {messages.map((message) => (
-          <div className="blockMessage" key={message.id}>
-            <span className="userName">{message.name}</span>
-            <div className="message">{message.message}</div>
-            <span className="data">date {message.date}</span>
+      <div className="containerNews">
+        <div className="newsName">
+          <span>Our News</span>
+          <div className="archive" onClick={toggleDropdown}>
+            archive
           </div>
-        ))}
-        <div className="blockMessage"></div>
+          {showDropdown && (
+            <div className="dropdown">
+              <div className="column">
+                <span>{previousYear}</span>
+                <ul>
+                  {months.map((month, index) => (
+                    <li key={index} onClick={() => handleMonthSelect(month, previousYear)}>
+                      {month}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="column">
+                <span>{currentYear}</span>
+                <ul>
+                  {months.map((month, index) => (
+                    <li key={index} onClick={() => handleMonthSelect(month, currentYear)}>
+                      {month}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Якщо немає новин за вибраний місяць */}
+        {selectedMonth && filteredNews.length === 0 && (
+          <div className="blockMessage">
+            <span>Даних немає за {selectedMonth} {selectedYear}</span>
+          </div>
+        )}
+
+        {/* Виводимо новини */}
+        {filteredNews
+          .map((news) => (
+            <div className="blockMessage" key={news.id}>
+              <span className="userName">{news.role_name}</span>
+              {isAdmin ? (
+                <RemoveCircleOutlineOutlinedIcon
+                  className="iconDel"
+                  onClick={() => handleDeleteNews(news.id)}
+                />
+              ) : (
+                ""
+              )}
+
+              <div className="message">{news.news_text}</div>
+              <span className="data">date {formatDate(news.news_date)}</span>
+            </div>
+          ))}
       </div>
     </div>
   );

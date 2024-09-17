@@ -10,6 +10,8 @@ function UserTaskDetails() {
   const [task, setTask] = useState(null);
   const [images, setImages] = useState([]);
 
+  const isAdmin = window.location.pathname.includes("/admin");
+
   useEffect(() => {
     const fetchTask = async () => {
       try {
@@ -49,7 +51,12 @@ function UserTaskDetails() {
       <div className="taskContainer">
         <div className="top">
           <div className="left">
-            
+          { isAdmin ?<div className="edit">
+              <Link to={`/admin/update_task/${task.id}`} className="update">
+                EditTask
+              </Link>
+            </div>
+            :""}
             <div className="title">Information</div>
             <div className="item">
               <img

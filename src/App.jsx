@@ -33,6 +33,7 @@ import Statistics from "./admin/adminPages/useful/Statistics";
 import AdminDashboard from "./admin/adminPages/home/AdminDashboard";
 import Social from "./pages/social/Social";
 import UserTaskDetails from "./pages/usertaskdetails/UserTaskDetails";
+import Settings from "./admin/adminPages/settings/Settings";
 
 
 const router = createBrowserRouter([
@@ -129,6 +130,11 @@ const router = createBrowserRouter([
         path: "/admin/task_details/:id",
         element: <UserTaskDetails />,
       },
+      {
+        path: "/admin/settings",
+        element: <Settings/>
+      },
+
 
     ],
   },

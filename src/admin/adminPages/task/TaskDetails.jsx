@@ -83,7 +83,6 @@ const TaskDetails = () => {
           <div className="right">
             <div className="title">Task Pictures</div>
             <div className="carousel">
-              {/* {" "} */}
               <ImageCarousel images={images} />
             </div>
           </div>

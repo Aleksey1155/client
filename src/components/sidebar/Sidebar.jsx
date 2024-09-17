@@ -22,9 +22,9 @@ function Sidebar() {
   };
 
   return (
-    <div className="sidebar">
-      <div className="container">
-        <div className="top">
+    <div className="sidebarUser">
+      <div className="containerUser">
+        <div className="topUser">
           <Link to="/">
             <span className="logo">welcome.com</span>
           </Link>
