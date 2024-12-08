@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import "./assignment.scss";
@@ -55,7 +55,7 @@ const Assignments = () => {
   useEffect(() => {
     const fetchAllAssignments = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/assignments");
+        const res = await axiosInstance.get("/assignments");
         setAssignments(res.data);
       } catch (err) {
         console.log(err);
@@ -64,7 +64,7 @@ const Assignments = () => {
 
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/users");
+        const res = await axiosInstance.get("/users");
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -81,7 +81,7 @@ const Assignments = () => {
     );
     if (confirmed) {
       try {
-        await axios.delete("http://localhost:3001/assignments/" + id);
+        await axiosInstance.delete("/assignments/" + id);
         setAssignments(
           assignments.filter((assignment) => assignment.id !== id)
         );

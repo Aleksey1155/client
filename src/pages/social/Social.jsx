@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 import "./social.scss";
 import Stories from "../../components/stories/Stories";
 import Posts from "../../components/posts/Posts";
@@ -14,17 +14,9 @@ function Social() {
     useEffect(() => {
       const fetchUserData = async () => {
         try {
-          const token = localStorage.getItem("token");
-          if (!token) {
-            navigate("/login");
-            return;
-          }
-  
-          const response = await axios.get("http://localhost:3001/me", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+
+          const response = await axiosInstance.get("/me");
+
           setUserData(response.data);
           setLoading(false);
         } catch (error) {

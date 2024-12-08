@@ -2,7 +2,9 @@ import "./users.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
+
+
 
 const userColumns = [
   { field: "id", headerName: "ID", width: 50 },
@@ -26,7 +28,7 @@ const userColumns = [
   },
   {
     field: "job_name",
-    headerName: "Job ",
+    headerName: "Job",
     width: 200,
   },
   {
@@ -38,13 +40,14 @@ const userColumns = [
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+ 
+ 
 
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/users");
+        const res = await axiosInstance.get("/users");
         setUsers(res.data);
-        console.log(res.data)
       } catch (err) {
         console.log(err);
       }
@@ -59,7 +62,7 @@ const Users = () => {
     );
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3001/users/${id}`);
+        await axiosInstance.delete(`/users/${id}`);
         setUsers(users.filter((user) => user.id !== id));
       } catch (err) {
         console.log(err);
@@ -75,11 +78,9 @@ const Users = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/* Link with dynamic routing */}
-           <Link to={`/admin/users/${params.row.id}`} style={{ textDecoration: "none" }}>
+            <Link to={`/admin/users/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">Деталі</div>
             </Link>
-           
             <button
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
@@ -92,10 +93,11 @@ const Users = () => {
     },
   ];
 
+ 
   return (
     <div className="users">
       <div className="datatableTitle">
-         Users
+        Users
         <Link to="/admin/add_user" className="link">
           Add New
         </Link>
@@ -108,7 +110,6 @@ const Users = () => {
         rowsPerPageOptions={[9]}
         checkboxSelection
       />
-      
     </div>
   );
 };

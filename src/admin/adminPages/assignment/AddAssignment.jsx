@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import "./addassignment.scss";
 
 const AddAssignment = () => {
@@ -17,7 +17,7 @@ const AddAssignment = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/users");
+        const res = await axiosInstance.get("/users");
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -25,7 +25,7 @@ const AddAssignment = () => {
     };
     const fetchTasks = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/tasks"); // Додаємо завдання
+        const res = await axiosInstance.get("/tasks"); // Додаємо завдання
         setTasks(res.data);
       } catch (err) {
         console.log(err);
@@ -43,7 +43,7 @@ const AddAssignment = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/assignments", assignment);
+      await axiosInstance.post("/assignments", assignment);
       navigate("/admin/assignments");
     } catch (err) {
       console.log(err);

@@ -9,6 +9,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
+import UserProfile from "../../pages/userprofile/UserProfile";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -68,9 +69,10 @@ function Sidebar() {
             </li>
             <p className="title">USER</p>
             <li>
-              <AccountBoxOutlinedIcon className="icon" />
-              <span>Profile</span>
-            </li>
+                <AccountBoxOutlinedIcon className="icon" />
+                <UserProfile />
+               
+              </li>
             <li onClick={handleLogout}>
               <LogoutOutlinedIcon className="icon" />
               <span>Logout</span>

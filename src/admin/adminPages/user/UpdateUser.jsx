@@ -70,7 +70,7 @@ const UpdateUser = () => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:3001/users/${userId}`, user);
-      navigate(`/admin/users/${userId}`);
+      
     } catch (err) {
       console.log(err);
     }

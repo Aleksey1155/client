@@ -1,5 +1,5 @@
 import React from "react";
-import "./profile.scss";
+import "./socialProfile.scss";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 import InstagramIcon from "@mui/icons-material/Instagram";

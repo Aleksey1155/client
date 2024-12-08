@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { Link } from "react-router-dom";
 import "./dashboardtable.scss";
 import Table from "@mui/material/Table";
@@ -25,7 +25,7 @@ const DashboardTable = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/dashboard");
+        const res = await axiosInstance.get("/dashboard");
         setDashboardData(res.data);
         setFilteredData(res.data);
       } catch (err) {
@@ -36,7 +36,7 @@ const DashboardTable = () => {
     // Отримання даних про користувачів
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/users");
+        const res = await axiosInstance.get("/users");
         // console.log("Users Data:", res.data);
         setUsers(res.data);
       } catch (err) {
@@ -47,7 +47,7 @@ const DashboardTable = () => {
     // Отримання даних про статуси завдань
     const fetchTaskStatuses = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/task_statuses");
+        const res = await axiosInstance.get("/task_statuses");
         // console.log("Task Statuses Data:", res.data);
         setTaskStatuses(res.data);
       } catch (err) {
@@ -58,7 +58,7 @@ const DashboardTable = () => {
     // Отримання даних про статуси проектів
     const fetchProjectStatuses = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/project_statuses");
+        const res = await axiosInstance.get("/project_statuses");
         // console.log("Project Statuses Data:", res.data);
         setProjectStatuses(res.data);
       } catch (err) {

@@ -28,12 +28,13 @@ import LayoutUser from "./pages/LayoutUser";
 import Upload from "./admin/adminComponents/upload/Upload";
 import UserHome from "./pages/userhome/UserHome";
 import ProtectedRoute from "./admin/adminComponents/ProtectedRoute";
-import Profile from "./pages/profile/Profile";
+import SocialProfile from "./pages/socialprofile/SocialProfile";
 import Statistics from "./admin/adminPages/useful/Statistics";
 import AdminDashboard from "./admin/adminPages/home/AdminDashboard";
 import Social from "./pages/social/Social";
 import UserTaskDetails from "./pages/usertaskdetails/UserTaskDetails";
 import Settings from "./admin/adminPages/settings/Settings";
+
 
 
 const router = createBrowserRouter([
@@ -115,8 +116,8 @@ const router = createBrowserRouter([
         element: <UpdateAssignment />,
       },
       {
-        path: "/admin/profile/:id",
-        element: <Profile />,
+        path: "/admin/social-profile/:id",
+        element: <SocialProfile />,
       },
       {
         path: "/admin/statistics",
@@ -158,8 +159,8 @@ const router = createBrowserRouter([
         element: <UserTaskDetails />,
       },
       {
-        path: "/profile/:id",
-        element: <Profile />,
+        path: "/social-profile/:id",
+        element: <SocialProfile />,
       },
       
     ],
@@ -185,6 +186,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+
+  
+  
   return (
     <div className="app">
       <div className="container">

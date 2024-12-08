@@ -2,7 +2,7 @@ import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { useEffect } from "react";
 
 const userColumns = [
@@ -43,7 +43,7 @@ const Datatable = () => {
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/users");
+        const res = await axiosInstance.get("/users");
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -59,7 +59,7 @@ const Datatable = () => {
     );
     if (confirmed) {
       try {
-        await axios.delete("http://localhost:3001/users/" + id);
+        await axiosInstance.delete("/users/" + id);
         setUsers(users.filter((user) => user.id !== id));
       } catch (err) {
         console.log(err);

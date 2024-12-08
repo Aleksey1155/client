@@ -16,7 +16,7 @@ const customStyles = {
 };
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-//Modal.setAppElement('#yourAppElement');
+Modal.setAppElement('#root');
 
 function Kanban({ userId }) {
   const [tasks, setTasks] = useState([]);

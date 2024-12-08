@@ -31,8 +31,8 @@ function Post({ post }) {
               <Link
                 to={
                   isAdmin
-                    ? `/admin/profile/${post.userId}`
-                    : `/profile/${post.userId}`
+                    ? `/admin/social-profile/${post.userId}`
+                    : `/social-profile/${post.userId}`
                 }
                 style={{ textDecoration: "none", color: "inherit" }}
               >

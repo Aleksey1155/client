@@ -19,6 +19,24 @@ function Register() {
     setErrors((prev) => ({ ...prev, [e.target.name]: "" })); // Очищення помилок при зміні полів
   };
 
+  const generatePassword = (length, alphabet) => {
+    let password = ''; // Ініціалізація порожнього рядка
+    const charactersLength = alphabet.length;// Довжина алфавіту
+    // Цикл для генерації пароля 
+    for (let i = 0; i < length; i++) {
+      password += alphabet.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return password;
+  };
+
+  const handleGeneratePassword = () => {
+    // Символи для генерації пароля
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+    const length = 12; // довжина пароля
+    const password = generatePassword(length, alphabet);
+    setUser((prev) => ({ ...prev, password })); // Оновлення пароля в стані
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
 
@@ -78,12 +96,29 @@ function Register() {
               name="email"
             />
             {errors.email && <span className="error">{errors.email}</span>}
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={handleChange}
-              name="password"
-            />
+
+              {/* Інпут і кнопка для генерування паролів */}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type="text"
+                placeholder="Password"
+                value={user.password} 
+                onChange={handleChange}
+                name="password"
+                style={{ flexGrow: 1 }} 
+              />
+              <button
+              className="btn_generate"
+                type="button" // "button", щоб уникнути поведінки за замовчуванням
+                onClick={handleGeneratePassword} // Викликаємо функцію для генерації 
+                style={{ marginLeft: "10px" }} 
+              >
+                Генерувати
+              </button>
+            </div>
+
+
+
             {errors.password && (
               <span className="error">{errors.password}</span>
             )}

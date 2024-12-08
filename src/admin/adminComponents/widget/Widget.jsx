@@ -5,14 +5,14 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import FolderSharedOutlinedIcon from "@mui/icons-material/FolderSharedOutlined";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 
 const Widget = ({ type }) => {
 const [users, setUsers] = useState([])
 useEffect(() => {
   const fetchAllUsers = async () => {
       try {
-          const res = await axios.get("http://localhost:3001/users");
+          const res = await axiosInstance.get("/users");
           setUsers(res.data);
           // console.log("Users Data:", res.data);
       } catch (err) {

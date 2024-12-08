@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 
 const ProtectedRoute = ({ component: Component, role }) => {
   const [loading, setLoading] = useState(true);
@@ -10,17 +10,9 @@ const ProtectedRoute = ({ component: Component, role }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
+        
 
-        const response = await axios.get("http://localhost:3001/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axiosInstance.get("/me");
 
         if (response.data.role_name === role) {
           setIsAuthenticated(true);

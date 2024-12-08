@@ -1,0 +1,157 @@
+.welcomeUserProfile{
+    color: #555;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.topContainerUserProfile{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .closeUserProfile{
+
+        text-decoration: none;
+        color: #d39881e0;
+        padding: 10px 10px;
+        border: 1px solid #816005e0;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        width: 150px;
+        height: 35px;
+        font-size: 15px;
+        align-items: center;
+
+    }
+    .closeUserProfile:hover {
+        background-color: #c7ba09e0;
+        color: white;
+      }
+
+    .listTextUserProfile{
+        margin: 30px;
+        color: #555;
+        font-size: 20px;
+
+    }
+
+    .editUserProfile {
+        text-decoration: none;
+        color: #2fa90ae0;
+        padding: 10px 10px;
+        border: 1px solid #228105e0;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        width: 150px;
+        height: 35px;
+      }
+      .editUserProfile:hover {
+        background-color: #2fa90ae0;
+        color: white;
+      }
+   
+}
+.topUserProfile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .titleUserProfile {
+    font-size: 15px;
+    color: #555;
+    font-weight: bold;
+  }
+  button {
+    text-decoration: none;
+    color: #2fa90ae0;
+    padding: 10px 10px;
+    border: 1px solid #228105e0;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 150px;
+    height: 35px;
+  }
+
+  button:hover {
+    background-color: #2fa90ae0;
+    color: white;
+  }
+}
+.bottomUserProfile {
+  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+  .titleUserProfile {
+    font-size: 20px;
+    color: #555;
+    font-weight: bold;
+  }
+
+  .leftUserProfile {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+
+    .noimageUserProfile {
+      width: 150px;
+      object-fit: cover;
+    }
+
+    .selectedFileUserProfile {
+      font-size: 12px;
+      color: #555;
+      .image-previewUserProfile {
+        width: 200px;
+        object-fit: cover;
+      }
+    }
+
+    .hiddenUserProfile {
+      opacity: 0;
+      height: 0;
+      width: 0;
+      line-height: 0;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+    }
+    .imageUserProfile {
+      width: 150px;
+      object-fit: cover;
+    }
+  }
+
+  .rightUserProfile {
+    flex: 2;
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      justify-content: space-around;
+
+      .formInputUserProfile {
+        width: 40%;
+
+        input {
+          width: 100%;
+          padding: 5px;
+          border: none;
+          border-bottom: 1px solid gray;
+        }
+
+        label {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: gray;
+
+          .iconUserProfile {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

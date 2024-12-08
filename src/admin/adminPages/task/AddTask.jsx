@@ -160,7 +160,7 @@ const AddTask = () => {
                 <label>Task title</label>
                 <input
                   type="text"
-                  placeholder="Назва нового проекту"
+                  placeholder="Назва нового завдання"
                   onChange={handleChange}
                   name="title"
                 />

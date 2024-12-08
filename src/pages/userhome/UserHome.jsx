@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import axiosInstance from "../../axiosInstance";
 import "./userHome.scss";
 import News from "../../components/news/News";
 import CalendarModal from "../../components/calendarmodal/CalendarModal";
@@ -8,47 +8,27 @@ import Kanban from "../../components/kanban/Kanban";
 
 function UserHome() {
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [homeData, setHomeData] = useState([]);
 
   const navigate = useNavigate();
-
+  const location = useLocation();
   const isAdmin = location.pathname.includes("/admin");
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const response = await axios.get("http://localhost:3001/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        const response = await axiosInstance.get("/me");
         setUserData(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setLoading(false);
+        navigate("/login"); // Redirect to login if there's an error
       }
     };
 
     const fetchHomeData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const res = await axios.get("http://localhost:3001/home");
-        // console.log("Home data:", res.data); // Лог для перевірки даних
-        setHomeData(Array.isArray(res.data) ? res.data : []); // array
+        const res = await axiosInstance.get("/home");
+        setHomeData(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.log(err);
       }
@@ -57,16 +37,6 @@ function UserHome() {
     fetchHomeData();
     fetchUserData();
   }, [navigate]);
-
-  // console.log(homeData);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!userData) {
-    return <div>Дані користувача відсутні.</div>;
-  }
 
   // Групуємо завдання за проектами і збираємо зображення користувачів та їх id у масиви
   const projectsMap = homeData.reduce((acc, item) => {
@@ -99,17 +69,17 @@ function UserHome() {
       acc[project_id].tasks[task_id] = {
         task_id,
         task_title,
-        task_description: task_description.slice(0, 40), // Скорочуємо опис до 20 символів
+        task_description: task_description.slice(0, 40), // Скорочуємо опис до 40 символів
         task_end_date,
         task_status,
         user_images: [],
-        user_ids: [], // Додаємо масив для user_id
+        user_ids: [],
       };
     }
 
     // Додаємо зображення користувача та його id до відповідних масивів
     acc[project_id].tasks[task_id].user_images.push(user_image);
-    acc[project_id].tasks[task_id].user_ids.push(user_id); // Додаємо user_id до масиву user_ids
+    acc[project_id].tasks[task_id].user_ids.push(user_id);
 
     return acc;
   }, {});
@@ -118,11 +88,11 @@ function UserHome() {
     ...project,
     tasks: Object.values(project.tasks),
   }));
+
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
 
   // Функція для перевірки, чи є дата кінця завдання близькою до поточної дати (2 дні)
   const isCloseToEnd = (endDate) => {
@@ -130,7 +100,6 @@ function UserHome() {
     const end = new Date(endDate);
     const diffTime = end - today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
     return diffDays <= 2 && diffDays >= 0;
   };
 
@@ -138,8 +107,6 @@ function UserHome() {
   const isEndDatePassedAndInProgress = (endDate, taskStatus) => {
     const today = new Date();
     const end = new Date(endDate);
-
-    // Перевірка, чи дата закінчилась і статус завдання "Виконується"
     return end < today && taskStatus === "Виконується";
   };
 
@@ -149,11 +116,8 @@ function UserHome() {
     const end = new Date(endDate);
     const diffTime = end - today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
-    // Перевіряємо чи більше ніж 2 дні і чи статус "Виконується"
     return diffDays > 2 && taskStatus === "Виконується";
   };
-  
 
   const uniqueTasks = homeData.reduce((acc, current) => {
     const x = acc.find((item) => item.task_id === current.task_id);
@@ -167,15 +131,13 @@ function UserHome() {
   return (
     <div className="userHome">
       <div className="container">
-        <span className="title">User Home</span>
+        <span className="title">Home Page</span>
         <div className="top">
           <div className="topCalendar">
             <CalendarModal tasks={uniqueTasks} />
-            {/* додав CalendarModal */}
           </div>
-
           <div className="topKanban">
-            <Kanban userId={userData.id} />
+            <Kanban userId={userData?.id} />
           </div>
           <div className="topDiscussions">
             <span className="title">Discussions</span>
@@ -189,22 +151,26 @@ function UserHome() {
         {projects
           .sort((a, b) => b.project_id - a.project_id) // Сортуємо проекти в зворотньому порядку за project_id
           .filter((project) => {
-            // console.log("Projects before filtering:", project);
-
             // Якщо роль - admin, показуємо всі проекти
-            if (userData.role_name === "admin") {
+            if (userData && userData.role_name === "admin") {
               return true;
             }
-
+        
+            // Якщо userData не існує, повертаємо false
+            if (!userData) {
+              return false;
+            }
+        
             // Інакше фільтруємо лише ті, в яких користувач бере участь
             const isUserInvolved = project.tasks.some(
               (task) => task.user_ids.includes(userData.id) // Перевіряємо, чи є user_id у масиві user_ids
             );
+        
             console.log(
               `User ${userData.id} involved in project ${project.project_id}:`,
               isUserInvolved
             );
-
+        
             return isUserInvolved;
           })
           .map((project) => (
@@ -212,9 +178,7 @@ function UserHome() {
               <div className="projectbord">
                 <div className="projectTitle">{project.project_title}</div>
                 <div className="projectInfo">
-                  <span className="projectStatus">
-                    {project.project_status}
-                  </span>
+                  <span className="projectStatus">{project.project_status}</span>
                   <span className="projectEndDate">
                     {formatDate(project.project_end_date)}
                   </span>
@@ -232,23 +196,21 @@ function UserHome() {
                       }
                     >
                       <div className="topTaskTitle">
-                      <div className="taskTitle">{task.task_title}</div>
-                      <div className={`stateTask ${
-                         isCloseToEnd(task.task_end_date)
-                         ? "closeToEnd"
-                         : isEndDatePassedAndInProgress(
-                             task.task_end_date,
-                             task.task_status
-                           )
-                         ? "endPassedInProgress"
-                         : isProgress(
-                          task.task_end_date,
-                          task.task_status
-                        )
-                          ? "progress"
-                          : ""
-
-                        }`}></div>
+                        <div className="taskTitle">{task.task_title}</div>
+                        <div
+                          className={`stateTask ${
+                            isCloseToEnd(task.task_end_date)
+                              ? "closeToEnd"
+                              : isEndDatePassedAndInProgress(
+                                  task.task_end_date,
+                                  task.task_status
+                                )
+                              ? "endPassedInProgress"
+                              : isProgress(task.task_end_date, task.task_status)
+                              ? "progress"
+                              : ""
+                          }`}
+                        ></div>
                       </div>
                       <div
                         className="taskDesc"
@@ -289,11 +251,11 @@ function UserHome() {
           ))}
 
         <div className="user">
-          <p>Welcome, {userData.name}!</p>
+          <p>Welcome, {userData?.name}!</p>
           <p>
-            Email: {userData.email} ID: {userData.id}
+            Email: {userData?.email} ID: {userData?.id}
           </p>
-          <p>User Role: {userData.role_name}</p>
+          <p>User Role: {userData?.role_name}</p>
         </div>
       </div>
       <News />

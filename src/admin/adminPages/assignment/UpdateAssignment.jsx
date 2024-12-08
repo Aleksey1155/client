@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { DateTime } from "luxon";
 import "./updateassignment.scss";
 
@@ -19,8 +19,8 @@ const UpdateAssignment = () => {
   useEffect(() => {
     const fetchAssignment = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3001/assignments/${assignmentId}`
+        const res = await axiosInstance.get(
+          `/assignments/${assignmentId}`
         );
         const assignmentData = res.data;
         setAssignment({
@@ -37,7 +37,7 @@ const UpdateAssignment = () => {
 
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/users");
+        const res = await axiosInstance.get("/users");
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -46,7 +46,7 @@ const UpdateAssignment = () => {
 
     const fetchTasks = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/tasks"); // Додаємо завдання
+        const res = await axiosInstance.get("/tasks"); // Додаємо завдання
         setTasks(res.data);
       } catch (err) {
         console.log(err);
@@ -65,8 +65,8 @@ const UpdateAssignment = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        "http://localhost:3001/assignments/" + assignmentId,
+      await axiosInstance.put(
+        "/assignments/" + assignmentId,
         assignment
       );
       navigate("/admin/assignments");

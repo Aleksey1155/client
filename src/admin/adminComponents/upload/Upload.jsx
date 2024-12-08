@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import "./upload.scss";
-const hostUrl = "http://localhost:3001/upload";
+import config from "../../../config"
+// const hostUrl = "http://localhost:3001/upload";
 
 
 function Upload() {
@@ -21,7 +22,7 @@ function Upload() {
     }
     const formData = new FormData();
     formData.append(`file`, selectedFile);
-    const res = await fetch(hostUrl, {
+    const res = await fetch(`${config.baseURL}/upload`, {
         method: "POST",
         body: formData,
     });

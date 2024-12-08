@@ -57,7 +57,7 @@ function News() {
 
   const handleDeleteNews = async (id) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити цей Task?"
+      "Ви впевнені, що хочете видалити цей News?"
     );
     if (confirmed) {
       try {
