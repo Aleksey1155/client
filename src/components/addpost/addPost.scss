@@ -1,0 +1,99 @@
+
+    .welcomeAddPost {
+      color: #555;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .topContainerAddPost {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      .closeAddPost {
+        text-decoration: none;
+        color: #d39881e0;
+        padding: 10px 10px;
+        border: 1px solid #816005e0;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        width: 150px;
+        height: 35px;
+        font-size: 15px;
+        align-items: center;
+      }
+      .closeAddPost:hover {
+        background-color: #c7ba09e0;
+        color: white;
+      }
+
+      .listTextAddPost {
+        margin: 30px;
+        color: #555;
+        font-size: 20px;
+      }
+
+      .editAddPost {
+        text-decoration: none;
+        color: #2fa90ae0;
+        padding: 10px 10px;
+        border: 1px solid #228105e0;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        width: 150px;
+        height: 35px;
+      }
+      .editAddPost:hover {
+        background-color: #2fa90ae0;
+        color: white;
+      }
+    }
+
+    .leftAddPost {
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+    
+    
+      .noimageAddPost {
+        width: 150px;
+        object-fit: cover;
+      }
+      .selectedFileAddPost {
+        font-size: 12px;
+        color: #555;
+        .image-preview{
+          width: 200px;
+        object-fit: cover;
+        }
+      }
+      .hidden {
+        opacity: 0;
+        height: 0;
+        width: 0;
+        line-height: 0;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+
+    .rightAddPost{
+
+      textarea {
+        margin: 50px;
+        width: 500px; /* Початкова ширина textarea */
+        height: 100px; /* Встановлює висоту textarea */
+        font-size: 16px; /* Розмір тексту всередині textarea */
+        padding: 10px; /* Відступи всередині textarea */
+        border-radius: 5px; /* Закруглення кутів */
+        max-width: 600px; /* Максимальна ширина textarea */
+        max-height: 350px; /* Максимальна висота textarea */
+        min-width: 250px; /* Початкова ширина textarea */
+        min-height: 100px; /* Встановлює висоту textarea */
+        resize: both; /* Дозволяє змінювати розмір у обох напрямках */
+        overflow: auto; /* Вмикає скролінг, якщо вміст перевищує розміри */
+    }
+    }
+

@@ -15,10 +15,12 @@ const AddUser = () => {
     img: "", // поле для зребеження зображення користувача
     descr: "",
     role_id: "",
+    job_id: "",
   });
 
   const filePicker = useRef(null);
   const [roles, setRoles] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null); // Оновлено
   const [uploaded, setUploaded] = useState();
 
@@ -34,7 +36,17 @@ const AddUser = () => {
       }
     };
 
+    const fetchJobs = async () => {
+      try {
+        const res = await axios.get(`${hostUrl}/jobs`);
+        setJobs(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     fetchRoles();
+    fetchJobs();
   }, []);
 
   const handleChange = (e) => {
@@ -59,6 +71,8 @@ const AddUser = () => {
         const formData = new FormData();
         formData.append("files", selectedFile);
         formData.append("userId", userId); // Передаємо userId на сервер
+
+        // В ПОСТАХ ТЕ ж САМЕ
 
         const res = await fetch(`${hostUrl}/upload_user`, {
           method: "POST",
@@ -196,18 +210,35 @@ const AddUser = () => {
               </div>
 
               <div className="formInput">
-                <label>Assignment</label>
+                <label>Role</label>
                 <select
                   name="role_id"
                   onChange={handleChange}
                   value={user.role_id}
                 >
                   <option value="" disabled>
-                    Виберіть посаду
+                    Виберіть роль
                   </option>
                   {roles.map((role) => (
                     <option key={role.id} value={role.id}>
                       {role.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="formInput">
+                <label>Jobs</label>
+                <select
+                  name="job_id"
+                  onChange={handleChange}
+                  value={user.job_id}
+                >
+                  <option value="" disabled>
+                    Виберіть посаду
+                  </option>
+                  {jobs.map((job) => (
+                    <option key={job.id} value={job.id}>
+                      {job.name}
                     </option>
                   ))}
                 </select>

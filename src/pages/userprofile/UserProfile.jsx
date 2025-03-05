@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
-import config from "../../config"
+import config from "../../config";
 import Modal from "react-modal";
 import "./userProfile.scss";
 
@@ -42,8 +42,6 @@ function UserProfile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-       
-
         const response = await axiosInstance.get("/me");
 
         setUserData(response.data);
@@ -86,6 +84,11 @@ function UserProfile() {
   const handleClick = async (e) => {
     e.preventDefault();
 
+    if (!user.newPassword) {
+      alert("Enter your password!");
+      return;
+    }
+
     if (user.newPassword !== user.confirmPassword) {
       alert("Passwords do not match!");
       return;
@@ -108,6 +111,7 @@ function UserProfile() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
+   
   };
 
   const handleUpload = async () => {
@@ -115,19 +119,30 @@ function UserProfile() {
       alert("Please select a file");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("files", selectedFile);
     formData.append("userId", userId); // Передаємо userId на сервер
-
-    const res = await fetch(`${config.baseURL}/upload_user`, {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-    setUploaded(data);
+  
+    try {
+      const res = await fetch(`${config.baseURL}/upload_user`, {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await res.json();
+      console.log("Server Response:", data); // Додано для перевірки
+  
+      setUploaded(data);
+  
+      
+        window.location.reload();
+      
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
   };
+  
 
   const handlePick = () => {
     filePicker.current.click();
@@ -148,8 +163,6 @@ function UserProfile() {
     setIsOpen(false);
   }
 
-  
-
   return (
     <div className="userProfile">
       <div className="containerUserProfile">
@@ -161,14 +174,13 @@ function UserProfile() {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          
           <span
             className="welcomeUserProfile"
             ref={(_subtitle) => (subtitle = _subtitle)}
           >
-           {userData ? `Welcome, ${userData.name}!` : "Loading..."}
+            {userData ? `Welcome, ${userData.name}!` : "Loading..."}
           </span>
-          
+
           <div className="topContainerUserProfile">
             <button className="closeUserProfile" onClick={closeModal}>
               close
@@ -220,7 +232,7 @@ function UserProfile() {
                   </div>
                 )}
 
-                {uploaded && uploaded.uploadedFiles.length > 0 && (
+                {uploaded?.uploadedFiles?.length > 0 && (
                   <div>
                     <h2>{uploaded.uploadedFiles[0].fileName}</h2>
                     <img

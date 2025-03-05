@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../axiosInstance";
+import { useLocation } from "react-router-dom";
 import "./socialProfile.scss";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import PinterestIcon from "@mui/icons-material/Pinterest";
@@ -11,7 +14,41 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import GeneralChat from "../../components/generalchat/GeneralChat";
 import Posts from "../../components/posts/Posts";
 
-function Profile() {
+function SocialProfile() {
+  const location = useLocation();
+  const post = location.state?.post; // Отримуємо post
+
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true); // Додано стан завантаження
+  const navigate = useNavigate();
+  
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+
+          const response = await axiosInstance.get("/me");
+
+          setUserData(response.data);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setLoading(false);
+        }
+      };
+  
+      fetchUserData();
+    }, [navigate]);
+  
+    if (loading) {
+      return <div>Loading...</div>; // Можна відобразити спіннер або повідомлення про завантаження
+    }
+  
+    if (!userData) {
+      return <div>No user data available.</div>; // Повідомлення, якщо дані користувача відсутні
+    }
+
+  // console.log(userData);
+
   return (
     <div className="profile">
       <div className="container">
@@ -21,11 +58,7 @@ function Profile() {
             alt=""
             className="cover"
           />
-          <img
-            src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
-            alt=""
-            className="profilePic"
-          />
+          <img src={post.user_img} alt="" className="profilePic" />
         </div>
         <div className="profileContainer">
           <div className="userInfo">
@@ -44,7 +77,8 @@ function Profile() {
               </a>
             </div>
             <div className="center">
-              <span>User name</span>
+              <span>{post.name}</span>
+
               <div className="info">
                 <div className="item">
                   <PlaceIcon />
@@ -54,7 +88,6 @@ function Profile() {
                   <LanguageIcon />
                   <span>User</span>
                 </div>
-               
               </div>
               <button>Follow</button>
             </div>
@@ -64,11 +97,11 @@ function Profile() {
             </div>
           </div>
         </div>
-        <Posts/>
+        <Posts userData = {userData} />
       </div>
-      <GeneralChat/>
+      <GeneralChat />
     </div>
   );
 }
 
-export default Profile;
+export default SocialProfile;

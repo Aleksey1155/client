@@ -21,11 +21,18 @@ Modal.setAppElement('#root');
 function Kanban({ userId }) {
   const [tasks, setTasks] = useState([]);
   const [addtask, setAddtask] = useState({
-    user_id: userId,
+    user_id: userId || "", // Додаємо перевірку на випадок undefined
     task_description: "",
   });
+  
+
 
   useEffect(() => {
+
+    setAddtask((prev) => ({ ...prev, user_id: userId })); // Додаємо user_id у стан
+
+
+    
     const fetchAllTasks = async () => {
       try {
         const res = await axios.get(`http://localhost:3001/kanban/${userId}`);
@@ -78,27 +85,26 @@ function Kanban({ userId }) {
   const handleClick = async (e) => {
     e.preventDefault();
   
-    // Перевірка на порожнє поле
     if (!addtask.task_description.trim()) {
       alert("Поле завдання не може бути порожнім!");
       return;
     }
   
+    if (!addtask.user_id) {
+      console.error("Помилка: user_id не визначено!");
+      return;
+    }
+  
     try {
       await axios.post("http://localhost:3001/kanban", addtask);
-  
-      // Оновити спис завд
       const res = await axios.get(`http://localhost:3001/kanban/${userId}`);
       setTasks(res.data);
-  
-      // Очист поле вводу 2 варіанти
-      // setAddtask((prev) => ({ ...prev, task_description: "" }));
-      
-      setAddtask({ task_description: "" });
+      setAddtask((prev) => ({ ...prev, task_description: "" })); // Очищуємо лише поле завдання
     } catch (err) {
       console.log("Error while adding task:", err);
     }
   };
+  
   
 
   const handleDeleteKanban = async (userId) => {

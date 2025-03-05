@@ -1,0 +1,158 @@
+.welcomeUpdatePost {
+  color: #555;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.topContainerUpdatePost {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .closeUpdatePost {
+    text-decoration: none;
+    color: #d39881e0;
+    padding: 10px 10px;
+    border: 1px solid #816005e0;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 150px;
+    height: 35px;
+    font-size: 15px;
+    align-items: center;
+  }
+  .closeUpdatePost:hover {
+    background-color: #c7ba09e0;
+    color: white;
+  }
+
+  .listTextUpdatePost {
+    margin: 30px;
+    color: #555;
+    font-size: 20px;
+  }
+
+  .editUpdatePost {
+    text-decoration: none;
+    color: #2fa90ae0;
+    padding: 10px 10px;
+    border: 1px solid #228105e0;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 150px;
+    height: 35px;
+  }
+  .editUpdatePost:hover {
+    background-color: #2fa90ae0;
+    color: white;
+  }
+}
+
+.centerUpdatePost {
+  .topUpdatePost {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .titleUpdatePost {
+      font-size: 15px;
+      color: #555;
+      font-weight: bold;
+    }
+    
+  }
+
+  .bottomUpdatePost {
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 10px;
+    display: flex;
+    gap: 20px;
+    
+
+      .leftUpdatePost {
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+
+        .noimageUpdatePost {
+          width: 150px;
+          height: 100px;
+          object-fit: cover;
+        }
+
+        .selectedFileUpdatePost {
+          font-size: 12px;
+          color: #555;
+          .image-previewUpdatePost {
+            width: 200px;
+            object-fit: cover;
+          }
+        }
+
+        .hiddenUpdatePost {
+          opacity: 0;
+          height: 0;
+          width: 0;
+          line-height: 0;
+          overflow: hidden;
+          padding: 0;
+          margin: 0;
+        }
+        .imageUpdatePost {
+          width: 150px;
+          object-fit: cover;
+        }
+      }
+
+      .rightUserProfile {
+        flex: 2;
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+          justify-content: space-around;
+
+          .formInputUserProfile {
+            width: 40%;
+
+            input {
+              width: 100%;
+              padding: 5px;
+              border: none;
+              border-bottom: 1px solid gray;
+            }
+
+            label {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              color: gray;
+
+              .iconUserProfile {
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+  }
+
+  textarea {
+
+    margin: 50px;
+    width: 500px; /* Початкова ширина textarea */
+    height: 100px; /* Встановлює висоту textarea */
+    font-size: 16px; /* Розмір тексту всередині textarea */
+    padding: 10px; /* Відступи всередині textarea */
+    border-radius: 5px; /* Закруглення кутів */
+    max-width: 600px; /* Максимальна ширина textarea */
+    max-height: 350px; /* Максимальна висота textarea */
+    min-width: 250px; /* Початкова ширина textarea */
+    min-height: 100px; /* Встановлює висоту textarea */
+    resize: both; /* Дозволяє змінювати розмір у обох напрямках */
+    overflow: auto; /* Вмикає скролінг, якщо вміст перевищує розміри */
+}
+
+
+}

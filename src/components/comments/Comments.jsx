@@ -1,44 +1,92 @@
-import { useContext } from "react";
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../axiosInstance";
 import "./comments.scss";
 
-//Temporary
-const comments = [
-  {
-    id: 1,
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-    name: "John Doe",
-    userId: 1,
-    profilePicture:
-      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  },
-  {
-    id: 2,
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-    name: "Jane Doe",
-    userId: 2,
-    profilePicture:
-      "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-];
-function Comments() {
-  const currentUser = "UserName";
-  const userImg = "https://images.pexels.com/photos/2071882/pexels-photo-2071882.jpeg"
+function Comments({ postId, userData }) {
+
+  
+  const userImg = userData.img;
+
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState({
+    description: "",
+    post_id: postId,
+    user_id: userData.id,
+  });
+
+  useEffect(() => {
+    const fetchAllComments = async () => {
+      try {
+        const res = await axiosInstance.get(`/comments?postId=${postId}`);
+        setComments(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (postId) {
+      fetchAllComments();
+    }
+  }, [postId]);
+
+  const handleChange = (e) => {
+    setComment((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axiosInstance.post("/comments", comment);
+      
+      if (res.status === 201) {
+        // Додаємо новий коментар до списку без перезавантаження сторінки
+        const newComment = {
+          id: res.data.id, // Переконайтеся, що сервер повертає ID
+          name: userData.name,
+          img: userData.img,
+          description: comment.description,
+          created_time: new Date().toISOString(), // Локальна дата для відображення
+        };
+        
+        setComments((prevComments) => [...prevComments, newComment]); 
+
+        // Очищуємо поле вводу після додавання коментаря
+        setComment((prev) => ({ ...prev, description: "" }));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Функція для форматування дати
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   return (
     <div className="comments">
       <div className="write">
         <img src={userImg} alt="" />
-        <input type="text" placeholder="write a comment" />
-        <button>send</button>
+        <input
+          type="text"
+          placeholder="Write a comment"
+          name="description"
+          value={comment.description}
+          onChange={handleChange}
+        />
+        <button onClick={handleClick}>Send</button>
       </div>
-      {comments.map((comment) => (
-        <div className="comment">
-          <img src={comment.profilePicture} alt="" />
+
+      
+      {[...comments].reverse().map((comment) => (
+        <div className="comment" key={comment.id}>
+          <img src={comment.img} alt="" />
           <div className="info">
             <span>{comment.name}</span>
-            <p>{comment.desc}</p>
+            <p>{comment.description}</p>
           </div>
-          <span className="date">1 hour ago</span>
+          <span className="date">{formatDate(comment.created_time)}</span>
         </div>
       ))}
     </div>
@@ -46,3 +94,5 @@ function Comments() {
 }
 
 export default Comments;
+
+

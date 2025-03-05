@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
+import axiosInstance from "../../../axiosInstance";
+import config from "../../../config";
 import axios from "axios";
 import "./updateuser.scss";
 
@@ -33,7 +35,7 @@ const UpdateUser = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/roles");
+        const res = await axiosInstance.get("/roles");
         setRoles(res.data);
       } catch (err) {
         console.log(err);
@@ -42,7 +44,7 @@ const UpdateUser = () => {
 
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/jobs");
+        const res = await axiosInstance.get("/jobs");
         setJobs(res.data);
       } catch (err) {
         console.log(err);
@@ -51,7 +53,7 @@ const UpdateUser = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/users/${userId}`);
+        const res = await axiosInstance.get(`/users/${userId}`);
         setUser(res.data);
       } catch (err) {
         console.log(err);
@@ -69,8 +71,9 @@ const UpdateUser = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3001/users/${userId}`, user);
-      
+      await axiosInstance.put(`/users/${userId}`, user);
+
+      navigate(`/admin/users/${userId}`);
     } catch (err) {
       console.log(err);
     }
@@ -83,30 +86,60 @@ const UpdateUser = () => {
   };
 
   //*********************************************************** */
+
   const handleUpload = async () => {
-    if (!selectedFile) {
-      alert("Please select a file");
-      return;
-    }
+  if (!selectedFile) {
+    alert("Please select a file");
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append("files", selectedFile);
-    formData.append("userId", userId); // Передаємо userId на сервер
+  const formData = new FormData();
+  formData.append("files", selectedFile);
+  formData.append("userId", userId); // Передаємо userId на сервер
 
-    const res = await fetch(`${hostUrl}/upload_user`, {
+  try {
+    const res = await fetch(`${config.baseURL}/upload_user`, {
       method: "POST",
       body: formData,
     });
 
-    console.log("Selected File: ", selectedFile);
-
     const data = await res.json();
+    console.log("Server Response:", data); // Додано для перевірки
+
     setUploaded(data);
-    // // Затримка на 1 секунду перед оновленням сторінки
-    // setTimeout(() => {
-    //   navigate(0); // Перенаправляємо на ту ж сторінку для оновлення
-    // }, 1000); // 1000 мс = 1 секунда
-  };
+
+  
+      window.location.reload();
+    
+  } catch (error) {
+    console.error("Upload error:", error);
+  }
+};
+
+  // const handleUpload = async () => {
+  //   if (!selectedFile) {
+  //     alert("Please select a file");
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append("files", selectedFile);
+  //   formData.append("userId", userId); // Передаємо userId на сервер
+
+  //   const res = await fetch(`${hostUrl}/upload_user`, {
+  //     method: "POST",
+  //     body: formData,
+  //   });
+
+  //   console.log("Selected File: ", selectedFile);
+
+  //   const data = await res.json();
+  //   setUploaded(data);
+  //   // // Затримка на 1 секунду перед оновленням сторінки
+  //   // setTimeout(() => {
+  //   //   navigate(0); // Перенаправляємо на ту ж сторінку для оновлення
+  //   // }, 1000); // 1000 мс = 1 секунда
+  // };
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const handlePick = () => {
@@ -168,8 +201,7 @@ const UpdateUser = () => {
               </div>
             )}
 
-
-           {/* ------------------------ Для Cloudinary ------------------- */}
+            {/* ------------------------ Для Cloudinary ------------------- */}
 
             {/* {uploaded &&
               uploaded.uploadedFiles &&
@@ -183,8 +215,6 @@ const UpdateUser = () => {
                   />
                 </div>
               )} */}
-
-            
           </div>
           <div className="right">
             <form>

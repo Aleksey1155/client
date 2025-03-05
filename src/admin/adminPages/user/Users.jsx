@@ -58,7 +58,7 @@ const Users = () => {
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити цей проект?"
+      "Ви впевнені, що хочете видалити цього корстувача?"
     );
     if (confirmed) {
       try {

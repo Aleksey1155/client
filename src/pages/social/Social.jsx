@@ -40,7 +40,7 @@ function Social() {
         
         <div className="container">
           <Stories userId = {userData.id} />
-          <Posts />
+          <Posts userData = {userData} />
        
         <div className="user">
           <p> Welcome, {userData.name}!</p>

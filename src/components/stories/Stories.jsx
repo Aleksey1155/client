@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./stories.scss";
+import axiosInstance from "../../axiosInstance";
 import axios from "axios";
 
 const stories = [
@@ -33,9 +34,9 @@ function Stories({userId}) {
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/users/${userId}`);
+        const res = await axiosInstance.get(`/users/${userId}`);
         setUser(res.data);
-        console.log(res.data)
+        // console.log(res.data)
       } catch (err) {
         console.log(err);
       }
@@ -45,9 +46,11 @@ function Stories({userId}) {
   }, [userId]);
 
 
-  console.log("---------" + userId)
+  // console.log("---------" + userId)
 
-console.log(user)
+// console.log(user)
+
+
   return (
     <div className="stories">
      {/* <h1> USER NAME: {user.name}</h1> */}

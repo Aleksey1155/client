@@ -1,38 +1,43 @@
-import React from 'react'
-import "./posts.scss"
-import Post from "../post/Post"
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../axiosInstance";
+import { Link } from "react-router-dom";
+import "./posts.scss";
+import Post from "../post/Post";
+import AddPost from "../addpost/AddPost";
+import AddStory from "../addstory/AddStory";
+import UserProfile from "../../pages/userprofile/UserProfile";
 
+function Posts({ userData }) {
+  const [posts, setPosts] = useState([]);
 
-const posts = [
-  {
-    id: 1,
-    name: "John Doe",
-    userId: 1,
-    profilePic:
-      "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-    img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    id: 2,
-    name: "Jane Doe",
-    userId: 2,
-    profilePic:
-      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    desc: "Tenetur iste voluptates dolorem rem commodi voluptate pariatur, voluptatum, laboriosam consequatur enim nostrum cumque! Maiores a nam non adipisci minima modi tempore.",
-    img: "https://images.pexels.com/photos/8512397/pexels-photo-8512397.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  },
-];
+  useEffect(() => {
+    const fetchAllPosts = async () => {
+      try {
+        const res = await axiosInstance.get("/posts");
+        setPosts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
+    fetchAllPosts();
+  }, []);
 
-function Posts() {
   return (
-    <div className='posts'>
-      {posts.map(post=>(
-        <Post post = {post} key ={post.id}/>
+    <div className="posts">
+      <div className="addStoryPost">
+        <button className="btnAddStoryPost">
+          <AddPost userData={userData} />
+        </button>
+        <button className="btnAddStoryPost">
+          <AddStory userData={userData} />
+        </button>
+      </div>
+      {[...posts].reverse().map((post) => (
+        <Post post={post} key={post.id} userData={userData} />
       ))}
     </div>
-  )
+  );
 }
 
-export default Posts
+export default Posts;
