@@ -1,4 +1,4 @@
-import React, { useState, useEffect,  useRef  } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axiosInstance from "../../axiosInstance";
 import "./generalChat.scss";
 
@@ -6,7 +6,6 @@ function GeneralChat({ userData }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null); // Для відповіді
-  
 
   useEffect(() => {
     async function fetchMessages() {
@@ -59,32 +58,39 @@ function GeneralChat({ userData }) {
     }
   };
 
-
   const lastMessageRef = useRef(null);
 
-useEffect(() => {
-  if (lastMessageRef.current) {
-    lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
-  }
-}, [messages]);
-
-  
-  
-  
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   return (
-    <div className="rightBar" > 
+    <div className="rightBar">
       <div className="container">
         <div className="chatName">Our General Chat</div>
         {messages.map((message, index) => (
-           <div className="blockMessage" key={message.id} ref={index === messages.length - 1 ? lastMessageRef : null}>
+          <div
+            className="blockMessage"
+            key={message.id}
+            ref={index === messages.length - 1 ? lastMessageRef : null}
+          >
             <span className="userName">{message.name}</span>
             <div className="message">
-              {message.replyTo && message.replyTo.message && (
-                <div className="replyTag">| ↳ {message.replyTo.message}</div>
-              )}
-              {message.message}
-            </div>
+  {message.replyTo ? (
+    message.replyTo === "Deleted" ? ( // Перевіряємо, чи replyTo == "Deleted"
+      <div className="replyTag">| ↳ Message deleted</div>
+    ) : (
+      message.replyTo.message ? ( // Перевіряємо чи існує message в replyTo
+        <div className="replyTag">| ↳ {message.replyTo.message}</div>
+      ) : null
+    )
+  ) : null}
+  {message.message}
+</div>
+
+
             <div className="msg-bottom">
               <span className="msg-data">{message.time}</span>
 
