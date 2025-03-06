@@ -2,6 +2,7 @@
     display: flex;
   padding: 10px;
 
+
    
   
    
@@ -19,6 +20,12 @@
       
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  .title {
+    font-size: 30px;
+    color: #555;
+    
   }
     }
 

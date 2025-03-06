@@ -39,6 +39,7 @@ function Social() {
       <div className="social">
         
         <div className="container">
+        <span className="title">Social Page</span>
           <Stories userId = {userData.id} />
           <Posts userData = {userData} />
        
@@ -50,7 +51,7 @@ function Social() {
           {/* Додаткова інформація про користувача */}
         </div>
         </div>
-          <GeneralChat />
+          <GeneralChat userData = {userData} />
         </div>
       
    

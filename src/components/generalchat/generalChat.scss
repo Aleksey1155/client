@@ -1,10 +1,11 @@
 .rightBar {
   flex: 3;
   
-  height: calc(100vh - 70px);
-  overflow: scroll;
+  // max-height: 100vh; // Або потрібну висоту
+  overflow-y: auto; // Дозволяє прокручування
   padding: 10px;
   background: rgb(255, 255, 255);
+  // margin-bottom: 50px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -21,16 +22,55 @@
     }
 
     .blockMessage {
+      position: relative;
       -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
       box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
       border: 1px solid lightgray;
       border-radius: 10px;
       background-color: white;
       padding: 5px;
-      margin-top: 10px;
+      margin: 10px 0px 0px 10px;
       color: #555;
-      
-
+    
+      &::before {
+        content: "";
+        position: absolute;
+        left: -10px; // Змінено значення left
+        top: 10px; // Змінено значення top
+        border-width: 10px 10px 10px 0; // Змінено значення border-width
+        border-style: solid;
+        border-color: transparent lightgray transparent transparent; // Змінено значення border-color
+      }
+    
+      &::after {
+        content: "";
+        position: absolute;
+        left: -9px; // Змінено значення left
+        top: 11px; // Змінено значення top
+        border-width: 9px 9px 9px 0; // Змінено значення border-width
+        border-style: solid;
+        border-color: transparent white transparent transparent; // Змінено значення border-color
+      }
+    
+      .replyTag {
+        font-size: 10px;
+        background-color: #fcd6fc;
+      }
+    
+      .msg-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    
+        .msg-data {
+          font-size: 10px;
+          color: #999;
+        }
+    
+        button {
+          font-size: 8px;
+        }
+      }
     }
   }
 }
