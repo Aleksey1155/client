@@ -21,6 +21,8 @@ function SocialProfile() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true); // Додано стан завантаження
   const navigate = useNavigate();
+
+  // console.log("POST INSIDE Social Profile", post);
   
     useEffect(() => {
       const fetchUserData = async () => {
@@ -99,7 +101,7 @@ function SocialProfile() {
         </div>
         <Posts userData = {userData} />
       </div>
-      <GeneralChat />
+      <GeneralChat userData={userData} />
     </div>
   );
 }

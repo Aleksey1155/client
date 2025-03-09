@@ -17,7 +17,8 @@ function Post({ post, userData }) {
   // Check if the current path includes '/admin'
   const isAdmin = location.pathname.includes("/admin");
   const navigate = useNavigate();
-
+  // console.log("User DATA INSIDE POST", userData);
+  // console.log("POST INSIDE POST", post);
  
 
   const handleNavigation = () => {

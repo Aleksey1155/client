@@ -52,6 +52,7 @@ function Social() {
         </div>
         </div>
           <GeneralChat userData = {userData} />
+          
         </div>
       
    

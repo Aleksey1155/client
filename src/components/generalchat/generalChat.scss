@@ -1,6 +1,6 @@
 .rightBar {
   flex: 3;
-  
+
   // max-height: 100vh; // Або потрібну висоту
   overflow-y: auto; // Дозволяє прокручування
   padding: 10px;
@@ -14,7 +14,6 @@
   .container {
     flex-direction: column;
     margin: 10px;
-    
 
     .chatName {
       font-size: 20px;
@@ -31,7 +30,7 @@
       padding: 5px;
       margin: 10px 0px 0px 10px;
       color: #555;
-    
+
       &::before {
         content: "";
         position: absolute;
@@ -41,7 +40,7 @@
         border-style: solid;
         border-color: transparent lightgray transparent transparent; // Змінено значення border-color
       }
-    
+
       &::after {
         content: "";
         position: absolute;
@@ -51,25 +50,51 @@
         border-style: solid;
         border-color: transparent white transparent transparent; // Змінено значення border-color
       }
-    
+
       .replyTag {
         font-size: 10px;
         background-color: #fcd6fc;
       }
-    
+
       .msg-bottom {
         display: flex;
         justify-content: space-between;
         align-items: center;
-    
+
         .msg-data {
           font-size: 10px;
           color: #999;
         }
-    
+
         button {
           font-size: 8px;
         }
+      }
+    }
+
+    .chatAddText {
+      display: flex;
+      flex-direction: column;
+      .chatTextArea {
+        width: 245px;
+        height: 30px;
+        min-width: 245px;
+        min-height: 20px;
+        max-width: 245px;
+        max-height: 80px;
+        overflow: auto; /* Вмикає скролінг, якщо вміст перевищує розміри */
+        
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        background-color: white;
+        padding: 2px;
+        margin: 10px 0px 10px 10px;
+        color: #555;
+      }
+      button{
+        margin: 0px 0px 10px 10px;
       }
     }
   }

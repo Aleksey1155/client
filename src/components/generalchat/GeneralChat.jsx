@@ -13,7 +13,7 @@ function GeneralChat({ userData }) {
   const [newMessage, setNewMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const lastMessageRef = useRef(null);
-
+  // console.log("User DATA General Chat", userData);
   // Функція для форматування дати
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -50,7 +50,7 @@ function GeneralChat({ userData }) {
       try {
         const response = await axiosInstance.get("/api/messages");
         if (Array.isArray(response.data)) {
-          console.log("Fetched messages:", response.data);
+          // console.log("Fetched messages:", response.data);
           setMessages(response.data);
         } else {
           console.error("Expected an array but got:", response.data);
@@ -195,7 +195,7 @@ function GeneralChat({ userData }) {
           <div key={date}>
             <div className="dateHeader">{date}</div>
 
-            {console.log("All messages:", messages)}
+            {/* {console.log("All messages:", messages)} */}
             {groupedMessages[date].map((message, index) => (
               <div
                 className="blockMessage"
@@ -206,7 +206,7 @@ function GeneralChat({ userData }) {
                     : null
                 }
               >
-                {console.log("Rendering message:", message)}
+                {/* {console.log("Rendering message:", message)} */}
 
                 <span className="userName">{message.name}</span>
                 <div className="message">
@@ -240,10 +240,10 @@ function GeneralChat({ userData }) {
                       >
                         ✏️ Edit
                       </button>
-                      {console.log(
+                      {/* {console.log(
                         "Trying to delete message with ID:",
                         message.id
-                      )}
+                      )} */}
                       <button onClick={() => handleDeleteMessage(message.id)}>
                         🗑 Delete
                       </button>
@@ -259,21 +259,26 @@ function GeneralChat({ userData }) {
           </div>
         ))}
 
-{replyTo && (
-  <p>
-    Replying to message: "
-    {messages.find((msg) => msg.id === replyTo)?.message || "Loading..."}"
-  </p>
-)}
+        {replyTo && (
+          <p>
+            Replying to message: "
+            {messages.find((msg) => msg.id === replyTo)?.message ||
+              "Loading..."}
+            "
+          </p>
+        )}
 
+        <div className="chatAddText">
 
-        <input
+        <textarea className="chatTextArea"
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
         <button onClick={handleSendMessage}>Send</button>
+        </div>
         <p> Welcome, {userData.name}!</p>
+
       </div>
     </div>
   );
