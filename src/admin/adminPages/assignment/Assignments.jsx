@@ -136,26 +136,31 @@ const Assignments = () => {
 
   return (
     <div className="assignments">
-      <div className="datatableTitle">
-      Assignments
-        <Link to="/admin/add_assignment" className="link">
-          Add New
-        </Link>
-      </div>
-      <div className="dataGrid">
-        <DataGrid
-          className="datagrid"
-          rows={assignments}
-          columns={assignmentColumns.concat(actionColumn)} // Колонка `id` не включена
-          pageSize={9}
-          rowsPerPageOptions={[9]}
-          checkboxSelection
-          initialState={{
-            sorting: {
-              sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
-            },
-          }}
-        />
+      <div className="containerAssignments">
+        <div className="datatableTitle">
+          Assignments
+          <Link to="/admin/add_assignment" className="link">
+            Add New
+          </Link>
+        </div>
+        <div className="dataGrid">
+          <DataGrid
+            className="datagrid"
+            rows={assignments}
+            columns={assignmentColumns.concat(actionColumn)} // Колонка `id` не включена
+            pageSize={9}
+            rowsPerPageOptions={[9]}
+            checkboxSelection
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
+              },
+            }}
+            sx={{
+              "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
+            }}
+          />
+        </div>
       </div>
     </div>
   );

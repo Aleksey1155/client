@@ -70,8 +70,12 @@ function GeneralChat({ userData }) {
       const response = await axiosInstance.post("/api/messages", {
         userId: userData.id,
         message: newMessage,
+        userName: userData.name, // Додаємо ім'я користувача
         replyTo: replyTo,
+        
+        
       });
+      console.log("response",response);
 
       if (!response.data || !response.data._id) {
         console.error("Error: Server did not return a valid message ID");
@@ -150,6 +154,7 @@ function GeneralChat({ userData }) {
           {
             ...msg,
             id: msg._id,
+            userName: msg.userName,
             time: msg.time || new Date().toISOString(),
             replyTo: repliedMessage ? repliedMessage : msg.replyTo, // Підтягуємо об'єкт повідомлення
           },
@@ -189,7 +194,7 @@ function GeneralChat({ userData }) {
 
   return (
     <div className="rightBar">
-      <div className="container">
+      <div className="containerRightBar">
         <div className="chatName">Our General Chat</div>
         {Object.keys(groupedMessages).map((date) => (
           <div key={date}>
@@ -208,7 +213,7 @@ function GeneralChat({ userData }) {
               >
                 {/* {console.log("Rendering message:", message)} */}
 
-                <span className="userName">{message.name}</span>
+                <span className="userName">{message.userName}</span>
                 <div className="message">
                   {message.replyTo ? (
                     message.replyTo === "Deleted" ? (
@@ -230,7 +235,7 @@ function GeneralChat({ userData }) {
 
                   {message.userId === userData.id ? (
                     <div className="msg-btn">
-                      <button
+                      <button className="btn-edit"
                         onClick={() =>
                           handleEditMessage(
                             message.id,
@@ -244,12 +249,12 @@ function GeneralChat({ userData }) {
                         "Trying to delete message with ID:",
                         message.id
                       )} */}
-                      <button onClick={() => handleDeleteMessage(message.id)}>
+                      <button className="btn-delete" onClick={() => handleDeleteMessage(message.id)}>
                         🗑 Delete
                       </button>
                     </div>
                   ) : (
-                    <button onClick={() => setReplyTo(message.id)}>
+                    <button className="btn-reply" onClick={() => setReplyTo(message.id)}>
                       💬 Reply
                     </button>
                   )}
@@ -275,7 +280,7 @@ function GeneralChat({ userData }) {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
-        <button onClick={handleSendMessage}>Send</button>
+        <button className="send-message" onClick={handleSendMessage}>Send</button>
         </div>
         <p> Welcome, {userData.name}!</p>
 

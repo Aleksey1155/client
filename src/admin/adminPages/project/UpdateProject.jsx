@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import ReactQuill from "react-quill";
 import { DateTime } from "luxon";
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
@@ -9,14 +9,13 @@ import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import Zoom from "react-medium-image-zoom";
 
-const hostUrl = "http://localhost:3001/upload_project";
-
 const UpdateProject = () => {
   const [project, setProject] = useState({
     title: "",
     description: "",
     start_date: "",
     end_date: "",
+    actual_end_date: "",
     status_id: "",
   });
 
@@ -31,16 +30,13 @@ const UpdateProject = () => {
   // const location = useLocation();
   // const projectId = location.pathname.split("/")[2];
   const { id: projectId } = useParams();
-  
 
   console.log("selectedFile --" + selectedFile); //--------------------
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3001/projects/${projectId}`
-        );
+        const res = await axiosInstance.get(`/projects/${projectId}`);
         const projectData = res.data;
         setProject({
           title: projectData.title,
@@ -51,6 +47,9 @@ const UpdateProject = () => {
           end_date: projectData.end_date
             ? DateTime.fromISO(projectData.end_date).toISODate()
             : "",
+          actual_end_date: projectData.actual_end_date
+            ? DateTime.fromISO(projectData.actual_end_date).toISODate()
+            : "",
           status_id: projectData.status_id,
         });
       } catch (err) {
@@ -60,7 +59,7 @@ const UpdateProject = () => {
 
     const fetchStatuses = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/project_statuses");
+        const res = await axiosInstance.get("/project_statuses");
         setStatuses(res.data);
       } catch (err) {
         console.log(err);
@@ -69,7 +68,7 @@ const UpdateProject = () => {
 
     const fetchImages = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/project_images`);
+        const res = await axiosInstance.get(`/project_images`);
         setImages(
           res.data.filter((image) => image.project_id === Number(projectId))
         );
@@ -85,22 +84,33 @@ const UpdateProject = () => {
   }, [projectId]);
 
   const handleChange = (e) => {
-    setProject((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setProject((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value === "" ? null : e.target.value,
+    }));
   };
-
+  
+  
   const handleEditorChange = (content) => {
     setProject((prev) => ({ ...prev, description: content }));
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
+  
+    const updatedProject = {
+      ...project,
+      actual_end_date: project.actual_end_date || null,
+    };
+  
     try {
-      await axios.put(`http://localhost:3001/projects/${projectId}`, project);
+      await axiosInstance.put(`/projects/${projectId}`, updatedProject);
       navigate(`/admin/project/${projectId}`);
     } catch (err) {
       console.log(err);
     }
   };
+  
 
   const handleDeleteImg = async (id) => {
     const confirmed = window.confirm(
@@ -108,7 +118,7 @@ const UpdateProject = () => {
     );
     if (confirmed) {
       try {
-        await axios.delete("http://localhost:3001/project_images/" + id);
+        await axiosInstance.delete("/project_images/" + id);
         setImages(images.filter((image) => image.id !== id));
       } catch (err) {
         console.log(err);
@@ -132,23 +142,26 @@ const UpdateProject = () => {
     const formData = new FormData();
     formData.append("files", selectedFile);
     formData.append("project_id", projectId); // Передаємо project_id
-   
 
-  
+    try {
+      const res = await axiosInstance.post("/upload_project", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    const res = await fetch(hostUrl, {
-      method: "POST",
-      body: formData,
-    });
+      console.log("Selected File: ", selectedFile);
+      console.log("Upload Response: ", res.data);
 
-    console.log("Selected File: ", selectedFile);
+      setUploaded(res.data);
 
-    const data = await res.json();
-    setUploaded(data);
-    // Затримка на 1 секунду перед оновленням сторінки
-    setTimeout(() => {
-      navigate(0); // Перенаправляємо на ту ж сторінку для оновлення
-    }, 1000); // 1000 мс = 1 секунда
+      setTimeout(() => {
+        navigate(0);
+      }, 1000);
+    } catch (error) {
+      console.error("Upload Error: ", error);
+      alert("Помилка завантаження файлу");
+    }
   };
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -214,8 +227,6 @@ const UpdateProject = () => {
           </div>
           <div className="right">
             <form>
-             
-
               <div className="formInput">
                 <label>Project Title</label>
                 <input
@@ -246,6 +257,17 @@ const UpdateProject = () => {
                   onChange={handleChange}
                   name="end_date"
                   value={project.end_date}
+                />
+              </div>
+
+              <div className="formInput">
+                <label>actual_end_date</label>
+                <input
+                  type="date"
+                  placeholder="actual_end_date"
+                  onChange={handleChange}
+                  name="actual_end_date"
+                  value={project.actual_end_date || ""} // якщо null, підставляється ""
                 />
               </div>
 

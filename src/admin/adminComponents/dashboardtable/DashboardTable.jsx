@@ -157,11 +157,12 @@ const DashboardTable = () => {
         <div className="selectProject">
           <p className="titleSelect">Фільтр статус проекта</p>
           <select
+      
             name="select"
             onChange={(e) => setProjectStatus(e.target.value)}
             value={projectStatus}
           >
-            <option value="">Всі</option>
+            <option  value="">Всі</option>
             {projectStatuses.map((status) => (
               <option key={status.id} value={status.status_name}>
                 {status.status_name}

@@ -164,8 +164,7 @@ function UserProfile() {
   }
 
   return (
-    <div className="userProfile">
-      <div className="containerUserProfile">
+    <div>
         <span onClick={openModal}>Profile</span>
         <Modal
           isOpen={modalIsOpen}
@@ -174,6 +173,8 @@ function UserProfile() {
           style={customStyles}
           contentLabel="Example Modal"
         >
+          <div className="userProfile">
+          <div className="containerUserProfile">
           <span
             className="welcomeUserProfile"
             ref={(_subtitle) => (subtitle = _subtitle)}
@@ -303,9 +304,10 @@ function UserProfile() {
               </div>
             </div>
           </div>
+          </div>
+          </div>
         </Modal>
-      </div>
-    </div>
+        </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { useParams, Link } from "react-router-dom";
 import "./taskdetails.scss";
 import TaskDatatable from "./TaskDatatable";
@@ -13,7 +13,7 @@ const TaskDetails = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/tasks/${id}`);
+        const res = await axiosInstance.get(`/tasks/${id}`);
         setTask(res.data);
       } catch (err) {
         console.log(err);
@@ -22,7 +22,7 @@ const TaskDetails = () => {
 
     const fetchImages = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/task_images`);
+        const res = await axiosInstance.get(`/task_images`);
         // setImages(res.data);  // This will now contain images specific to the current project
         setImages(res.data.filter((image) => image.task_id === Number(id)));
       } catch (err) {
@@ -46,7 +46,7 @@ const TaskDetails = () => {
 
   return (
     <div className="taskDetails">
-      <div className="userContainer">
+      <div className="containerTaskDetails">
         <div className="top">
           <div className="left">
             <div className="edit">
@@ -70,6 +70,12 @@ const TaskDetails = () => {
                   </span>
                   <span className="itemKey">End Date:</span>
                   <span className="itemValue">{formatDate(task.end_date)}</span>
+                  <span className="itemKey">Actual End Date:</span>
+                  <span className="itemValue">
+                    {task.actual_end_date
+                      ? formatDate(task.actual_end_date)
+                      : "Не завершено"}
+                  </span>
                   <span className="itemKey">Task Status:</span>
                   <span className="itemValue">{task.status_name}</span>
                   <span className="itemKey">Task Priority:</span>

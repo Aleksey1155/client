@@ -3,33 +3,41 @@
 
   // max-height: 100vh; // Або потрібну висоту
   overflow-y: auto; // Дозволяє прокручування
-  padding: 10px;
-  background: rgb(255, 255, 255);
+
   // margin-bottom: 50px;
 
   &::-webkit-scrollbar {
     display: none;
   }
 
-  .container {
+  .containerRightBar {
+    margin-left: 10px;
+    // padding: 10px;
+    position: sticky;
+    top: 70;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+
     flex-direction: column;
-    margin: 10px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .chatName {
       font-size: 20px;
-      color: #555;
+      color: inherit;
     }
 
     .blockMessage {
       position: relative;
       -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
       box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-      border: 1px solid lightgray;
+      border: 1px solid #777;
       border-radius: 10px;
-      background-color: white;
+
       padding: 5px;
       margin: 10px 0px 0px 10px;
-      color: #555;
+      color: inherit;
 
       &::before {
         content: "";
@@ -38,7 +46,7 @@
         top: 10px; // Змінено значення top
         border-width: 10px 10px 10px 0; // Змінено значення border-width
         border-style: solid;
-        border-color: transparent lightgray transparent transparent; // Змінено значення border-color
+        border-color: transparent #777 transparent transparent; // Змінено значення border-color
       }
 
       &::after {
@@ -48,7 +56,7 @@
         top: 11px; // Змінено значення top
         border-width: 9px 9px 9px 0; // Змінено значення border-width
         border-style: solid;
-        border-color: transparent white transparent transparent; // Змінено значення border-color
+        border-color: transparent #d6d3d3 transparent transparent; // Змінено значення border-color
       }
 
       .replyTag {
@@ -68,6 +76,9 @@
 
         button {
           font-size: 8px;
+          color: inherit;
+          background: inherit;
+          border: solid 1px;
         }
       }
     }
@@ -83,18 +94,23 @@
         max-width: 245px;
         max-height: 80px;
         overflow: auto; /* Вмикає скролінг, якщо вміст перевищує розміри */
-        
+        color: inherit;
+        background: inherit;
+
         -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
         box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-        border: 1px solid lightgray;
+        border: 1px solid #777;
         border-radius: 5px;
-        background-color: white;
+
         padding: 2px;
         margin: 10px 0px 10px 10px;
-        color: #555;
+        color: #777;
       }
-      button{
+      button {
         margin: 0px 0px 10px 10px;
+        color: inherit;
+        background: inherit;
+        border: solid 1px #999;
       }
     }
   }

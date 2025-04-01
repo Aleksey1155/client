@@ -2,13 +2,15 @@
   // flex: 1;
   width: 180px;
   min-height: 100vh;
+  color: inherit;
+  background: inherit;
 
  
  
   .containerAdmin {
     position: sticky;
     top: 0;
-    background-color: white;
+   
     
     .topAdmin {
       height: 50px;
@@ -44,7 +46,7 @@
           cursor: pointer;
 
           &:hover {
-            background-color: hsl(240, 9%, 94%);
+            background-color: inherit
           }
 
           .icon {
@@ -65,21 +67,23 @@
     .bottomAdmin {
       display: flex;
       align-items: center;
-      margin: 10px;
-      .colorOption {
+      border: 1px solid #7451f8;
+      width: 40px;
+  
+      .colorOptionAdmin {
         height: 20px;
         width: 20px;
-        border-radius: 5px;
-        border: 1px solid #7451f8;
+        
+        
         cursor: pointer;
-        margin: 5px;
+        
 
         &:nth-child(1) {
-          background-color: whitesmoke;
+          background-color: white;
         }
 
         &:nth-child(2) {
-          background-color: #333;
+          background-color: black;
         }
       }
     }

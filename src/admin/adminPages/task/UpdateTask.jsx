@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import ReactQuill from "react-quill";
 import { DateTime } from "luxon";
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import "./updatetask.scss";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import Zoom from "react-medium-image-zoom";
-
-const hostUrl = "http://localhost:3001/upload_task";
 
 const UpdateTask = () => {
   const [task, setTask] = useState({
@@ -18,7 +16,9 @@ const UpdateTask = () => {
     start_date: "",
     end_date: "",
     priority_id: "",
+    actual_end_date: "",
     status_id: "",
+    rating: "",
   });
 
   const filePicker = useRef(null);
@@ -38,7 +38,7 @@ const UpdateTask = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/tasks/${taskId}`);
+        const res = await axiosInstance.get(`/tasks/${taskId}`);
         const taskData = res.data;
         setTask({
           project_id: taskData.project_id,
@@ -50,8 +50,12 @@ const UpdateTask = () => {
           end_date: taskData.end_date
             ? DateTime.fromISO(taskData.end_date).toISODate()
             : "",
+          actual_end_date: taskData.actual_end_date
+            ? DateTime.fromISO(taskData.actual_end_date).toISODate()
+            : "",
           priority_id: taskData.priority_id,
           status_id: taskData.status_id,
+          rating: taskData.rating,
         });
       } catch (err) {
         console.log(err);
@@ -60,7 +64,7 @@ const UpdateTask = () => {
 
     const fetchStatuses = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/task_statuses");
+        const res = await axiosInstance.get("/task_statuses");
         setStatuses(res.data);
       } catch (err) {
         console.log(err);
@@ -69,7 +73,7 @@ const UpdateTask = () => {
 
     const fetchPriorities = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/task_priorities");
+        const res = await axiosInstance.get("/task_priorities");
         setPriorities(res.data);
       } catch (err) {
         console.log(err);
@@ -78,7 +82,7 @@ const UpdateTask = () => {
 
     const fetchImages = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/task_images`);
+        const res = await axiosInstance.get(`/task_images`);
         setImages(res.data.filter((image) => image.task_id === Number(taskId)));
       } catch (err) {
         console.log(err);
@@ -87,7 +91,7 @@ const UpdateTask = () => {
 
     const fetchAllProjects = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/projects"); // Запит на отримання всіх проєктів
+        const res = await axiosInstance.get("/projects"); // Запит на отримання всіх проєктів
         setProjects(res.data);
       } catch (err) {
         console.log(err);
@@ -102,7 +106,10 @@ const UpdateTask = () => {
   }, [taskId]);
 
   const handleChange = (e) => {
-    setTask((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setTask((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value === "" ? null : e.target.value,
+    }));
   };
 
   const handleEditorChange = (content) => {
@@ -111,8 +118,14 @@ const UpdateTask = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+
+    const updatedTask = {
+      ...task,
+      actual_end_date: task.actual_end_date || null,
+    };
+
     try {
-      await axios.put(`http://localhost:3001/tasks/${taskId}`, task);
+      await axiosInstance.put(`/tasks/${taskId}`, updatedTask);
       navigate(`/admin/task/${taskId}`);
     } catch (err) {
       console.log(err);
@@ -125,7 +138,7 @@ const UpdateTask = () => {
     );
     if (confirmed) {
       try {
-        await axios.delete("http://localhost:3001/task_images/" + id);
+        await axiosInstance.delete("/task_images/" + id);
         setImages(images.filter((image) => image.id !== id));
       } catch (err) {
         console.log(err);
@@ -140,6 +153,7 @@ const UpdateTask = () => {
   };
 
   //*********************************************************** */
+
   const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file");
@@ -150,19 +164,25 @@ const UpdateTask = () => {
     formData.append("files", selectedFile);
     formData.append("task_id", taskId); // Передаємо project_id
 
-    const res = await fetch(hostUrl, {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const res = await axiosInstance.post("/upload_task", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    console.log("Selected File: ", selectedFile);
+      console.log("Selected File: ", selectedFile);
+      console.log("Upload Response: ", res.data);
 
-    const data = await res.json();
-    setUploaded(data);
-    // Затримка на 1 секунду перед оновленням сторінки
-    setTimeout(() => {
-      navigate(0); // Перенаправляємо на ту ж сторінку для оновлення
-    }, 1000); // 1000 мс = 1 секунда
+      setUploaded(res.data);
+
+      setTimeout(() => {
+        navigate(0);
+      }, 1000);
+    } catch (error) {
+      console.error("Upload Error: ", error);
+      alert("Помилка завантаження файлу");
+    }
   };
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -250,7 +270,7 @@ const UpdateTask = () => {
                   </option>
                   {projects.map((project) => (
                     <option key={project.id} value={project.id}>
-                      {project.title} 
+                      {project.title}
                     </option>
                   ))}
                 </select>
@@ -273,6 +293,16 @@ const UpdateTask = () => {
                   onChange={handleChange}
                   name="end_date"
                   value={task.end_date}
+                />
+              </div>
+              <div className="formInput">
+                <label>actual_end_date</label>
+                <input
+                  type="date"
+                  placeholder="actual_end_date"
+                  onChange={handleChange}
+                  name="actual_end_date"
+                  value={task.actual_end_date || ""} // якщо null, підставляється ""
                 />
               </div>
 
@@ -300,6 +330,23 @@ const UpdateTask = () => {
                   {priorities.map((priority) => (
                     <option key={priority.id} value={priority.id}>
                       {priority.priority_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="formInput">
+                <label>Rating</label>
+                <select
+                  name="rating"
+                  onChange={handleChange}
+                  value={task.rating}
+                >
+                  <option value="" disabled>
+                    Виберіть рейтинг
+                  </option>
+                  {[1, 2, 3, 4, 5].map((rating) => (
+                    <option key={rating} value={rating}>
+                      {rating}
                     </option>
                   ))}
                 </select>
@@ -369,91 +416,6 @@ const UpdateTask = () => {
           </div>
         </div>
       </div>
-
-      {/* <h1>Редагувати Завдання</h1>
-      <input
-        type="number"
-        placeholder="project_id"
-        onChange={handleChange}
-        name="project_id"
-        value={task.project_id}
-      />
-      <input
-        type="text"
-        placeholder="title"
-        onChange={handleChange}
-        name="title"
-        value={task.title}
-      />
-      <ReactQuill
-        value={task.description}
-        onChange={handleEditorChange}
-        modules={{
-          toolbar: [
-            [{ header: "1" }, { header: "2" }, { font: [] }],
-            [{ size: [] }],
-            ["bold", "italic", "underline", "strike", "blockquote"],
-            [
-              { list: "ordered" },
-              { list: "bullet" },
-              { indent: "-1" },
-              { indent: "+1" },
-            ],
-            ["link", "image"],
-            ["clean"],
-          ],
-        }}
-        formats={[
-          "header",
-          "font",
-          "size",
-          "bold",
-          "italic",
-          "underline",
-          "strike",
-          "blockquote",
-          "list",
-          "bullet",
-          "indent",
-          "link",
-          "image",
-        ]}
-      />
-      <input
-        type="date"
-        placeholder="start_date"
-        onChange={handleChange}
-        name="start_date"
-        value={task.start_date}
-      />
-      <input
-        type="date"
-        placeholder="end_date"
-        onChange={handleChange}
-        name="end_date"
-        value={task.end_date}
-      />
-      <select
-        name="priority_id"
-        onChange={handleChange}
-        value={task.priority_id}
-      >
-        {priorities.map((priority) => (
-          <option key={priority.id} value={priority.id}>
-            {priority.priority_name}
-          </option>
-        ))}
-      </select>
-      <select name="status_id" onChange={handleChange} value={task.status_id}>
-        {statuses.map((status) => (
-          <option key={status.id} value={status.id}>
-            {status.status_name}
-          </option>
-        ))}
-      </select>
-      <button className="nav-addlink" onClick={handleClick}>
-        Редагувати
-      </button> */}
     </div>
   );
 };

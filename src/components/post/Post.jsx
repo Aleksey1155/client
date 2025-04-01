@@ -64,7 +64,7 @@ function Post({ post, userData }) {
 
   return (
     <div className="post">
-      <div className="container">
+      <div className="containerPost">
         <div className="user">
           <div className="userInfo">
             <img src={post.user_img} alt="" />
@@ -106,7 +106,7 @@ function Post({ post, userData }) {
 
           {/* -------------------------------- */}
         </div>
-        <div className="content">
+        <div className="contentPost">
           <p>{post.description}</p>
           <img src={post.img} alt="" />
         </div>

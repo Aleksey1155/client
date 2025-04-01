@@ -1,0 +1,35 @@
+.statistic-category {
+  .statCatContaner {
+    color: #555;
+    .statCatWidget {
+      .statCatList {
+        display: flex;
+        flex-wrap: wrap; /* Дозволяє завданням переноситися на новий рядок */
+        gap: 25px; /* Відступи між завданнями */
+        width: 100%; /* Ширина контейнера */
+
+        .statCatCard {
+          padding: 10px;
+          -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+          box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+          border-radius: 10px;
+          height: 200px;
+          width: 200px;
+
+          .statCard1 {
+            font-weight: bold;
+            font-size: 16px;
+          }
+
+          .statCard {
+            font-size: 12px;
+          }
+          .statCard5 {
+            width: 50px;
+            height: 50px;
+          }
+        }
+      }
+    }
+  }
+}

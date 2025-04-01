@@ -70,7 +70,7 @@ function Login() {
             {errors.password && (
               <span className="error">{errors.password}</span>
             )}
-            <button onClick={handleClick}>Login</button>
+            <button className="login-button" onClick={handleClick}>Login</button>
           </form>
         </div>
       </div>

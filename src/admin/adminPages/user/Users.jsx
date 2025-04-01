@@ -1,10 +1,10 @@
 import "./users.scss";
+import { useContext, useMemo } from "react";
+import { ThemeContext } from "../../../ThemeContext";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axiosInstance from "../../../axiosInstance";
-
-
 
 const userColumns = [
   { field: "id", headerName: "ID", width: 50 },
@@ -40,9 +40,6 @@ const userColumns = [
 
 const Users = () => {
   const [users, setUsers] = useState([]);
- 
- 
-
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
@@ -78,7 +75,10 @@ const Users = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to={`/admin/users/${params.row.id}`} style={{ textDecoration: "none" }}>
+            <Link
+              to={`/admin/users/${params.row.id}`}
+              style={{ textDecoration: "none" }}
+            >
               <div className="viewButton">Деталі</div>
             </Link>
             <button
@@ -93,23 +93,34 @@ const Users = () => {
     },
   ];
 
- 
   return (
     <div className="users">
-      <div className="datatableTitle">
-        Users
-        <Link to="/admin/add_user" className="link">
-          Add New
-        </Link>
+      <div className="containerUsers">
+        <div className="datatableTitle">
+          Users
+          <Link to="/admin/add_user" className="link">
+            Add New
+          </Link>
+        </div>
+        <div className="table">
+       
+  <div>
+   
+    <DataGrid
+      className="datagrid"
+      rows={users}
+      columns={userColumns.concat(actionColumn)}
+      pageSize={9}
+      rowsPerPageOptions={[9]}
+      checkboxSelection
+      sx={{
+        "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
+      }}
+    />
+  </div>
+
+        </div>
       </div>
-      <DataGrid
-        className="datagrid"
-        rows={users}
-        columns={userColumns.concat(actionColumn)}
-        pageSize={9}
-        rowsPerPageOptions={[9]}
-        checkboxSelection
-      />
     </div>
   );
 };

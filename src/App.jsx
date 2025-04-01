@@ -34,7 +34,8 @@ import AdminDashboard from "./admin/adminPages/home/AdminDashboard";
 import Social from "./pages/social/Social";
 import UserTaskDetails from "./pages/usertaskdetails/UserTaskDetails";
 import Settings from "./admin/adminPages/settings/Settings";
-
+import StatisticCategory from "./admin/adminComponents/statisticCategory/StatisticCategory";
+import { ThemeProvider } from "./ThemeContext";
 
 
 const router = createBrowserRouter([
@@ -124,6 +125,10 @@ const router = createBrowserRouter([
         element: <Statistics/>,
       },
       {
+        path: "/admin/statistics/:category",
+        element: <StatisticCategory/>,
+      },
+      {
         path: "/admin/social",
         element: <Social />,
       },
@@ -186,15 +191,14 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
-  
-  
   return (
-    <div className="app">
-      <div className="container">
-        <RouterProvider router={router} />
+    <ThemeProvider>
+      <div className="app">
+        <div className="container">
+          <RouterProvider router={router} />
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 

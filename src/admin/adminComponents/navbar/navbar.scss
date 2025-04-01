@@ -1,74 +1,76 @@
-.navbar{
-    height: 50px;
-    border-bottom: 0.5px solid rgb(231, 228, 228);
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #555;
-    z-index: 9999;
-    position: sticky;
-    top: 0;
-    background-color: white;
+.navbarAdmin {
+  height: 50px;
+  border-bottom: 0.5px solid rgb(231, 228, 228);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+
+  z-index: 1000;
+  position: sticky;
+  top: 0;
+  color: inherit;
+  background: inherit;
+  .containerNavbarAdmin {
+    flex: 6;
     
+    .wrapperNavbarAdmin {
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-
-    .wrapper{
-        width: 100%;
-        padding: 20px;
+      .searchNavbarAdmin {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        
-        .search{
+        border: 0.5px solid lightgrey;
+        padding: 3px;
+
+        input {
+          border: none;
+          outline: none;
+          background: transparent;
+          &::placeholder {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .itemsNavbarAdmin {
+        display: flex;
+        align-items: center;
+        .itemNavbarAdmin {
+          display: flex;
+          align-items: center;
+          margin: 20px;
+          position: relative;
+
+          .iconNavbarAdmin {
+            font-size: 20px;
+          }
+
+          .avatarNavbarAdmin {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+          .counterNavbarAdmin {
+            width: 15px;
+            height: 15px;
+            background-color: red;
+            border-radius: 50%;
+            color: white;
             display: flex;
             align-items: center;
-            border: 0.5px solid lightgrey;
-            padding: 3px;
-
-            input{
-                border: none;
-                outline: none;
-                background: transparent;
-                &::placeholder{
-                    font-size: 12px;
-                }
-            }
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+          }
         }
-
-        .item{
-            display: flex;
-            align-items: center;
-            .item{
-                display: flex;
-                align-items: center;
-                margin: 20px;
-                position: relative;
-
-                .icon{
-                    font-size: 20px;
-                }
-
-                .avatar{
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                }
-                .counter{
-                    width: 15px;
-                    height: 15px;
-                    background-color: red;
-                    border-radius: 50%;
-                    color: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 10px;
-                    font-weight: bold;
-                    position: absolute;
-                    top: -5px;
-                    right: -5px;
-                }
-            }
-        }
+      }
     }
+  }
 }

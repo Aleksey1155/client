@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import "./layoutAdmin.scss";
 import Navbar from "../adminComponents/navbar/Navbar";
 import Sidebar from "../adminComponents/sidebar/Sidebar";
 import useFetchUserDataWithCheck from "../../hooks/useFetchUserDataWithCheck";
@@ -30,7 +31,8 @@ const LayoutAdmin = () => {
       <Sidebar />
       <div className="container">
         <Navbar />
-        <Outlet /> {/* Вміст поточної сторінки */}
+        <Outlet /> 
+        {/* Вміст поточної сторінки */}
       </div>
     </div>
   );

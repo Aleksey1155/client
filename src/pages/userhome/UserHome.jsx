@@ -130,7 +130,7 @@ function UserHome() {
 
   return (
     <div className="userHome">
-      <div className="container">
+      <div className="containerUserHome">
         <span className="title">Home Page</span>
         <div className="top">
           <div className="topCalendar">

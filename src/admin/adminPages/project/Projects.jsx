@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import "./projects.scss";
@@ -65,7 +65,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchAllProjects = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/projects");
+        const res = await axiosInstance.get("/projects");
         // Додаємо порядковий номер для кожного проекту
         const projectsWithOrderNumber = res.data.map((project, index) => ({
           ...project,
@@ -86,7 +86,7 @@ const Projects = () => {
     );
     if (confirmed) {
       try {
-        await axios.delete("http://localhost:3001/projects/" + id);
+        await axiosInstance.delete("/projects/" + id);
         setProjects(projects.filter((project) => project.id !== id));
       } catch (err) {
         console.log(err);
@@ -124,7 +124,7 @@ const Projects = () => {
 
   return (
     <div className="projects">
-      <div className="container">
+      <div className="containerProjects">
         <div className="datatableTitle">
           Projects
           <Link to="/admin/add_project" className="link">
@@ -143,6 +143,9 @@ const Projects = () => {
               sorting: {
                 sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
               },
+            }}
+            sx={{
+              "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
             }}
           />
         </div>

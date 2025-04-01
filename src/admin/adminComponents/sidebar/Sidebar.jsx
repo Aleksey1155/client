@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../../ThemeContext";
 import "./sidebar.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -14,16 +15,19 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
+import InterestsOutlinedIcon from "@mui/icons-material/InterestsOutlined";
 import UserProfile from "../../../pages/userprofile/UserProfile";
 
 function Sidebar() {
+  const { darkMode, toggleTheme } = useContext(ThemeContext);
+
+  useEffect(() => {}, [darkMode]);
+  
   const navigate = useNavigate();
 
   const handleLogout = () => {
     // Очищення токена з локального сховища або сесії
     localStorage.removeItem("token");
-
     // Перенаправлення на сторінку входу
     navigate("/login");
   };
@@ -103,19 +107,18 @@ function Sidebar() {
               <span>Logs</span>
             </li>
             <Link to="/admin/settings">
-            <li>
-              <SettingsOutlinedIcon className="icon" />
-              <span>Settings</span>
-            </li>
+              <li>
+                <SettingsOutlinedIcon className="icon" />
+                <span>Settings</span>
+              </li>
             </Link>
             <p className="title">USER</p>
-            
-              <li>
-                <AccountBoxOutlinedIcon className="icon" />
-                <UserProfile />
-               
-              </li>
-            
+
+            <li>
+              <AccountBoxOutlinedIcon className="icon" />
+              <UserProfile />
+            </li>
+
             <li onClick={handleLogout}>
               <LogoutOutlinedIcon className="icon" />
               <span>Logout</span>
@@ -123,8 +126,12 @@ function Sidebar() {
           </ul>
         </div>
         <div className="bottomAdmin">
-          <div className="colorOption"></div>
-          <div className="colorOption"></div>
+          {/* Вимкнення темного режиму */}
+          <div className="colorOptionAdmin" onClick={() => toggleTheme(false)}></div>
+
+          {/* Увімкнення темного режиму */}
+          <div className="colorOptionAdmin dark" onClick={() => toggleTheme(true)}
+          ></div>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./addproject.scss";
 
-const hostUrl = "http://localhost:3001";
+
 
 const AddProject = () => {
   const [project, setProject] = useState({
@@ -25,7 +25,7 @@ const AddProject = () => {
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
-        const res = await axios.get(`${hostUrl}/project_statuses`);
+        const res = await axiosInstance.get(`/project_statuses`);
         setStatuses(res.data);
       } catch (err) {
         console.log(err);
@@ -53,7 +53,7 @@ const AddProject = () => {
     
     try {
       // 1. Додаємо проект
-      const projectRes = await axios.post(`${hostUrl}/projects`, project);
+      const projectRes = await axiosInstance.post(`/projects`, project);
       const projectId = projectRes.data.insertId; // Отримуємо з серверу id нового проекту
     
       // 2. Якщо вибрано файли, додаємо їх до таблиці project_images
@@ -65,7 +65,7 @@ const AddProject = () => {
     
         formData.append("project_id", projectId);
     
-        await axios.post(`${hostUrl}/upload_project`, formData, {
+        await axiosInstance.post(`/upload_project`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

@@ -117,6 +117,9 @@ function TaskDatatable({ taskId }) {
           rowsPerPageOptions={[9]}
           checkboxSelection
           getRowId={(row) => row.id} // Вказуємо, що id йде з поля id
+          sx={{
+            "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
+          }}
         />
       </div>
     </div>

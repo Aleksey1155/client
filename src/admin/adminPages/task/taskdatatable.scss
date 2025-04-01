@@ -75,24 +75,35 @@
         font-size: 14px; /* Однаковий розмір шрифту */
       }
   
+      .view-Button, .deleteButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px; /* Однакова висота */
+        padding: 5px 10px; /* Відступи */
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px; /* Однаковий розмір шрифту */
+      }
+    
       .view-Button {
-        color: darkblue;
-        // border: 1px dotted rgba(0, 0, 139, 0.6);
+        color: rgb(79, 79, 133);
+        border: 1px dotted rgba(0, 0, 139, 0.6);
         outline: none;
         border: none; /* Видалення межі кнопки, якщо є */
       }
-  
+    
       .deleteButton {
-        color: rgb(179, 54, 54);
+        color: rgb(177, 91, 91);
         border: 1px dotted rgba(220, 20, 60, 0.6);
-        background-color: white;
+        background: inherit;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
-  
+
       .deleteButton:hover {
-        background-color: rgb(179, 54, 54);
+        background-color: rgb(179, 54, 54);;
         color: white;
-      }
+    }
     }
   }
   

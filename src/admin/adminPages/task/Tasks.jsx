@@ -148,26 +148,31 @@ const Tasks = () => {
 
   return (
     <div className="tasks">
-      <div className="datatableTitle">
-        Tasks
-        <Link to="/admin/add_task" className="link">
-          Add New
-        </Link>
-      </div>
-      <div className="dataGrid">
-        <DataGrid
-          className="datagrid"
-          rows={tasks}
-          columns={projectColumns.concat(actionColumn)} // Колонка `id` не включена
-          pageSize={9}
-          rowsPerPageOptions={[9]}
-          checkboxSelection
-          initialState={{
-            sorting: {
-              sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
-            },
-          }}
-        />
+      <div className="containerTask">
+        <div className="datatableTitle">
+          Tasks
+          <Link to="/admin/add_task" className="link">
+            Add New
+          </Link>
+        </div>
+        <div className="dataGrid">
+          <DataGrid
+            className="datagrid"
+            rows={tasks}
+            columns={projectColumns.concat(actionColumn)} // Колонка `id` не включена
+            pageSize={9}
+            rowsPerPageOptions={[9]}
+            checkboxSelection
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
+              },
+            }}
+            sx={{
+              "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
+            }}
+          />
+        </div>
       </div>
     </div>
   );

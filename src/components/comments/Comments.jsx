@@ -28,7 +28,7 @@ function Comments({ postId, userData }) {
       fetchAllComments();
     }
   }, [postId]);
-
+console.log(comments)
   const handleChange = (e) => {
     setComment((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -81,7 +81,7 @@ function Comments({ postId, userData }) {
       
       {[...comments].reverse().map((comment) => (
         <div className="comment" key={comment.id}>
-          <img src={comment.img} alt="" />
+          <img src={comment.user_img} alt="" />
           <div className="info">
             <span>{comment.name}</span>
             <p>{comment.description}</p>

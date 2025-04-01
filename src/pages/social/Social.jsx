@@ -38,7 +38,7 @@ function Social() {
     return (
       <div className="social">
         
-        <div className="container">
+        <div className="containerSocial">
         <span className="title">Social Page</span>
           <Stories userId = {userData.id} />
           <Posts userData = {userData} />

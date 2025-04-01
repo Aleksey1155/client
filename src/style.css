@@ -1,25 +1,137 @@
-
 .App {
-   
-
+    /* Твій стиль для основного контейнера */
 }
 
-.layout{
+.layout {
     display: flex;
 }
 
-.container{
+.container {
     flex: 6;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
 body {
-    
     margin-top: 0;
-    
-
+    margin-bottom: 0;
+    margin-right: 0;
+    margin-left: 0;
+    overflow-x: hidden;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
+/* Світла тема (за замовчуванням) */
+:root {
+    --DataGrid-containerBackground: #ffffff; /* Світлий фон за замовчуванням */
+    --header-bg: #f5f5f5;
+    --header-text: #555;
+    --text-color: #000;
+    --svg-icon: #7451f8;
+    background-color: white;
+    color: #222;
+}
+
+/* Темна тема */
+.dark-mode {
+    --DataGrid-containerBackground: #222222; /* Темний фон */
+    --header-bg: #333333;
+    --header-text: #999;
+    --text-color: #fff;
+    --svg-icon: #7451f8;
+    
+    background-color: black;
+    color: #8d8c8c;
+}
+
+
+
+.dark-mode .sidebarUser {
+    background-color: black;
+}
+
+.dark-mode .containerUser {
+    background-color: black;
+}
+
+.dark-mode .center ul li {
+    color: #999;
+}
+
+.dark-mode .icon {
+    color: #7451f8;
+}
+
+/* Перемикач теми */
+.colorOption {
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    border: 1px solid #7451f8;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.colorOption:nth-child(1) {
+    background-color: whitesmoke;
+}
+
+.colorOption:nth-child(2) {
+    background-color: black;
+}
+
+/* Загальні стилі для всіх таблиць */
+.MuiDataGrid-root {
+    background-color: inherit !important;
+    color: inherit !important;
+}
+
+/* Додаткові стилі для конкретних елементів */
+.MuiDataGrid-columnHeaders {
+    background-color: var(--DataGrid-containerBackground) !important;
+    color: var(--header-text) !important;
+}
+
+.MuiDataGrid-footerContainer {
+    background-color: var(--DataGrid-containerBackground) !important;
+    color: var(--header-text) !important;
+}
+
+
+/* Стилізація для трьох точок (SVG) */
+/* Тільки для іконок трьох точок в DataGrid */
+.MuiDataGrid-root .MuiSvgIcon-root {
+    fill: var(--header-text) !important; /* Колір для іконок у таблиці */
+}
+
+/* Квадратики вибору */
+.MuiCheckbox-root {
+    color: var(--header-text) !important; /* Колір для чекбоксів */
+}
+
+/* Текст "Rows per page" в футері */
+.MuiTablePagination-caption {
+    color: var(--header-text) !important; /* Колір для тексту */
+}
+
+
+
+/* Зміна кольору для пагінації (наприклад, числа, "1–15 of 15") */
+.MuiTablePagination-root {
+    color: var(--header-text) !important; /* Колір для тексту пагінації */
+}
+
+.MuiTableCell-root  {
+    background-color: var(--background-color) !important; /* Встановлюємо фон меню */
+    color: var(--header-text) !important; /* Колір тексту в меню */
+}
+
+
+
+.MuiPaper-root.MuiPaper-elevation  {
+    background-color: var(--header-bg) !important; /* Встановлюємо фон меню */
+    color: var(--header-text) !important; /* Колір тексту в меню */
+}

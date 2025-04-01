@@ -40,7 +40,7 @@ function AddStory() {
   return (
     <div className="userProfile">
       <div className="containerUserProfile">
-        <span onClick={openModal}>Додати нову історію</span>
+        <span onClick={openModal}>Add New Story</span>
         <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
