@@ -19,6 +19,7 @@
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "draft-js": "^0.11.7",
     "jquery": "^3.7.1",
     "luxon": "^3.4.4",

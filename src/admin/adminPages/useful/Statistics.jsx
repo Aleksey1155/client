@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./statistics.scss";
 import axiosInstance from "../../../axiosInstance";
-import Graphs from "../../adminComponents/graph/Graphs";
+import Graphs from "../../adminComponents/graphs/Graphs";
 
 function Statistics() {
   const [data, setData] = useState([]);

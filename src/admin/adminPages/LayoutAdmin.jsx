@@ -1,9 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import "./layoutAdmin.scss";
-import Navbar from "../adminComponents/navbar/Navbar";
-import Sidebar from "../adminComponents/sidebar/Sidebar";
+import NavbarAdmin from "../adminComponents/navbarAdmin/NavbarAdmin";
+
 import useFetchUserDataWithCheck from "../../hooks/useFetchUserDataWithCheck";
+import SidebarAdmin from "../adminComponents/sidebarAdmin/SidebarAdmin";
 
 
 const LayoutAdmin = () => {
@@ -28,9 +29,9 @@ const LayoutAdmin = () => {
 
   return (
     <div className="layout">
-      <Sidebar />
+      <SidebarAdmin />
       <div className="container">
-        <Navbar />
+        <NavbarAdmin userData={userData} />
         <Outlet /> 
         {/* Вміст поточної сторінки */}
       </div>

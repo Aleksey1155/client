@@ -152,17 +152,17 @@ function Competences({ userData, selectedItem, communication }) {
       
     }
   }, [userData, communication]);
-  console.log("communication", communication);
+  
 
   return (
     <div className="competences">
       {selectedItem ? (
         <>
           <pre>{JSON.stringify(selectedItem, null, 2)}</pre>
-          <div>{selectedItem.name}</div>
+          <div><h2>{selectedItem.name}</h2></div>
         </>
       ) : (
-        <div>Виберіть об'єкт</div>
+        <div><h2>Виберіть об'єкт</h2></div>
       )}
 
       <h2>Tasks</h2>

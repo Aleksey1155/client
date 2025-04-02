@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../../axiosInstance";
-import Graphs from "../../adminComponents/graph/Graphs";
+import Graphs from "../../adminComponents/graphs/Graphs";
 import "./statisticCategory.scss";
 
 const StatisticCategory = (category) => {

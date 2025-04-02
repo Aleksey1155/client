@@ -1,0 +1,42 @@
+.canvas-container {
+  padding: 20px;
+
+
+  .graphContainer {
+    // width: 50%;
+    display: flex;
+    margin-top: 40px;
+
+    .tasksStatisticCard {
+      flex: 1;
+      height: 20rem;
+      
+    }
+
+    .communicationCard {
+      flex: 4;
+      height: 20rem;
+     
+      
+    }
+  }
+
+  .ratingTimeCard{
+
+    width: 100%;
+    height: 20rem;
+    margin-top: 40px;
+  }
+
+  .taskScatterPlot{
+
+    width: 100%;
+    height: 50rem;
+    margin-top: 40px;
+  }
+
+  .revenueCard {
+    width: 100%;
+    height: 20rem;
+  }
+}

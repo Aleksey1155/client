@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/navbar/Navbar";
-import Sidebar from "../components/sidebar/Sidebar";
+import NavbarUser from "../components/navbaruser/NavbarUser";
+import SidebarUser from "../components/sidebaruser/SidebarUser";
 import useFetchUserDataWithCheck from "../../src/hooks/useFetchUserDataWithCheck";
 
 const LayoutUser = () => {
@@ -18,9 +18,9 @@ const LayoutUser = () => {
   }
     return (
       <div className="layout">
-        <Sidebar />
+        <SidebarUser />
         <div className="container">
-          <Navbar />
+          <NavbarUser userData={userData} />
           <Outlet  />  
         </div>
       </div>

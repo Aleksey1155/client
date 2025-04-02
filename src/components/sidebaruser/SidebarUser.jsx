@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../ThemeContext";
-import "./sidebar.scss";
+import "./sidebarUser.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
@@ -12,7 +12,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import InterestsOutlinedIcon from "@mui/icons-material/InterestsOutlined";
 import UserProfile from "../../pages/userprofile/UserProfile";
 
-function Sidebar() {
+function SidebarUser() {
   const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {}, [darkMode]);
@@ -94,4 +94,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default SidebarUser;

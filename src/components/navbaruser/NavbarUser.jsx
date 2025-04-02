@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { ThemeContext } from "../../ThemeContext";
 import { useLocation } from "react-router-dom";  // Імпортуємо useLocation
-import "./navbar.scss";
+import "./navbarUser.scss";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -11,7 +11,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 
-function Navbar() {
+function NavbarUser({userData}) {
  const { darkMode, toggleTheme } = useContext(ThemeContext);
   const location = useLocation();  // Отримуємо поточне розташування маршруту
 
@@ -62,7 +62,7 @@ function Navbar() {
           </div>
           <div className="item">
             <img
-              src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+              src={userData.img}
               alt=""
               className="avatar"
             />
@@ -73,4 +73,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default NavbarUser;
