@@ -1,0 +1,60 @@
+.conversation {
+    height: calc(100vh - 50px); 
+  display: flex;
+  
+  border-right: solid 1px #555 ;
+ 
+  overflow: scroll;
+
+ 
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  .containerConversation {
+    
+    .conversationList {
+      display: flex;
+      flex-direction: column;
+    
+
+      .conversationItem {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #f5f5f5;
+          border-radius: 8px;
+        }
+        .conversationImg {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .conversationName {
+          font-size: 16px;
+        } .conversationCounter {
+          width: 15px;
+          height: 15px;
+          background-color: red;
+          border-radius: 50%;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 10px;
+          font-weight: bold;
+          
+          
+        }
+      }
+    }
+  }
+}

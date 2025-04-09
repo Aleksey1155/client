@@ -1,20 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import axiosInstance from "../../axiosInstance";
 import io from "socket.io-client";
-import "./generalChat.scss";
+import "./message.scss";
 
 
-
-function GeneralChat({ userData }) {
+function Message({ userData, selectedUser }) {
   const socket = io("http://localhost:3001", {
     transports: ["websocket", "polling"],
     withCredentials: true,
   });
+  
+  if (!selectedUser) {
+    return <div className="noSelectedUser">👈 Вибери співрозмовника</div>;
+  }
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const lastMessageRef = useRef(null);
-  // console.log("User DATA General Chat", userData);
+  const chatId = selectedUser
+    ? [selectedUser.id, userData.id].sort().join("_")
+    : null;
+
   // Функція для форматування дати
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -33,7 +39,6 @@ function GeneralChat({ userData }) {
       minute: "2-digit",
     });
   };
-
   // Групуємо повідомлення за датами
   const groupMessagesByDate = (messages) => {
     return messages.reduce((groups, message) => {
@@ -51,10 +56,11 @@ function GeneralChat({ userData }) {
       try {
         const response = await axiosInstance.get("/api/messages");
         if (Array.isArray(response.data)) {
-          const generalMessages = response.data.filter(
-            (msg) => msg.chatId === "general_chat"
+          // Фільтруємо тільки повідомлення поточного чату
+          const chatMessages = response.data.filter(
+            (msg) => msg.chatId === chatId
           );
-          setMessages(generalMessages);
+          setMessages(chatMessages);
         } else {
           console.error("Expected an array but got:", response.data);
           setMessages([]);
@@ -65,18 +71,32 @@ function GeneralChat({ userData }) {
       }
     }
 
-    fetchMessages();
-  }, []);
+    const markMessagesAsRead = async () => {
+      if (!chatId || !userData?.id) return;
   
+      try {
+        await axiosInstance.put(`/api/messages/read/${chatId}/${userData.id}`);
+      } catch (err) {
+        console.error("Failed to mark messages as read", err);
+      }
+    };
+  
+    markMessagesAsRead();
+
+    fetchMessages();
+  }, [chatId, userData]);
+
+ 
 
   const handleSendMessage = async () => {
     try {
       const response = await axiosInstance.post("/api/messages", {
         userId: userData.id,
+        receiverId: selectedUser.id,
         message: newMessage,
         userName: userData.name, // Додаємо ім'я користувача
         replyTo: replyTo,
-        chatId: "general_chat",
+        chatId: chatId,
       });
       console.log("response", response);
 
@@ -102,7 +122,7 @@ function GeneralChat({ userData }) {
       console.error("Error sending message:", error);
     }
   };
-
+  
   const handleEditMessage = async (messageId, newText) => {
     try {
       if (!messageId) {
@@ -148,9 +168,9 @@ function GeneralChat({ userData }) {
         return;
       }
 
-      //  Перевіряємо, чи це повідомлення з general_chat
-      if (msg.chatId !== "general_chat") {
-        return; // ігноруємо, якщо це не той чат
+      // Фільтруємо тільки повідомлення поточного чату
+      if (msg.chatId !== chatId) {
+        return;
       }
 
       setMessages((prevMessages) => {
@@ -198,87 +218,139 @@ function GeneralChat({ userData }) {
       socket.off("message_updated");
       socket.off("message_deleted");
     };
-  }, []);
+  }, [chatId]);
+
+  useEffect(() => {
+    if (!chatId || !userData?.id) return;
+  
+    const markMessagesAsRead = async () => {
+      try {
+        await axiosInstance.put(`/api/messages/read/${chatId}/${userData.id}`);
+        
+        //  Тут  повідомляємо всіх через сокет
+        socket.emit("markMessagesAsRead", {
+          chatId,
+          userId: userData.id
+        });
+  
+      } catch (err) {
+        console.error("Failed to mark messages as read", err);
+      }
+    };
+  
+    markMessagesAsRead();
+  }, [chatId, userData]);
+  
+
+  
 
   return (
-    <div className="rightBar">
-      <div className="containerRightBar">
-        <div className="chatName">Our General Chat</div>
-        {Object.keys(groupedMessages).map((date) => (
-          <div key={date}>
-            <div className="dateHeader">{date}</div>
+    <div className="messageHome">
+      <div className="clientMessageHome">
+        <img
+          className="messageImgHome"
+          src={selectedUser?.img} // Аватар
+          alt=""
+        />
+        <div className="clientMessageNameHome">{selectedUser?.name}</div>
+      </div>
+      <div className="containerMessageHome">
+        <div className="messageDataHome">
+          {Object.keys(groupedMessages).map((date) => (
+            <div key={date}>
+              <div className="dateHeaderHome">{date}</div>
 
-            {/* {console.log("All messages:", messages)} */}
-            {groupedMessages[date].map((message, index) => (
-              <div
-                className="blockMessage"
-                key={`${message.time || Date.now()}-${message.id || index}`}
-                ref={
-                  index === groupedMessages[date].length - 1
-                    ? lastMessageRef
-                    : null
-                }
-              >
-                {/* {console.log("Rendering message:", message)} */}
+              {/* {console.log("All messages:", messages)} */}
+              {groupedMessages[date].map((message, index) => (
+                <div
+                  className="blockGroupedMessages"
+                  key={`${message.time || Date.now()}-${message.id || index}`}
+                  ref={
+                    index === groupedMessages[date].length - 1
+                      ? lastMessageRef
+                      : null
+                  }
+                >
+                  {/* {console.log("Rendering message:", message)} */}
 
-                <span className="userName">{message.userName}</span>
-                <div className="message">
-                  {message.replyTo ? (
-                    message.replyTo === "Deleted" ? (
-                      <div className="replyTag">| ↳ Message deleted</div>
-                    ) : typeof message.replyTo === "object" ? (
-                      <div className="replyTag">
-                        | ↳ {message.replyTo.message}
+                  <div
+                    className={
+                      message.userId === userData.id
+                        ? "messageItemHome own"
+                        : "messageItemHome"
+                    }
+                  >
+                    <div className="messageBoxHome">
+                      <div className="messageTopHome">
+                        {/* <span className="userName">{message.userName}</span> */}
+                        <div className="messageTextHome">
+                          {message.replyTo ? (
+                            message.replyTo === "Deleted" ? (
+                              <div className="replyTagHome">
+                                | ↳ Message deleted
+                              </div>
+                            ) : typeof message.replyTo === "object" ? (
+                              <div className="replyTagHome">
+                                | ↳{" "}
+                                {message.replyTo.message.length > 40
+                                  ? message.replyTo.message.slice(0, 40) + "..."
+                                  : message.replyTo.message}
+                              </div>
+                            ) : (
+                              <div className="replyTagHome">
+                                | ↳ Loading reply...
+                              </div>
+                            )
+                          ) : null}
+
+                          {message.message}
+                        </div>
                       </div>
-                    ) : (
-                      <div className="replyTag">| ↳ Loading reply...</div>
-                    )
-                  ) : null}
 
-                  {message.message}
-                </div>
+                      <div className="messageBottomHome">
+                        <span className="msgData">
+                          {formatTime(message.time)}
+                        </span>
 
-                <div className="msg-bottom">
-                  <span className="msg-data">{formatTime(message.time)}</span>
+                        {message.userId === userData.id ? (
+                          <div className="msgBtn">
+                            <button
+                              className="btnEdit"
+                              onClick={() =>
+                                handleEditMessage(
+                                  message.id,
+                                  prompt("Edit:", message.message)
+                                )
+                              }
+                            >
+                              ✏️
+                            </button>
 
-                  {message.userId === userData.id ? (
-                    <div className="msg-btn">
-                      <button
-                        className="btn-edit"
-                        onClick={() =>
-                          handleEditMessage(
-                            message.id,
-                            prompt("Edit:", message.message)
-                          )
-                        }
-                      >
-                        ✏️ Edit
-                      </button>
-                      {/* {console.log(
-                        "Trying to delete message with ID:",
-                        message.id
-                      )} */}
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDeleteMessage(message.id)}
-                      >
-                        🗑 Delete
-                      </button>
+                            <button
+                              className="btnDelete"
+                              onClick={() => handleDeleteMessage(message.id)}
+                            >
+                              🗑
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            className="btnReply"
+                            onClick={() => setReplyTo(message.id)}
+                          >
+                            💬
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    <button
-                      className="btn-reply"
-                      onClick={() => setReplyTo(message.id)}
-                    >
-                      💬 Reply
-                    </button>
-                  )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ))}
+              ))}
+            </div>
+          ))}
+        </div>
 
+        {/* <div className="messageBottom">2 хв тому</div> */}
         {replyTo && (
           <p>
             Replying to message: "
@@ -288,21 +360,20 @@ function GeneralChat({ userData }) {
           </p>
         )}
 
-        <div className="chatAddText">
+        <div className="chatAddTextHome">
           <textarea
-            className="chatTextArea"
+            className="chatTextAreaHome"
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
           />
-          <button className="send-message" onClick={handleSendMessage}>
+          <button className="send-messageHome" onClick={handleSendMessage}>
             Send
           </button>
         </div>
-        <p> Welcome, {userData.name}!</p>
       </div>
     </div>
   );
 }
 
-export default GeneralChat;
+export default Message;

@@ -57,7 +57,7 @@ const AddAssignment = () => {
       <div className="addassignmentContainer">
         <div className="top">
           <p className="title">New Assignment</p>
-          <button className="nav-addlink" onClick={handleClick}>
+          <button className="button" onClick={handleClick}>
             Додати
           </button>
         </div>
@@ -67,6 +67,7 @@ const AddAssignment = () => {
               <div className="formInput">
                 <label>Task</label>
                 <select
+                  className="select"
                   name="task_id" //  task_id замість task_title
                   onChange={handleChange}
                   value={assignment.task_id || ""}
@@ -85,6 +86,7 @@ const AddAssignment = () => {
               <div className="formInput">
                 <label>Date Assignment</label>
                 <input
+                  className="select"
                   type="date"
                   onChange={handleChange}
                   name="assigned_date"
@@ -93,6 +95,7 @@ const AddAssignment = () => {
               <div className="formInput">
                 <label>Assignment</label>
                 <select
+                  className="select"
                   name="user_id"
                   onChange={handleChange}
                   value={assignment.user_id || ""}

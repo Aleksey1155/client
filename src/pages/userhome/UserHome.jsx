@@ -139,9 +139,15 @@ function UserHome() {
           <div className="topKanban">
             <Kanban userId={userData?.id} />
           </div>
+           <Link to={
+                        isAdmin
+                          ? `/admin/messenger`
+                          : `/messenger`
+                      }>
           <div className="topDiscussions">
-            <span className="title">Discussions</span>
+            <span className="titleDiscussions">Discussions</span>
           </div>
+          </Link>
           <div className="topFiles">
             <span className="title">Files</span>
           </div>

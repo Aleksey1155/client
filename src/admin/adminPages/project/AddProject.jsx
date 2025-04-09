@@ -91,14 +91,14 @@ const AddProject = () => {
       <div className="addprojectContainer">
         <div className="top">
           <p className="title">New project</p>
-          <button className="nav-addlink" onClick={handleClick}>
+          <button className="button" onClick={handleClick}>
             Додати
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
-              <button onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -135,6 +135,7 @@ const AddProject = () => {
               <div className="formInput">
                 <label>Project title</label>
                 <input
+                className="input"
                   type="text"
                   placeholder="Назва нового проекту"
                   onChange={handleChange}
@@ -144,18 +145,21 @@ const AddProject = () => {
 
               <div className="formInput"></div>
 
-              <div className="formInput">
+              <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
                 <label>Start Date</label>
                 <input
+                 className="inputDate"
                   type="date"
                   placeholder="start_date"
                   onChange={handleChange}
                   name="start_date"
                 />
               </div>
-              <div className="formInput">
+              <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
+
                 <label>End Date</label>
                 <input
+                className="inputDate"
                   type="date"
                   placeholder="end_date"
                   onChange={handleChange}
@@ -166,6 +170,7 @@ const AddProject = () => {
               <div className="formInput">
                 <label>Status</label>
                 <select
+                className="select"
                   name="status_id"
                   onChange={handleChange}
                   value={project.status_id}

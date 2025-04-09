@@ -36,6 +36,7 @@ import UserTaskDetails from "./pages/usertaskdetails/UserTaskDetails";
 import Settings from "./admin/adminPages/settings/Settings";
 import StatisticCategory from "./admin/adminComponents/statisticCategory/StatisticCategory";
 import { ThemeProvider } from "./ThemeContext";
+import Messenger from "./pages/messenger/Messenger"
 
 
 const router = createBrowserRouter([
@@ -140,6 +141,10 @@ const router = createBrowserRouter([
         path: "/admin/settings",
         element: <Settings/>
       },
+      {
+        path: "/admin/messenger",
+        element: <Messenger />,
+      },
 
 
     ],
@@ -166,6 +171,10 @@ const router = createBrowserRouter([
       {
         path: "/social-profile/:id",
         element: <SocialProfile />,
+      },
+      {
+        path: "/messenger",
+        element: <Messenger />,
       },
       
     ],

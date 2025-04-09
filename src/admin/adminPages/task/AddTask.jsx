@@ -49,7 +49,6 @@ const AddTask = () => {
       try {
         const res = await axios.get("http://localhost:3001/projects"); // Запит на отримання всіх проєктів
         setProjects(res.data);
-        
       } catch (err) {
         console.log(err);
       }
@@ -109,20 +108,22 @@ const AddTask = () => {
   const handlePick = () => {
     filePicker.current.click();
   };
-  
+
   return (
     <div className="addtask">
       <div className="addtaskContainer">
         <div className="top">
           <p className="title">New task</p>
-          <button className="nav-addlink" onClick={handleClick}>
+          <button className="button" onClick={handleClick}>
             Додати
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
-              <button onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>
+                Add file
+              </button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -156,9 +157,10 @@ const AddTask = () => {
           </div>
           <div className="right">
             <form>
-            <div className="formInput">
+              <div className="formInput">
                 <label>Task title</label>
                 <input
+                  className="input"
                   type="text"
                   placeholder="Назва нового завдання"
                   onChange={handleChange}
@@ -168,6 +170,7 @@ const AddTask = () => {
               <div className="formInput">
                 <label>Project</label>
                 <select
+                  className="select"
                   name="project_id"
                   onChange={handleChange}
                   value={task.project_id}
@@ -177,23 +180,35 @@ const AddTask = () => {
                   </option>
                   {projects.map((project) => (
                     <option key={project.id} value={project.id}>
-                      {project.title} 
+                      {project.title}
                     </option>
                   ))}
                 </select>
               </div>
-              <div className="formInput">
+              <div
+                className="formInput"
+                onClick={(e) =>
+                  e.currentTarget.querySelector("input").showPicker()
+                }
+              >
                 <label>Start Date</label>
                 <input
+                  className="inputDate"
                   type="date"
                   placeholder="start_date"
                   onChange={handleChange}
                   name="start_date"
                 />
               </div>
-              <div className="formInput">
+              <div
+                className="formInput"
+                onClick={(e) =>
+                  e.currentTarget.querySelector("input").showPicker()
+                }
+              >
                 <label>End Date</label>
                 <input
+                  className="inputDate"
                   type="date"
                   placeholder="end_date"
                   onChange={handleChange}
@@ -204,6 +219,7 @@ const AddTask = () => {
               <div className="formInput">
                 <label>Status</label>
                 <select
+                  className="select"
                   name="status_id"
                   onChange={handleChange}
                   value={task.status_id}
@@ -221,6 +237,7 @@ const AddTask = () => {
               <div className="formInput">
                 <label>Priority</label>
                 <select
+                  className="select"
                   name="priority_id"
                   onChange={handleChange}
                   value={task.priority_id}
@@ -294,8 +311,6 @@ const AddTask = () => {
           </div>
         </div>
       </div>
-
-  
     </div>
   );
 };

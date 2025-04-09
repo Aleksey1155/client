@@ -7,12 +7,12 @@
   background: inherit;
   .dashboardContainer {
     position: relative; /* Замість sticky */
-  height: calc(100vh - 70px);
-  overflow-y: auto;
-   
-  &::-webkit-scrollbar {
-    display: none;
-  }
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .top {
       .tableTitle {
@@ -65,10 +65,7 @@
             margin-right: 10px;
             color: inherit;
           }
-          .select {
-            color: #555;
-            background: #222;
-          }
+          
         }
       }
     }

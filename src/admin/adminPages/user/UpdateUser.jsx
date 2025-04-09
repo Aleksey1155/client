@@ -88,33 +88,31 @@ const UpdateUser = () => {
   //*********************************************************** */
 
   const handleUpload = async () => {
-  if (!selectedFile) {
-    alert("Please select a file");
-    return;
-  }
+    if (!selectedFile) {
+      alert("Please select a file");
+      return;
+    }
 
-  const formData = new FormData();
-  formData.append("files", selectedFile);
-  formData.append("userId", userId); // Передаємо userId на сервер
+    const formData = new FormData();
+    formData.append("files", selectedFile);
+    formData.append("userId", userId); // Передаємо userId на сервер
 
-  try {
-    const res = await fetch(`${config.baseURL}/upload_user`, {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const res = await fetch(`${config.baseURL}/upload_user`, {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await res.json();
-    console.log("Server Response:", data); // Додано для перевірки
+      const data = await res.json();
+      console.log("Server Response:", data); // Додано для перевірки
 
-    setUploaded(data);
+      setUploaded(data);
 
-  
       window.location.reload();
-    
-  } catch (error) {
-    console.error("Upload error:", error);
-  }
-};
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
+  };
 
   // const handleUpload = async () => {
   //   if (!selectedFile) {
@@ -151,14 +149,14 @@ const UpdateUser = () => {
       <div className="updateuserContainer">
         <div className="top">
           <p className="title">Update user</p>
-          <button className="nav-addlink" onClick={handleClick}>
+          <button className="button" onClick={handleClick}>
             Редагувати
           </button>
         </div>
         <div className="bottom">
           <div className="left">
             <div>
-              <button onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -166,7 +164,7 @@ const UpdateUser = () => {
                 onChange={handleFileChange}
                 accept="image/*, .png, .jpg, .web"
               />
-              <button onClick={handleUpload}>Upload now!</button>
+              <button className="buttonAddFile" onClick={handleUpload}>Upload now!</button>
             </div>
 
             {!selectedFile && <img className="noimage" src={user.img} alt="" />}
@@ -221,6 +219,7 @@ const UpdateUser = () => {
               <div className="formInput">
                 <label>Username</label>
                 <input
+                  className="input"
                   type="text"
                   placeholder="name"
                   onChange={handleChange}
@@ -232,6 +231,7 @@ const UpdateUser = () => {
               <div className="formInput">
                 <label>Email</label>
                 <input
+                  className="input"
                   type="text"
                   placeholder="email"
                   onChange={handleChange}
@@ -243,6 +243,7 @@ const UpdateUser = () => {
               <div className="formInput">
                 <label>Phone</label>
                 <input
+                  className="input"
                   type="text"
                   placeholder="phone"
                   onChange={handleChange}
@@ -254,6 +255,7 @@ const UpdateUser = () => {
               <div className="formInput">
                 <label>Description</label>
                 <textarea
+                  className="textarea"
                   type="text"
                   placeholder="опис"
                   onChange={handleChange}
@@ -264,6 +266,7 @@ const UpdateUser = () => {
               <div className="formInput">
                 <label>Photo</label>
                 <input
+                  className="input"
                   type="text"
                   placeholder="photo"
                   onChange={handleChange}
@@ -274,6 +277,7 @@ const UpdateUser = () => {
               <div className="formInput">
                 <label>Roles</label>
                 <select
+                  className="select"
                   name="role_id"
                   onChange={handleChange}
                   value={user.role_id}
@@ -291,6 +295,7 @@ const UpdateUser = () => {
               <div className="formInput">
                 <label>Jobs</label>
                 <select
+                  className="select"
                   name="job_id"
                   onChange={handleChange}
                   value={user.job_id}

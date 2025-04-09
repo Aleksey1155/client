@@ -17,7 +17,7 @@
              color: grey;
              font-weight: bold;
            }
-         button {
+         .button {
              
              text-decoration: none;
              color: #2fa90ae0;
@@ -29,8 +29,8 @@
              height: 35px;
            }
   
-           button:hover {
-             background-color: #2fa90ae0;
+           .button:hover {
+             background-color: #2fa90ae0 !important;
              color: white;
            }
       }

@@ -1,7 +1,10 @@
+import React from "react";
 import { Outlet } from "react-router-dom";
+import "./layoutUser.scss";
 import NavbarUser from "../components/navbaruser/NavbarUser";
 import SidebarUser from "../components/sidebaruser/SidebarUser";
 import useFetchUserDataWithCheck from "../../src/hooks/useFetchUserDataWithCheck";
+// import { SocketProvider } from "../../src/SocketContext"; // Імпортуємо SocketProvider
 
 const LayoutUser = () => {
   const { userData, loading, error } = useFetchUserDataWithCheck(); // Виклик хуку для перевірки
@@ -17,6 +20,7 @@ const LayoutUser = () => {
     return <div>Дані користувача відсутні.</div>; // Якщо даних немає
   }
     return (
+      // <SocketProvider userData={userData}>
       <div className="layout">
         <SidebarUser />
         <div className="container">
@@ -24,7 +28,9 @@ const LayoutUser = () => {
           <Outlet  />  
         </div>
       </div>
+      // </SocketProvider>
     );
+    
   };
 
 export default LayoutUser;

@@ -1,0 +1,165 @@
+.messageHome {
+  
+  .clientMessageHome {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    height: 80px; // фіксована висота, важливо!
+    display: flex;
+    align-items: center;
+
+    .messageImgHome {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      align-items: center;
+      padding-left: 20px;
+    }
+    .clientMessageNameHome {
+      font-size: 30px;
+      padding-left: 20px;
+    }
+  }
+  .containerMessageHome {
+    height: calc(100vh - 170px); // 100vh мінус висота хедера
+    overflow-y: auto;
+    padding-top: 10px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .dateHeaderHome{
+      font-weight: bold;
+    
+      text-align: center
+    }
+    
+    .messageItemHome {
+      display: flex;
+
+      .messageBoxHome {
+        max-width: 60%;
+        display: flex;
+        flex-direction: column;
+        margin: 20px 100px 20px 100px;
+       
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 16px;
+        max-width: 100%;
+        .messageTopHome {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-direction: column;
+
+          .messageTextHome {
+            max-width: 400px;
+            min-width: 100px;
+            word-wrap: break-word;     // Переносить слова
+            overflow-wrap: break-word; // Альтернативний (новіший) варіант
+            white-space: pre-wrap;     // Зберігає переноси рядків, але дозволяє переносити текст
+            .replyTagHome{
+              font-size: 14px;
+              color: #347a39;
+            }
+          }
+        }
+
+        .messageBottomHome {
+          width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          .msgData {
+            font-size: 12px;
+          }
+          
+          button {
+            font-size: 8px;
+            color: inherit;
+            background: inherit;
+            border: solid 1px;
+          }
+          
+        }
+      }
+
+      &.own {
+        justify-content: flex-end;
+
+        .messageBoxHome {
+          align-items: flex-end;
+          background: #8774e1 !important;
+
+          .messageTopHome {
+            flex-direction: row-reverse;
+            flex-direction: column;
+
+            // .messageImgHome {
+            //   display: none;
+            // }
+
+            .messageTextHome {
+
+              .replyTagHome{
+                font-size: 14px;
+                color: #acceae;
+              }
+              
+            }
+          }
+
+          .messageBottomHome {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .msgData {
+              font-size: 12px;
+              
+            }
+            .msgBtn {
+              button {
+                font-size: 8px;
+                color: inherit;
+                background: inherit;
+                border: solid 1px;
+              }
+          }
+           
+          }
+        }
+      }
+    }
+
+    .chatAddTextHome {
+      margin-bottom: 50px;
+      display: flex;
+        flex-direction: column;
+      .chatTextAreaHome{
+        background: inherit;
+        color: inherit;
+        border: solid 1px #999;
+        width: 40px;
+        height: 40px;
+       max-width: 800px;
+       min-width: 500px;
+       min-height: 100px;
+       margin: 20px 20px 0px 20px;
+      }
+      button {
+        font-size: 20px;
+        color: inherit;
+        background: inherit;
+        border:  solid 1px;
+        border-radius: 5px;
+        width: 100px;
+        height: 30px;
+        margin: 20px;
+      }
+    }
+  }
+}

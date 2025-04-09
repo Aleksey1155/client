@@ -19,7 +19,7 @@ body {
     margin-bottom: 0;
     margin-right: 0;
     margin-left: 0;
-    overflow-x: hidden;
+    overflow: hidden;
     padding-right: 5px;
     padding-left: 5px;
 }
@@ -31,6 +31,7 @@ body {
     --header-text: #555;
     --text-color: #000;
     --svg-icon: #7451f8;
+    --chat-bg: #bbcfb7;
     background-color: white;
     color: #222;
 }
@@ -42,6 +43,7 @@ body {
     --header-text: #999;
     --text-color: #fff;
     --svg-icon: #7451f8;
+    --chat-bg: black;
     
     background-color: black;
     color: #8d8c8c;
@@ -134,4 +136,56 @@ body {
 .MuiPaper-root.MuiPaper-elevation  {
     background-color: var(--header-bg) !important; /* Встановлюємо фон меню */
     color: var(--header-text) !important; /* Колір тексту в меню */
+}
+
+.select{
+    background-color: var(--header-bg) !important;
+    color: var(--header-text) !important;
+}
+
+.textarea{
+    background-color: var(--header-bg) !important;
+    color: var(--header-text) !important;
+}
+.button{
+    background-color: var(--header-bg) !important;
+}
+
+.buttonAddFile{
+    background-color: var(--header-bg) !important;
+    color: var(--header-text) !important;
+    border: solid 1px;
+    cursor: pointer;
+}
+.input{
+    background-color: var(--header-bg) !important;
+    color: var(--header-text) !important;
+}
+
+.inputDate{
+    background-color: var(--header-bg) !important;
+    color: var(--header-text) !important;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.messageBoxHome {
+    background-color: var(--header-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.conversation{
+    background-color: var(--header-bg) !important;
+}
+.messengerMessage{
+    background-color: var(--chat-bg) !important;
+}
+.chatTextAreaHome{
+    background-color: var(--header-bg) !important;
+}
+
+.titleDiscussions{
+   
+    color: var(--header-text) !important;
 }

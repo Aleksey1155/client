@@ -128,126 +128,128 @@ const DashboardTable = () => {
     <div className="dashboardTable">
       <div className="dashboardContainer">
         <div className="top">
-      {/* Посилання для додавання проекту */}
-      <div className="addlinks">
-        <p className="titleAdd">Додати проект</p>
-        <Link to="/admin/add_project" className="addlink">
-          Додати новий проект
-        </Link>
-      </div>
-      <div className="tableTitle">Таблиця завдань та призначень</div>
+          {/* Посилання для додавання проекту */}
+          <div className="addlinks">
+            <p className="titleAdd">Додати проект</p>
+            <Link to="/admin/add_project" className="addlink">
+              Додати новий проект
+            </Link>
+          </div>
+          <div className="tableTitle">Таблиця завдань та призначень</div>
 
-      {/* Фільтри для таблиці */}
-      <div className="filtersSelect">
-        <div className="selectTask">
-          <p className="titleSelect">Фільтр статус завдання</p>
-          <select
-            name="select"
-            onChange={(e) => setTaskStatus(e.target.value)}
-            value={taskStatus}
-          >
-            <option value="">Всі</option>
-            {taskStatuses.map((status) => (
-              <option key={status.id} value={status.status_name}>
-                {status.status_name}
-              </option>
-            ))}
-          </select>
+          {/* Фільтри для таблиці */}
+          <div className="filtersSelect">
+            <div className="selectTask">
+              <p className="titleSelect">Фільтр статус завдання</p>
+              <select
+                className="select"
+                name="select"
+                onChange={(e) => setTaskStatus(e.target.value)}
+                value={taskStatus}
+              >
+                <option value="">Всі</option>
+                {taskStatuses.map((status) => (
+                  <option key={status.id} value={status.status_name}>
+                    {status.status_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="selectProject">
+              <p className="titleSelect">Фільтр статус проекта</p>
+              <select
+                className="select"
+                name="select"
+                onChange={(e) => setProjectStatus(e.target.value)}
+                value={projectStatus}
+              >
+                <option value="">Всі</option>
+                {projectStatuses.map((status) => (
+                  <option key={status.id} value={status.status_name}>
+                    {status.status_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="selectUser">
+              <p className="titleSelect">Фільтр по виконавцям </p>
+              <select
+                className="select"
+                name="select"
+                onChange={(e) => setUserId(e.target.value)}
+                value={userId}
+              >
+                <option value="">Всі</option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
-        <div className="selectProject">
-          <p className="titleSelect">Фільтр статус проекта</p>
-          <select
-      
-            name="select"
-            onChange={(e) => setProjectStatus(e.target.value)}
-            value={projectStatus}
-          >
-            <option  value="">Всі</option>
-            {projectStatuses.map((status) => (
-              <option key={status.id} value={status.status_name}>
-                {status.status_name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="selectUser">
-          <p className="titleSelect">Фільтр по виконавцям </p>
-          <select
-            name="select"
-            onChange={(e) => setUserId(e.target.value)}
-            value={userId}
-          >
-            <option value="">Всі</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      </div>
-      {/* Таблиця з даними */}
+        {/* Таблиця з даними */}
 
-      <TableContainer component={Paper} className="table">
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell className="tableCell">Назва Завдання</TableCell>
-              <TableCell className="tableCell">Назва проекту</TableCell>
-              <TableCell className="tableCell">ПІБ Виконавця</TableCell>
-              <TableCell className="tableCell">Дата Призначення</TableCell>
-              <TableCell className="tableCell">Початок Завдання</TableCell>
-              <TableCell className="tableCell">Кінець Завдання</TableCell>
-              <TableCell className="tableCell">Статус Завдання</TableCell>
-              <TableCell className="tableCell">Статус Проекту</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredData.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell className="tableCell">{row.task_title}</TableCell>
-                <TableCell className="tableCell">
-                  {" "}
-                  {row.project_title}{" "}
-                </TableCell>
-                <TableCell className="tableCell">{row.user_name}</TableCell>
-                <TableCell className="tableCell">
-                  {formatDate(row.assigned_date)}
-                </TableCell>
-                <TableCell className="tableCell">
-                  {formatDate(row.start_date)}
-                </TableCell>
-                <TableCell className="tableCell">
-                  <span
-                    className={`enddate ${
-                      isCloseToEnd(row.end_date)
-                        ? "closeToEnd"
-                        : isEndDatePassedAndInProgress(
-                            row.end_date,
-                            row.task_status
-                          )
-                        ? "endPassedInProgress"
-                        : ""
-                    }`}
-                  >
-                    {formatDate(row.end_date)}
-                  </span>
-                </TableCell>
-
-                <TableCell className="tableCell">
-                  <span className={`status ${row.task_status}`}>
-                    {row.task_status}
-                  </span>
-                </TableCell>
-                <TableCell className="tableCell">
-                  {row.project_status}
-                </TableCell>
+        <TableContainer component={Paper} className="table">
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell className="tableCell">Назва Завдання</TableCell>
+                <TableCell className="tableCell">Назва проекту</TableCell>
+                <TableCell className="tableCell">ПІБ Виконавця</TableCell>
+                <TableCell className="tableCell">Дата Призначення</TableCell>
+                <TableCell className="tableCell">Початок Завдання</TableCell>
+                <TableCell className="tableCell">Кінець Завдання</TableCell>
+                <TableCell className="tableCell">Статус Завдання</TableCell>
+                <TableCell className="tableCell">Статус Проекту</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {filteredData.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell className="tableCell">{row.task_title}</TableCell>
+                  <TableCell className="tableCell">
+                    {" "}
+                    {row.project_title}{" "}
+                  </TableCell>
+                  <TableCell className="tableCell">{row.user_name}</TableCell>
+                  <TableCell className="tableCell">
+                    {formatDate(row.assigned_date)}
+                  </TableCell>
+                  <TableCell className="tableCell">
+                    {formatDate(row.start_date)}
+                  </TableCell>
+                  <TableCell className="tableCell">
+                    <span
+                      className={`enddate ${
+                        isCloseToEnd(row.end_date)
+                          ? "closeToEnd"
+                          : isEndDatePassedAndInProgress(
+                              row.end_date,
+                              row.task_status
+                            )
+                          ? "endPassedInProgress"
+                          : ""
+                      }`}
+                    >
+                      {formatDate(row.end_date)}
+                    </span>
+                  </TableCell>
+
+                  <TableCell className="tableCell">
+                    <span className={`status ${row.task_status}`}>
+                      {row.task_status}
+                    </span>
+                  </TableCell>
+                  <TableCell className="tableCell">
+                    {row.project_status}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );

@@ -108,7 +108,7 @@ const AddUser = () => {
         <div className="bottom">
           <div className="left">
             <div>
-              <button onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -162,6 +162,7 @@ const AddUser = () => {
               <div className="formInput">
                 <label>Username</label>
                 <input
+                 className="input"
                   type="text"
                   placeholder="ПІБ нового виконавця"
                   onChange={handleChange}
@@ -172,6 +173,7 @@ const AddUser = () => {
               <div className="formInput">
                 <label>Email</label>
                 <input
+                  className="input"
                   type="text"
                   placeholder="email нового виконавця"
                   onChange={handleChange}
@@ -182,6 +184,7 @@ const AddUser = () => {
               <div className="formInput">
                 <label>Password</label>
                 <input
+                 className="input"
                   type="text"
                   placeholder="Пароль нового виконавця"
                   onChange={handleChange}
@@ -192,6 +195,7 @@ const AddUser = () => {
               <div className="formInput">
                 <label>Phone</label>
                 <input
+                 className="input"
                   type="text"
                   placeholder="номер телефону"
                   onChange={handleChange}
@@ -202,6 +206,7 @@ const AddUser = () => {
               <div className="formInput">
                 <label>Description</label>
                 <textarea
+                  className="textarea"
                   type="text"
                   placeholder="опис"
                   onChange={handleChange}
@@ -212,6 +217,7 @@ const AddUser = () => {
               <div className="formInput">
                 <label>Role</label>
                 <select
+                  className="select"
                   name="role_id"
                   onChange={handleChange}
                   value={user.role_id}
@@ -229,6 +235,7 @@ const AddUser = () => {
               <div className="formInput">
                 <label>Jobs</label>
                 <select
+                  className="select"
                   name="job_id"
                   onChange={handleChange}
                   value={user.job_id}
@@ -243,7 +250,7 @@ const AddUser = () => {
                   ))}
                 </select>
               </div>
-              <button className="nav-addlink" onClick={handleClick}>
+              <button className="button" onClick={handleClick}>
                 Додати
               </button>
             </form>

@@ -195,14 +195,16 @@ const UpdateTask = () => {
       <div className="updatetaskContainer">
         <div className="top">
           <p className="title">Update task</p>
-          <button className="nav-addlink" onClick={handleClick}>
+          <button className="button" onClick={handleClick}>
             Редагувати
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
-              <button onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>
+                Add file
+              </button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -210,7 +212,9 @@ const UpdateTask = () => {
                 onChange={handleFileChange}
                 accept="image/*, .png, .jpg, .web"
               />
-              <button onClick={handleUpload}>Upload now!</button>
+              <button className="buttonAddFile" onClick={handleUpload}>
+                Upload now!
+              </button>
             </div>
 
             {!selectedFile && (
@@ -251,6 +255,7 @@ const UpdateTask = () => {
               <div className="formInput">
                 <label>Task Title</label>
                 <input
+                  className="input"
                   type="text"
                   placeholder="name"
                   onChange={handleChange}
@@ -261,6 +266,7 @@ const UpdateTask = () => {
               <div className="formInput">
                 <label>Project</label>
                 <select
+                  className="select"
                   name="project_id"
                   onChange={handleChange}
                   value={task.project_id}
@@ -275,9 +281,15 @@ const UpdateTask = () => {
                   ))}
                 </select>
               </div>
-              <div className="formInput">
+              <div
+                className="formInput"
+                onClick={(e) =>
+                  e.currentTarget.querySelector("input").showPicker()
+                }
+              >
                 <label>start_date</label>
                 <input
+                  className="inputDate"
                   type="date"
                   placeholder="start_date"
                   onChange={handleChange}
@@ -285,9 +297,15 @@ const UpdateTask = () => {
                   value={task.start_date}
                 />
               </div>
-              <div className="formInput">
+              <div
+                className="formInput"
+                onClick={(e) =>
+                  e.currentTarget.querySelector("input").showPicker()
+                }
+              >
                 <label>end_date</label>
                 <input
+                  className="inputDate"
                   type="date"
                   placeholder="end_date"
                   onChange={handleChange}
@@ -295,9 +313,15 @@ const UpdateTask = () => {
                   value={task.end_date}
                 />
               </div>
-              <div className="formInput">
+              <div
+                className="formInput"
+                onClick={(e) =>
+                  e.currentTarget.querySelector("input").showPicker()
+                }
+              >
                 <label>actual_end_date</label>
                 <input
+                  className="inputDate"
                   type="date"
                   placeholder="actual_end_date"
                   onChange={handleChange}
@@ -309,6 +333,7 @@ const UpdateTask = () => {
               <div className="formInput">
                 <label>Status</label>
                 <select
+                  className="select"
                   name="status_id"
                   onChange={handleChange}
                   value={task.status_id}
@@ -323,6 +348,7 @@ const UpdateTask = () => {
               <div className="formInput">
                 <label>Priority</label>
                 <select
+                  className="select"
                   name="status_id"
                   onChange={handleChange}
                   value={task.priority_id}
@@ -337,6 +363,7 @@ const UpdateTask = () => {
               <div className="formInput">
                 <label>Rating</label>
                 <select
+                  className="select"
                   name="rating"
                   onChange={handleChange}
                   value={task.rating}

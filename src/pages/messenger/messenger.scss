@@ -1,0 +1,21 @@
+.messenger{
+
+  
+    .containerMessenger{
+      
+       
+        display: flex;
+        .messengerConversation {
+            flex: 2;
+           
+            
+          }
+          
+          .messengerMessage {
+            flex: 5;
+           
+           
+          }
+        
+    }
+}

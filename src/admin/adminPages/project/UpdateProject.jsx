@@ -174,14 +174,14 @@ const UpdateProject = () => {
       <div className="updateprojectContainer">
         <div className="top">
           <p className="title">Update project</p>
-          <button className="nav-addlink" onClick={handleClick}>
+          <button className="button" onClick={handleClick}>
             Редагувати
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
-              <button onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -189,7 +189,7 @@ const UpdateProject = () => {
                 onChange={handleFileChange}
                 accept="image/*, .png, .jpg, .web"
               />
-              <button onClick={handleUpload}>Upload now!</button>
+              <button className="buttonAddFile" onClick={handleUpload}>Upload now!</button>
             </div>
 
             {!selectedFile && (
@@ -230,6 +230,7 @@ const UpdateProject = () => {
               <div className="formInput">
                 <label>Project Title</label>
                 <input
+                className="input"
                   type="text"
                   placeholder="name"
                   onChange={handleChange}
@@ -239,9 +240,10 @@ const UpdateProject = () => {
               </div>
               <div className="formInput"></div>
 
-              <div className="formInput">
+              <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
                 <label>start_date</label>
                 <input
+                 className="inputDate"
                   type="date"
                   placeholder="start_date"
                   onChange={handleChange}
@@ -249,9 +251,10 @@ const UpdateProject = () => {
                   value={project.start_date}
                 />
               </div>
-              <div className="formInput">
+              <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
                 <label>end_date</label>
                 <input
+                 className="inputDate"
                   type="date"
                   placeholder="end_date"
                   onChange={handleChange}
@@ -260,9 +263,10 @@ const UpdateProject = () => {
                 />
               </div>
 
-              <div className="formInput">
+              <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
                 <label>actual_end_date</label>
                 <input
+                 className="inputDate"
                   type="date"
                   placeholder="actual_end_date"
                   onChange={handleChange}
@@ -274,6 +278,7 @@ const UpdateProject = () => {
               <div className="formInput">
                 <label>Status</label>
                 <select
+                className="select"
                   name="status_id"
                   onChange={handleChange}
                   value={project.status_id}

@@ -19,9 +19,7 @@ const UpdateAssignment = () => {
   useEffect(() => {
     const fetchAssignment = async () => {
       try {
-        const res = await axiosInstance.get(
-          `/assignments/${assignmentId}`
-        );
+        const res = await axiosInstance.get(`/assignments/${assignmentId}`);
         const assignmentData = res.data;
         setAssignment({
           task_id: assignmentData.task_id || "", // Зберігаємо task_id
@@ -65,10 +63,7 @@ const UpdateAssignment = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.put(
-        "/assignments/" + assignmentId,
-        assignment
-      );
+      await axiosInstance.put("/assignments/" + assignmentId, assignment);
       navigate("/admin/assignments");
     } catch (err) {
       console.log(err);
@@ -80,7 +75,7 @@ const UpdateAssignment = () => {
       <div className="updateassignmentContainer">
         <div className="top">
           <p className="title">Update Assignment</p>
-          <button className="nav-addlink" onClick={handleClick}>
+          <button className="button" onClick={handleClick}>
             Редагувати
           </button>
         </div>
@@ -91,6 +86,7 @@ const UpdateAssignment = () => {
               <div className="formInput">
                 <label>Task</label>
                 <select
+                  className="select"
                   name="task_id" //  task_id замість task_title
                   onChange={handleChange}
                   value={assignment.task_id || ""}
@@ -106,9 +102,15 @@ const UpdateAssignment = () => {
                 </select>
               </div>
 
-              <div className="formInput">
+              <div
+                className="formInput"
+                onClick={(e) =>
+                  e.currentTarget.querySelector("input").showPicker()
+                }
+              >
                 <label>Date Assignment</label>
                 <input
+                  className="inputDate"
                   type="date"
                   onChange={handleChange}
                   name="assigned_date"
@@ -119,6 +121,7 @@ const UpdateAssignment = () => {
               <div className="formInput">
                 <label>Assignment</label>
                 <select
+                  className="select"
                   name="user_id"
                   onChange={handleChange}
                   value={assignment.user_id || ""}
