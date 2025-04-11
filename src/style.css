@@ -189,3 +189,6 @@ body {
    
     color: var(--header-text) !important;
 }
+.dropdown{
+    background-color: var(--header-bg) !important;
+}

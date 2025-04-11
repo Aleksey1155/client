@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import axiosInstance from "../../axiosInstance";
-import io from "socket.io-client";
+import { useSocket } from "../../SocketContext";
+
 import "./generalChat.scss";
-
-
+import axiosInstance from "../../../src/axiosInstance";
 
 function GeneralChat({ userData }) {
-  const socket = io("http://localhost:3001", {
-    transports: ["websocket", "polling"],
-    withCredentials: true,
-  });
+  const socket = useSocket();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
@@ -49,7 +45,8 @@ function GeneralChat({ userData }) {
   useEffect(() => {
     async function fetchMessages() {
       try {
-        const response = await axiosInstance.get("/api/messages");
+        const response = await axiosInstance.get("/api/general-messages");
+
         if (Array.isArray(response.data)) {
           const generalMessages = response.data.filter(
             (msg) => msg.chatId === "general_chat"
@@ -67,7 +64,6 @@ function GeneralChat({ userData }) {
 
     fetchMessages();
   }, []);
-  
 
   const handleSendMessage = async () => {
     try {
@@ -109,7 +105,7 @@ function GeneralChat({ userData }) {
         console.error("Error: Message ID is undefined");
         return;
       }
-      await axiosInstance.put(`/api/messages/${messageId}`, {
+      await axiosInstance.put(`/api/general-messages/${messageId}`, {
         message: newText,
       });
     } catch (error) {
@@ -125,11 +121,13 @@ function GeneralChat({ userData }) {
         console.error("Error: Message ID is undefined");
         return;
       }
-      await axiosInstance.delete(`/api/messages/${messageId}`);
+      await axiosInstance.delete(`/api/general-messages/${messageId}`);
     } catch (error) {
       console.error("Error deleting message:", error);
     }
   };
+
+  
 
   useEffect(() => {
     if (lastMessageRef.current) {
@@ -208,7 +206,7 @@ function GeneralChat({ userData }) {
           <div key={date}>
             <div className="dateHeader">{date}</div>
 
-            {/* {console.log("All messages:", messages)} */}
+            {console.log("All messages:", messages)}
             {groupedMessages[date].map((message, index) => (
               <div
                 className="blockMessage"
@@ -219,7 +217,7 @@ function GeneralChat({ userData }) {
                     : null
                 }
               >
-                {/* {console.log("Rendering message:", message)} */}
+                {console.log("Rendering message:", message)}
 
                 <span className="userName">{message.userName}</span>
                 <div className="message">
@@ -240,7 +238,7 @@ function GeneralChat({ userData }) {
 
                 <div className="msg-bottom">
                   <span className="msg-data">{formatTime(message.time)}</span>
-
+                  {console.log("message.userId" , message.userId, "userData.id",userData.id) }
                   {message.userId === userData.id ? (
                     <div className="msg-btn">
                       <button

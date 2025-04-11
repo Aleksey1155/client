@@ -84,7 +84,8 @@ function News() {
     const filtered = newss.filter((news) => {
       const newsDate = new Date(news.news_date);
       return (
-        newsDate.getFullYear() === year && newsDate.getMonth() === months.indexOf(month)
+        newsDate.getFullYear() === year &&
+        newsDate.getMonth() === months.indexOf(month)
       );
     });
 
@@ -105,7 +106,10 @@ function News() {
                 <span>{previousYear}</span>
                 <ul>
                   {months.map((month, index) => (
-                    <li key={index} onClick={() => handleMonthSelect(month, previousYear)}>
+                    <li
+                      key={index}
+                      onClick={() => handleMonthSelect(month, previousYear)}
+                    >
                       {month}
                     </li>
                   ))}
@@ -115,7 +119,10 @@ function News() {
                 <span>{currentYear}</span>
                 <ul>
                   {months.map((month, index) => (
-                    <li key={index} onClick={() => handleMonthSelect(month, currentYear)}>
+                    <li
+                      key={index}
+                      onClick={() => handleMonthSelect(month, currentYear)}
+                    >
                       {month}
                     </li>
                   ))}
@@ -128,28 +135,29 @@ function News() {
         {/* Якщо немає новин за вибраний місяць */}
         {selectedMonth && filteredNews.length === 0 && (
           <div className="blockMessage">
-            <span>Даних немає за {selectedMonth} {selectedYear}</span>
+            <span>
+              Даних немає за {selectedMonth} {selectedYear}
+            </span>
           </div>
         )}
 
         {/* Виводимо новини */}
-        {filteredNews
-          .map((news) => (
-            <div className="blockMessage" key={news.id}>
-              <span className="userName">{news.role_name}</span>
-              {isAdmin ? (
-                <RemoveCircleOutlineOutlinedIcon
-                  className="iconDel"
-                  onClick={() => handleDeleteNews(news.id)}
-                />
-              ) : (
-                ""
-              )}
+        {filteredNews.map((news) => (
+          <div className="blockMessage" key={news.id}>
+            <span className="userName">{news.role_name}</span>
+            {isAdmin ? (
+              <RemoveCircleOutlineOutlinedIcon
+                className="iconDel"
+                onClick={() => handleDeleteNews(news.id)}
+              />
+            ) : (
+              ""
+            )}
 
-              <div className="message">{news.news_text}</div>
-              <span className="data">date {formatDate(news.news_date)}</span>
-            </div>
-          ))}
+            <div className="message">{news.news_text}</div>
+            <span className="data">date {formatDate(news.news_date)}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -19,19 +19,27 @@ function Post({ post, userData }) {
   const navigate = useNavigate();
   // console.log("User DATA INSIDE POST", userData);
   // console.log("POST INSIDE POST", post);
- 
+
+  console.log("DATA POST ++", post);
 
   const handleNavigation = () => {
-    navigate(isAdmin ? `/admin/social-profile/${post.user_id}` : `/social-profile/${post.user_id}`, {
-      state: { post },
-    });
+    navigate(
+      isAdmin
+        ? `/admin/social-profile/${post.user_id}`
+        : `/social-profile/${post.user_id}`,
+      {
+        state: { post },
+      }
+    );
   };
 
   const [commentsCount, setCommentsCount] = useState(0);
   const [commentOpen, setCommentOpen] = useState(false);
   const [isOpen, setOpen] = useState(false);
+  const [liked, setLiked] = useState(false); // чи вже лайкнув
+  const [likesCount, setLikesCount] = useState(0); // кількість лайків
 
-  const liked = false;
+  console.log("liked", liked);
 
   useEffect(() => {
     axiosInstance
@@ -42,24 +50,67 @@ function Post({ post, userData }) {
       .catch((error) => console.error("Error fetching comments:", error));
   }, [post.id]);
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this post?"
-    );
-    if (!confirmDelete) return;
+  useEffect(() => {
+    async function fetchLikes() {
+      try {
+        const response = await axiosInstance.get("/api/likes");
+        if (Array.isArray(response.data)) {
+          const postLikes = response.data.filter(
+            (like) => like.entityId === post.id && like.type === "post"
+          );
+          setLikesCount(postLikes.length);
+          console.log("postLikes", postLikes);
+          const isLiked = postLikes.some(
+            (like) => like.fromUserId === userData.id
+          );
+          setLiked(isLiked);
+        }
+      } catch (error) {
+        console.error("Error fetching likes:", error);
+        setLikesCount(0);
+        setLiked(false);
+      }
+    }
 
+    fetchLikes();
+  }, [post, userData.id]);
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+  
     try {
+      // Видаляємо пост
       await axiosInstance.delete(`/posts/${id}`);
+  
+      // Оновлюємо локальний стан, наприклад, можна змінити дані або переадресувати користувача
       window.location.reload();
     } catch (err) {
       console.error("Error deleting post:", err);
     }
   };
+  
 
   // Функція для форматування дати
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const addLike = async () => {
+    try {
+      const res = await axiosInstance.post(`/api/likes/`, {
+        toUserId: post.user_id,
+        fromUserId: userData.id,
+        type: "post",
+        entityId: post.id,
+      });
+
+      setLiked(res.data.liked);
+      setLikesCount(res.data.count); // count повертається з бекенду
+    } catch (err) {
+      console.error("Помилка при лайкуванні:", err);
+    }
   };
 
   return (
@@ -111,10 +162,18 @@ function Post({ post, userData }) {
           <img src={post.img} alt="" />
         </div>
         <div className="info">
-          <div className="item">
+          <div
+            className="item"
+            onClick={post.user_id !== userData.id ? addLike : undefined}
+            style={{
+              cursor: post.user_id !== userData.id ? "pointer" : "not-allowed",
+              opacity: post.user_id !== userData.id ? 1 : 0.6,
+            }}
+          >
             {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-            12 likes
+            {likesCount} likes
           </div>
+
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
             {commentsCount} Comments
@@ -126,7 +185,6 @@ function Post({ post, userData }) {
         </div>
         {commentOpen && <Comments postId={post.id} userData={userData} />}
       </div>
-      
     </div>
   );
 }

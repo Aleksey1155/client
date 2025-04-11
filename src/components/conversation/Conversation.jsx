@@ -13,19 +13,22 @@ function Conversation({ users, userData, onUserSelect }) {
 
   // console.log("users???????????", users);
   // console.log("userData???????????", userData);
-  console.log("Conversation unreadCounts ++++++", unreadCounts);
+  // console.log("Conversation unreadCounts ++++++", unreadCounts);
+
   useEffect(() => {
     const fetchUnreadCounts = async () => {
       if (!userData?.id) return;
 
       try {
         const res = await axiosInstance.get(
-          `/api/messages/unread/${userData.id}`
+          `/api/messages/unread-by-chat/${userData.id}`
         );
-        // Очікуємо, що бекенд поверне масив [{ chatId: "abc", count: 3 }, ...]
+
+        // console.log("Response from unread-by-chat API:", res.data);
+
         const counts = {};
-        res.data.forEach(({ chatId, count }) => {
-          counts[chatId] = count;
+        res.data.forEach(({ _id, count }) => {
+          counts[_id] = count;
         });
         setUnreadCounts(counts);
       } catch (err) {
@@ -34,7 +37,7 @@ function Conversation({ users, userData, onUserSelect }) {
     };
 
     fetchUnreadCounts();
-  }, [userData]);
+  }, [userData]); // Залежність від userData, щоб повторно запитувати при зміні userData
 
   useEffect(() => {
     if (!userData?.id) return;
@@ -58,8 +61,27 @@ function Conversation({ users, userData, onUserSelect }) {
   }, [userData]);
 
   const handleClick = (data) => {
-    onUserSelect(data); // тут ми ВИКЛИКАЄМО функцію з батька
-    // console.log("Conversation", data);
+    const chatId = [userData.id, data.id].sort().join("_");
+
+    const unreadCountInChat = unreadCounts[chatId] || 0;
+
+    console.log("SEND chatId:", chatId, "Unread:", unreadCountInChat);
+
+    // Emit подія: повідомлення прочитано + передай скільки саме
+    socket.emit("messagesRead", {
+      chatId,
+      userId: userData.id,
+      unreadCountInChat: unreadCountInChat, // <-- виправили назву
+    });
+
+    // Обнуляємо лічильник по цьому чату
+    setUnreadCounts((prev) => ({
+      ...prev,
+      [chatId]: 0,
+    }));
+
+    // Вибір користувача
+    onUserSelect(data);
   };
 
   return (
@@ -71,8 +93,9 @@ function Conversation({ users, userData, onUserSelect }) {
               {conversations
                 .filter((conversation) => conversation.id !== userData.id)
                 .map((conversation) => {
-                  const chatId =
-                    conversation.chatId || `${userData.id}_${conversation.id}`; // або як ти формуєш chatId
+                  const chatId = [userData.id, conversation.id]
+                    .sort()
+                    .join("_");
 
                   return (
                     <div key={conversation.id}>
@@ -86,6 +109,8 @@ function Conversation({ users, userData, onUserSelect }) {
                           alt=""
                         />
                         <p className="conversationName">{conversation.name}</p>
+                        {/* {console.log("unreadCounts:", unreadCounts)}
+                        {console.log("chatId in loop:", chatId)} */}
 
                         {unreadCounts[chatId] > 0 && (
                           <div className="conversationCounter">

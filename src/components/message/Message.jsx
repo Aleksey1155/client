@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useSocket } from "../../SocketContext";
 import axiosInstance from "../../axiosInstance";
 import io from "socket.io-client";
 import "./message.scss";
 
 
 function Message({ userData, selectedUser }) {
-  const socket = io("http://localhost:3001", {
-    transports: ["websocket", "polling"],
-    withCredentials: true,
-  });
+  const socket = useSocket();
+
+  
   
   if (!selectedUser) {
     return <div className="noSelectedUser">👈 Вибери співрозмовника</div>;
@@ -72,7 +72,7 @@ function Message({ userData, selectedUser }) {
     }
 
     const markMessagesAsRead = async () => {
-      if (!chatId || !userData?.id) return;
+      if (!chatId || !userData?.id || !socket) return;
   
       try {
         await axiosInstance.put(`/api/messages/read/${chatId}/${userData.id}`);
@@ -100,7 +100,7 @@ function Message({ userData, selectedUser }) {
       });
       console.log("response", response);
 
-      if (!response.data || !response.data._id) {
+      if (!response.data || !response.data._id || !socket) {
         console.error("Error: Server did not return a valid message ID");
         return;
       }
@@ -109,7 +109,7 @@ function Message({ userData, selectedUser }) {
         ...response.data,
         id: response.data._id, // Призначаємо id
       };
-
+      console.log("savedMessage", savedMessage);
       // Відправляємо повідомлення через socket.io
       socket.emit("message", savedMessage);
 
@@ -125,7 +125,7 @@ function Message({ userData, selectedUser }) {
   
   const handleEditMessage = async (messageId, newText) => {
     try {
-      if (!messageId) {
+      if (!messageId || !socket ) {
         console.error("Error: Message ID is undefined");
         return;
       }
@@ -141,7 +141,7 @@ function Message({ userData, selectedUser }) {
     console.log("Message list before delete:", messages);
     console.log("Deleting message with ID:", messageId);
     try {
-      if (!messageId) {
+      if (!messageId || !socket) {
         console.error("Error: Message ID is undefined");
         return;
       }
@@ -159,11 +159,17 @@ function Message({ userData, selectedUser }) {
 
   const groupedMessages = groupMessagesByDate(messages);
 
+  
+  useEffect(() => {
+    console.log("Message component socket:", socket);
+  }, [socket]);
+
+
   useEffect(() => {
     socket.on("message", (msg) => {
       console.log("Received message:", msg);
 
-      if (!msg._id) {
+      if (!msg._id || !socket) {
         console.error("Error: Received message has no ID");
         return;
       }
@@ -221,7 +227,7 @@ function Message({ userData, selectedUser }) {
   }, [chatId]);
 
   useEffect(() => {
-    if (!chatId || !userData?.id) return;
+    if (!chatId || !userData?.id || !socket) return;
   
     const markMessagesAsRead = async () => {
       try {

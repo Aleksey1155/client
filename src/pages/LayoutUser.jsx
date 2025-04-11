@@ -4,8 +4,7 @@ import "./layoutUser.scss";
 import NavbarUser from "../components/navbaruser/NavbarUser";
 import SidebarUser from "../components/sidebaruser/SidebarUser";
 import useFetchUserDataWithCheck from "../../src/hooks/useFetchUserDataWithCheck";
-// import { SocketProvider } from "../../src/SocketContext"; // Імпортуємо SocketProvider
-
+import { SocketProvider } from "../SocketContext"; 
 const LayoutUser = () => {
   const { userData, loading, error } = useFetchUserDataWithCheck(); // Виклик хуку для перевірки
   if (loading) {
@@ -20,7 +19,7 @@ const LayoutUser = () => {
     return <div>Дані користувача відсутні.</div>; // Якщо даних немає
   }
     return (
-      // <SocketProvider userData={userData}>
+      <SocketProvider>
       <div className="layout">
         <SidebarUser />
         <div className="container">
@@ -28,7 +27,7 @@ const LayoutUser = () => {
           <Outlet  />  
         </div>
       </div>
-      // </SocketProvider>
+       </SocketProvider>
     );
     
   };

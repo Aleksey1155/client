@@ -3,6 +3,13 @@
     width: 100%;
     .taskContainer {
       flex: 6;
+      position: relative; /* Замість sticky */
+      height: calc(100vh - 70px);
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      
   
       .top {
         padding: 20px;

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-// import { useSocket } from "../../../src/SocketContext"; // Імпортуємо useSocket
+import { useSocket } from "../../SocketContext"; // Імпортуємо ху
 import { ThemeContext } from "../../ThemeContext";
 import { useLocation } from "react-router-dom"; // Імпортуємо useLocation
+import { Link, useNavigate } from "react-router-dom";
 import "./navbarUser.scss";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
@@ -12,90 +13,119 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import axiosInstance from "../../../src/axiosInstance";
-import io from "socket.io-client";
 
 function NavbarUser({ userData }) {
-  const socket = io("http://localhost:3001", {
-    transports: ["websocket", "polling"],
-    withCredentials: true,
-  });
+  const socket = useSocket();
   const [unreadCount, setUnreadCount] = useState(0); // <-- число
   const location = useLocation(); // Отримуємо поточне розташування маршруту
   const { darkMode, toggleTheme } = useContext(ThemeContext);
 
-  
-
-useEffect(() => {
-  const fetchUnreadCount = async () => {
-    if (!userData?.id) return;
-  
-    try {
-      const res = await axiosInstance.get(`/api/messages/unread/${userData.id}`);
-      setUnreadCount(res.data.count);
-    } catch (err) {
-      console.error("Axios error:", err);
+  useEffect(() => {
+    if (socket && !socket.connected) {
+      console.log("Сокет не підключений, чекаємо на підключення...");
+      socket.connect(); // Якщо сокет не підключений, підключити його вручну
     }
-  };
-  
+  }, [socket]);
 
-  fetchUnreadCount();
-}, [userData]);
-
-useEffect(() => {
-  if (userData?.id) {
-    socket.emit("joinRoom", userData.id);
-    console.log("Joined socket room:++++++", userData.id);
-  }
-}, [userData]);
-
-console.log("userData.id////", userData.id );
-useEffect(() => {
-  if (!userData?.id) return;
-
-  socket.on("message", (msg) => {
-    console.log("Received message USER NAVBAR:", msg.receiverId);
-
-    // Ігноруємо груповий чат
-    if (!msg.receiverId) return;
-
-    // Перевіряємо, що повідомлення призначене цьому користувачу і ще не прочитане
-    if (userData.id === msg.receiverId && !msg.isRead) {
-      setUnreadCount((prev) => prev + 1);
+  useEffect(() => {
+    if (socket?.connected && userData?.id) {
+      console.log("Socket підключено, можна відправити події");
+      socket.emit("someEvent", userData);
+      socket.emit("joinRoom", userData.id);
+      console.log("Приєднано до кімнати:", userData.id);
+    } else {
+      console.log("Socket не підключений, неможливо надіслати подію.");
     }
-  });
+  }, [socket, userData]); // Залежність від сокета та userData
 
-  return () => {
-    socket.off("message");
-  };
-}, [userData]);
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      if (!userData?.id) return;
 
-useEffect(() => {
-    if (!userData?.id) return;
-  
-    socket.on("messagesRead", ({ chatId, userId }) => {
-      console.log(`Отримано підтвердження, що користувач ${userId} прочитав чат ${chatId}`);
-      
-      // Якщо поточний користувач — той, хто прочитав → скидаємо лічильник
-      if (userId === userData.id) {
-        setUnreadCount(0);
+      try {
+        const res = await axiosInstance.get(
+          `/api/messages/unread/${userData.id}`
+        );
+        setUnreadCount(res.data.count);
+      } catch (err) {
+        console.error("Axios error:", err);
       }
-  
-      // Якщо треба — оновити інтерфейс в інших (наприклад, якщо список чатів з лічильниками)
-      // Тут можеш додати ще якусь логіку
+    };
+
+    fetchUnreadCount();
+  }, [userData]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("connect", () => {
+        console.log("Socket підключено!");
+        if (userData?.id) {
+          socket.emit("joinRoom", userData.id); // Підключення до кімнати
+          console.log("Приєднано до кімнати:", userData.id);
+        }
+      });
+
+      socket.on("disconnect", () => {
+        console.log("Socket відключено");
+      });
+
+      return () => {
+        socket.off("connect");
+        socket.off("disconnect");
+      };
+    }
+  }, [socket, userData]);
+
+  useEffect(() => {
+    if (socket && userData?.id) {
+      socket.on("message", (msg) => {
+        console.log("Received message USER NAVBAR+++:", msg);
+        // Перевірка формату даних
+        if (!msg.receiverId) return;
+
+        if (userData.id === msg.receiverId && !msg.isRead) {
+          setUnreadCount((prev) => prev + 1);
+        }
+      });
+
+      socket.on("messagesRead", ({ userId, unreadCountInChat }) => {
+        if (userId === userData.id) {
+          setUnreadCount((prev) => Math.max(prev - unreadCountInChat, 0));
+        }
+      });
+
+      return () => {
+        socket.off("message");
+        socket.off("messagesRead");
+      };
+    }
+  }, [socket, userData]);
+
+  useEffect(() => {
+    if (!userData?.id || !socket) return;
+
+    socket.on("messagesRead", ({ userId, unreadCountInChat }) => {
+      console.log(
+        "Unread USER NAVBAR---:",
+        unreadCountInChat,
+        "userId",
+        userId
+      );
+      if (userId === userData.id) {
+        setUnreadCount((prev) => Math.max(prev - unreadCountInChat, 0));
+      }
     });
-  
+
     return () => {
       socket.off("messagesRead");
     };
-  }, [userData]);
-  
-  
+  }, [userData, socket]);
 
-  console.log("unreadCount+++++", unreadCount)
+  console.log("unreadCount+++++", unreadCount);
 
-  // Очищення пошукового тексту при зміні маршруту
   return (
     <div className="navbar">
+      
       <div className="wrapper">
         <div className="search">
           <input type="text" placeholder="Search..." />
@@ -120,15 +150,18 @@ useEffect(() => {
           <div className="item">
             <FullscreenExitOutlinedIcon className="icon" />
           </div>
+          <Link to="/messenger">
           <div className="item">
             <NotificationsOutlinedIcon className="icon" />
             {unreadCount > 0 && <div className="counter">{unreadCount}</div>}
           </div>
-
-          <div className="item">
-            <ChatBubbleOutlineOutlinedIcon className="icon" />
-            <div className="counter">2</div>
-          </div>
+          </Link>
+          <Link to="/social">
+            <div className="item">
+              <ChatBubbleOutlineOutlinedIcon className="icon" />
+              <div className="counter">2</div>
+            </div>
+          </Link>
           <div className="item">
             <ListOutlinedIcon className="icon" />
           </div>

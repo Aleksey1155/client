@@ -10,7 +10,7 @@ import UserProfile from "../../pages/userprofile/UserProfile";
 function Posts({ userData }) {
   const [posts, setPosts] = useState([]);
 
-  // console.log("User DATA POSTS", userData);
+  //  console.log("DATA POSTS", posts);
 
   useEffect(() => {
     const fetchAllPosts = async () => {

@@ -213,35 +213,7 @@ function App() {
 
 export default App;
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <BrowserRouter>
-//         <Routes>
-//           <Route path="/" element={<Home/>} />
-//           <Route path="/projects" element={<Projects />} />
-//           <Route path="/project/:id" element={<ProjectDetails />} />
-//           <Route path="/task/:id" element={<TaskDetails />} />
-//           <Route path="/tasks" element={<Tasks />} />
-//           <Route path="/users" element={<Users />} />
-//           <Route path="/assignments" element={<Assignments />} />
-//           <Route path="/add_project" element={<AddProject />} />
-//           <Route path="/add_task" element={<AddTask />} />
-//           <Route path="/add_user" element={<AddUser />} />
-//           <Route path="/add_assignment" element={<AddAssignment />} />
-//           <Route path="/update_project/:id" element={<UpdateProject />} />
-//           <Route path="/update_task/:id" element={<UpdateTask />} />
-//           <Route path="/update_user/:id" element={<UpdateUser />} />
-//           <Route path="/update_assignment/:id" element={<UpdateAssignment />} />
-//           <Route path="/login" element={<Login />} />
-//           <Route path="/register" element={<Register />} />
-//         </Routes>
-//       </BrowserRouter>
-//     </div>
-//   );
-// }
 
-// export default App;
 
 
 
