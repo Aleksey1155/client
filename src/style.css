@@ -1,194 +1,212 @@
 .App {
-    /* Твій стиль для основного контейнера */
+  /* Твій стиль для основного контейнера */
 }
 
 .layout {
-    display: flex;
+  display: flex;
 }
 
 .container {
-    flex: 6;
+  flex: 6;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 body {
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-right: 0;
-    margin-left: 0;
-    overflow: hidden;
-    padding-right: 5px;
-    padding-left: 5px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0;
+  margin-left: 0;
+  overflow: hidden;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 
 /* Світла тема (за замовчуванням) */
 :root {
-    --DataGrid-containerBackground: #ffffff; /* Світлий фон за замовчуванням */
-    --header-bg: #f5f5f5;
-    --header-text: #555;
-    --text-color: #000;
-    --svg-icon: #7451f8;
-    --chat-bg: #bbcfb7;
-    background-color: white;
-    color: #222;
+  --DataGrid-containerBackground: #ffffff; /* Світлий фон за замовчуванням */
+  --header-bg: #f5f5f5;
+  --header-text: #555;
+  --text-color: #000;
+  --svg-icon: #7451f8;
+  --chat-bg: #bbcfb7;
+  --block-border: #000000;
+  --block-bg: #ffffff;
+  background-color: white;
+  color: #222;
 }
 
 /* Темна тема */
 .dark-mode {
-    --DataGrid-containerBackground: #222222; /* Темний фон */
-    --header-bg: #333333;
-    --header-text: #999;
-    --text-color: #fff;
-    --svg-icon: #7451f8;
-    --chat-bg: black;
-    
-    background-color: black;
-    color: #8d8c8c;
+  --DataGrid-containerBackground: #222222; /* Темний фон */
+  --header-bg: #333333;
+  --header-text: #999;
+  --text-color: #fff;
+  --svg-icon: #7451f8;
+  --chat-bg: black;
+  --block-border: #d8d7d7;
+  --block-bg: #000000;
+
+  background-color: black;
+  color: #8d8c8c;
 }
 
-
-
 .dark-mode .sidebarUser {
-    background-color: black;
+  background-color: black;
 }
 
 .dark-mode .containerUser {
-    background-color: black;
+  background-color: black;
 }
 
 .dark-mode .center ul li {
-    color: #999;
+  color: #999;
 }
 
 .dark-mode .icon {
-    color: #7451f8;
+  color: #7451f8;
 }
 
 /* Перемикач теми */
 .colorOption {
-    height: 20px;
-    width: 20px;
-    border-radius: 5px;
-    border: 1px solid #7451f8;
-    cursor: pointer;
-    margin: 5px;
+  height: 20px;
+  width: 20px;
+  border-radius: 5px;
+  border: 1px solid #7451f8;
+  cursor: pointer;
+  margin: 5px;
 }
 
 .colorOption:nth-child(1) {
-    background-color: whitesmoke;
+  background-color: whitesmoke;
 }
 
 .colorOption:nth-child(2) {
-    background-color: black;
+  background-color: black;
 }
 
 /* Загальні стилі для всіх таблиць */
 .MuiDataGrid-root {
-    background-color: inherit !important;
-    color: inherit !important;
+  background-color: inherit !important;
+  color: inherit !important;
 }
 
 /* Додаткові стилі для конкретних елементів */
 .MuiDataGrid-columnHeaders {
-    background-color: var(--DataGrid-containerBackground) !important;
-    color: var(--header-text) !important;
+  background-color: var(--DataGrid-containerBackground) !important;
+  color: var(--header-text) !important;
 }
 
 .MuiDataGrid-footerContainer {
-    background-color: var(--DataGrid-containerBackground) !important;
-    color: var(--header-text) !important;
+  background-color: var(--DataGrid-containerBackground) !important;
+  color: var(--header-text) !important;
 }
-
 
 /* Стилізація для трьох точок (SVG) */
 /* Тільки для іконок трьох точок в DataGrid */
 .MuiDataGrid-root .MuiSvgIcon-root {
-    fill: var(--header-text) !important; /* Колір для іконок у таблиці */
+  fill: var(--header-text) !important; /* Колір для іконок у таблиці */
 }
 
 /* Квадратики вибору */
 .MuiCheckbox-root {
-    color: var(--header-text) !important; /* Колір для чекбоксів */
+  color: var(--header-text) !important; /* Колір для чекбоксів */
 }
 
 /* Текст "Rows per page" в футері */
 .MuiTablePagination-caption {
-    color: var(--header-text) !important; /* Колір для тексту */
+  color: var(--header-text) !important; /* Колір для тексту */
 }
-
-
 
 /* Зміна кольору для пагінації (наприклад, числа, "1–15 of 15") */
 .MuiTablePagination-root {
-    color: var(--header-text) !important; /* Колір для тексту пагінації */
+  color: var(--header-text) !important; /* Колір для тексту пагінації */
 }
 
-.MuiTableCell-root  {
-    background-color: var(--background-color) !important; /* Встановлюємо фон меню */
-    color: var(--header-text) !important; /* Колір тексту в меню */
+.MuiTableCell-root {
+  background-color: var(
+    --background-color
+  ) !important; /* Встановлюємо фон меню */
+  color: var(--header-text) !important; /* Колір тексту в меню */
 }
 
-
-
-.MuiPaper-root.MuiPaper-elevation  {
-    background-color: var(--header-bg) !important; /* Встановлюємо фон меню */
-    color: var(--header-text) !important; /* Колір тексту в меню */
+.MuiPaper-root.MuiPaper-elevation {
+  background-color: var(--header-bg) !important; /* Встановлюємо фон меню */
+  color: var(--header-text) !important; /* Колір тексту в меню */
 }
 
-.select{
-    background-color: var(--header-bg) !important;
-    color: var(--header-text) !important;
+.select {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
 }
 
-.textarea{
-    background-color: var(--header-bg) !important;
-    color: var(--header-text) !important;
+.textarea {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
 }
-.button{
-    background-color: var(--header-bg) !important;
-}
-
-.buttonAddFile{
-    background-color: var(--header-bg) !important;
-    color: var(--header-text) !important;
-    border: solid 1px;
-    cursor: pointer;
-}
-.input{
-    background-color: var(--header-bg) !important;
-    color: var(--header-text) !important;
+.button {
+  background-color: var(--header-bg) !important;
 }
 
-.inputDate{
-    background-color: var(--header-bg) !important;
-    color: var(--header-text) !important;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
+.buttonAddFile {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
+  border: solid 1px;
+  cursor: pointer;
+}
+.input {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
+}
+
+.inputDate {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
 }
 
 .messageBoxHome {
-    background-color: var(--header-bg) !important;
-    color: var(--text-color) !important;
+  background-color: var(--header-bg) !important;
+  color: var(--text-color) !important;
 }
 
-.conversation{
-    background-color: var(--header-bg) !important;
+.conversation {
+  background-color: var(--header-bg) !important;
 }
-.messengerMessage{
-    background-color: var(--chat-bg) !important;
+.messengerMessage {
+  background-color: var(--chat-bg) !important;
 }
-.chatTextAreaHome{
-    background-color: var(--header-bg) !important;
+.chatTextAreaHome {
+  background-color: var(--header-bg) !important;
 }
 
-.titleDiscussions{
-   
-    color: var(--header-text) !important;
+.titleDiscussions {
+  color: var(--header-text) !important;
 }
-.dropdown{
-    background-color: var(--header-bg) !important;
+.dropdown {
+  background-color: var(--header-bg) !important;
+}
+
+.inputComments {
+  color: var(--header-text) !important;
+}
+
+.blockMessage {
+ 
+  border: 1px solid var(--block-border) !important;
+ 
+}
+
+.blockMessage::before {
+
+  border-color: transparent var(--block-border) transparent transparent !important;
+}
+
+.blockMessage::after {
+  
+  border-color: transparent var(--block-bg) transparent transparent !important;
 }

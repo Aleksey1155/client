@@ -1,19 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useSocket } from "../../SocketContext";
 import "./conversation.scss";
 import axiosInstance from "../../../src/axiosInstance";
 import io from "socket.io-client";
 
 function Conversation({ users, userData, onUserSelect }) {
-  const socket = io("http://localhost:3001", {
-    transports: ["websocket", "polling"],
-    withCredentials: true,
-  });
+  const socket = useSocket();
   const conversations = users;
   const [unreadCounts, setUnreadCounts] = useState({});
 
-  // console.log("users???????????", users);
-  // console.log("userData???????????", userData);
-  // console.log("Conversation unreadCounts ++++++", unreadCounts);
+    useEffect(() => {
+       if (socket && userData) {
+         // Check if the socket is not null before emitting an event
+         socket.emit("someEvent", userData);
+       }
+     }, [socket, userData]);
 
   useEffect(() => {
     const fetchUnreadCounts = async () => {
@@ -38,6 +39,33 @@ function Conversation({ users, userData, onUserSelect }) {
 
     fetchUnreadCounts();
   }, [userData]); // Залежність від userData, щоб повторно запитувати при зміні userData
+
+
+  useEffect(() => {
+    if (!userData?.id || !socket) return;
+  
+    const handleNotification = (notif) => {
+      if (notif.entityId && notif.receiverId === userData.id) {
+        console.log("📣 Notification received in Conversation:", notif);
+  
+        const chatId = [notif.userId, notif.receiverId].sort().join("_");
+  
+        setUnreadCounts((prev) => ({
+          ...prev,
+          [chatId]: (prev[chatId] || 0) + 1,
+        }));
+      }
+    };
+  
+    socket.on("notification", handleNotification);
+  
+    return () => {
+      socket.off("notification", handleNotification); // <-- очищення слухача
+    };
+  }, [userData, socket]); // важливо: socket і userData в залежностях
+  
+
+    console.log("📣 Unread Counts in Conversation:", unreadCounts);
 
   useEffect(() => {
     if (!userData?.id) return;

@@ -8,8 +8,8 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     const socketInstance = io("http://localhost:3001", {
-      transports: ["websocket", "polling"],
-      withCredentials: true,
+      
+      
     });
 
     socketInstance.on("connect", () => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
 import { Link, useLocation } from "react-router-dom";
@@ -75,21 +75,41 @@ function Post({ post, userData }) {
     fetchLikes();
   }, [post, userData.id]);
 
+  const commentRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        commentOpen &&
+        commentRef.current &&
+        !commentRef.current.contains(event.target)
+      ) {
+        setCommentOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [commentOpen]);
+
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
     if (!confirmDelete) return;
-  
+
     try {
       // Видаляємо пост
       await axiosInstance.delete(`/posts/${id}`);
-  
+
       // Оновлюємо локальний стан, наприклад, можна змінити дані або переадресувати користувача
       window.location.reload();
     } catch (err) {
       console.error("Error deleting post:", err);
     }
   };
-  
 
   // Функція для форматування дати
   const formatDate = (dateString) => {
@@ -183,7 +203,11 @@ function Post({ post, userData }) {
             12 Shares
           </div>
         </div>
-        {commentOpen && <Comments postId={post.id} userData={userData} />}
+        {commentOpen && (
+          <div ref={commentRef}>
+            <Comments postId={post.id} userData={userData} />
+          </div>
+        )}
       </div>
     </div>
   );

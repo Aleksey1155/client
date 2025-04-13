@@ -7,14 +7,34 @@ import "./addPost.scss";
 
 const customStyles = {
   content: {
-    top: "350px",
-    left: "40%",
-    right: "700px",
-    bottom: "-10%",
-    marginRight: "-50%",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    backgroundColor: "var(--header-bg) !important", // Темний фон
+    color: "#ffffff", // Білий текст
+    border: "1px solid #444", // Темна рамка
+    borderRadius: "10px",
+    padding: "20px",
     transform: "translate(-50%, -50%)",
   },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)", // Темний прозорий фон
+    zIndex: 1000,
+  },
 };
+
+
+// const customStyles = {
+//   content: {
+//     top: "350px",
+//     left: "40%",
+//     right: "700px",
+//     bottom: "-10%",
+//     marginRight: "-50%",
+//     transform: "translate(-50%, -50%)",
+//   },
+// };
 
 Modal.setAppElement("#root");
 
@@ -129,7 +149,7 @@ function AddPost({ userData }) {
           {/* ПОЧАТОК Додавання зображення  */}
           <div className="leftAddPost">
             <div>
-              <button onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -185,7 +205,7 @@ function AddPost({ userData }) {
           <div className="rightAddPost">
           
               
-                <textarea
+                <textarea className="textarea"
                   type="text"
                   placeholder="write a post"
                   onChange={handleChange}

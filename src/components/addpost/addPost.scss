@@ -6,6 +6,7 @@
     }
 
     .topContainerAddPost {
+      background: inherit;
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -29,7 +30,6 @@
 
       .listTextAddPost {
         margin: 30px;
-        color: #555;
         font-size: 20px;
       }
 
@@ -39,7 +39,7 @@
         padding: 10px 10px;
         border: 1px solid #228105e0;
         border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        background: inherit;
         width: 150px;
         height: 35px;
       }
@@ -61,7 +61,6 @@
       }
       .selectedFileAddPost {
         font-size: 12px;
-        color: #555;
         .image-preview{
           width: 200px;
         object-fit: cover;

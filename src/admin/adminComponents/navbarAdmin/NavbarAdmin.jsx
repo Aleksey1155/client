@@ -20,12 +20,19 @@ function NavbarAdmin({ userData }) {
   const location = useLocation(); // Отримуємо поточне розташування маршруту
   const { darkMode, toggleTheme } = useContext(ThemeContext);
 
+  console.log("📣 Unread Counts in NavbarUser:", unreadCount);
+
   useEffect(() => {
-    if (socket && userData) {
-      // Check if the socket is not null before emitting an event
-      socket.emit("someEvent", userData);
-    }
-  }, [socket, userData]);
+      if (!socket) return;
+    
+      socket.onAny((event, ...args) => {
+        console.log("📡 SOCKET EVENT:", event, args);
+      });
+    
+      return () => {
+        socket.offAny();
+      };
+    }, [socket]);
 
   useEffect(() => {
     const fetchUnreadCount = async () => {
@@ -53,25 +60,54 @@ function NavbarAdmin({ userData }) {
 
   // console.log("userData.id////", userData.id );
 
+  // Слушаем notification!!!!!!!!!!!!!!!!!!!!!!!
+    useEffect(() => {
+      if (!userData?.id || !socket) return;
+  
+      socket.on("notification", (notif) => {
+        if (Array.isArray(notif)) {
+          notif.forEach(n => {
+            if (n.receiverId === userData.id) {
+              setUnreadCount((prev) => prev + 1);
+            }
+          });
+        } else if (notif.receiverId === userData.id) {
+          setUnreadCount((prev) => prev + 1);
+        }
+      });
+  
+      return () => {
+        socket.off("notification");
+      };
+    }, [userData, socket]);
+  
+
   useEffect(() => {
     if (!userData?.id || !socket) return;
 
-    socket.on("message", (msg) => {
-      console.log("Received message USER NAVBAR +++:", msg.receiverId);
-
-      // Ігноруємо груповий чат
-      if (!msg.receiverId) return;
-
-      // Перевіряємо, що повідомлення призначене цьому користувачу і ще не прочитане
-      if (userData.id === msg.receiverId && !msg.isRead) {
-        setUnreadCount((prev) => prev + 1);
+    socket.on("message", (msgs) => {
+      console.log("Received message ADMIN NAVBAR +++:", msgs);
+      
+      // Логування кожного повідомлення
+      msgs.forEach((msg, index) => {
+        console.log(`Message ${index}:`, msg);
+      });
+    
+      const newUnread = msgs.filter(
+        (msg) =>
+          msg.receiverId === userData.id &&
+          !msg.isRead
+      ).length;
+    
+      if (newUnread > 0) {
+        setUnreadCount((prev) => prev + newUnread);
       }
     });
 
     return () => {
       socket.off("message");
     };
-  }, [userData]);
+  }, [userData, socket]);
 
   useEffect(() => {
     if (!userData?.id || !socket) return;

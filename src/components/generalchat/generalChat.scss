@@ -31,13 +31,13 @@
     .blockMessage {
       position: relative;
       -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-      border: 1px solid #777;
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);    
       border-radius: 10px;
-
       padding: 5px;
       margin: 10px 0px 0px 10px;
       color: inherit;
+
+      
 
       &::before {
         content: "";
@@ -46,7 +46,7 @@
         top: 10px; // Змінено значення top
         border-width: 10px 10px 10px 0; // Змінено значення border-width
         border-style: solid;
-        border-color: transparent #777 transparent transparent; // Змінено значення border-color
+       
       }
 
       &::after {
@@ -56,7 +56,7 @@
         top: 11px; // Змінено значення top
         border-width: 9px 9px 9px 0; // Змінено значення border-width
         border-style: solid;
-        border-color: transparent #d6d3d3 transparent transparent; // Змінено значення border-color
+        
       }
 
       .replyTag {

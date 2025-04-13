@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useSocket } from "../../SocketContext"; // Імпортуємо ху
+import { useSocket } from "../../SocketContext"; //
 import { ThemeContext } from "../../ThemeContext";
 import { useLocation } from "react-router-dom"; // Імпортуємо useLocation
 import { Link, useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlin
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
-import axiosInstance from "../../../src/axiosInstance";
+import axiosInstance from "../../axiosInstance";
 
 function NavbarUser({ userData }) {
   const socket = useSocket();
@@ -20,23 +20,20 @@ function NavbarUser({ userData }) {
   const location = useLocation(); // Отримуємо поточне розташування маршруту
   const { darkMode, toggleTheme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    if (socket && !socket.connected) {
-      console.log("Сокет не підключений, чекаємо на підключення...");
-      socket.connect(); // Якщо сокет не підключений, підключити його вручну
-    }
-  }, [socket]);
+  console.log("📣 Unread Counts in NavbarUser:", unreadCount);
 
   useEffect(() => {
-    if (socket?.connected && userData?.id) {
-      console.log("Socket підключено, можна відправити події");
-      socket.emit("someEvent", userData);
-      socket.emit("joinRoom", userData.id);
-      console.log("Приєднано до кімнати:", userData.id);
-    } else {
-      console.log("Socket не підключений, неможливо надіслати подію.");
-    }
-  }, [socket, userData]); // Залежність від сокета та userData
+    if (!socket) return;
+  
+    socket.onAny((event, ...args) => {
+      console.log("📡 SOCKET EVENT:", event, args);
+    });
+  
+    return () => {
+      socket.offAny();
+    };
+  }, [socket]);
+  
 
   useEffect(() => {
     const fetchUnreadCount = async () => {
@@ -55,51 +52,66 @@ function NavbarUser({ userData }) {
     fetchUnreadCount();
   }, [userData]);
 
+ useEffect(() => {
+     if (userData?.id && socket) {
+       socket.emit("joinRoom", userData.id);
+       // console.log("Joined socket room:++++++", userData.id);
+     }
+   }, [userData]);
+
+  // console.log("userData.id////", userData.id );
+
+  // Слушаем notification!!!!!!!!!!!!!!!!!!!!!!!
   useEffect(() => {
-    if (socket) {
-      socket.on("connect", () => {
-        console.log("Socket підключено!");
-        if (userData?.id) {
-          socket.emit("joinRoom", userData.id); // Підключення до кімнати
-          console.log("Приєднано до кімнати:", userData.id);
-        }
-      });
+    if (!userData?.id || !socket) return;
 
-      socket.on("disconnect", () => {
-        console.log("Socket відключено");
-      });
+    socket.on("notification", (notif) => {
+      console.log("Received notification USER NAVBAR +++:", notif);
+      if (Array.isArray(notif)) {
+        notif.forEach(n => {
+          if (n.receiverId === userData.id) {
+            setUnreadCount((prev) => prev + 1);
+          }
+        });
+      } else if (notif.receiverId === userData.id) {
+        setUnreadCount((prev) => prev + 1);
+      }
+    });
+    
 
-      return () => {
-        socket.off("connect");
-        socket.off("disconnect");
-      };
-    }
-  }, [socket, userData]);
+    return () => {
+      socket.off("notification");
+    };
+  }, [userData, socket]);
 
   useEffect(() => {
-    if (socket && userData?.id) {
-      socket.on("message", (msg) => {
-        console.log("Received message USER NAVBAR+++:", msg);
-        // Перевірка формату даних
-        if (!msg.receiverId) return;
-
-        if (userData.id === msg.receiverId && !msg.isRead) {
-          setUnreadCount((prev) => prev + 1);
-        }
+    if (!userData?.id || !socket) return;
+  
+    socket.on("message", (msgs) => {
+      console.log("Received message USER NAVBAR +++:", msgs);
+      
+      // Логування кожного повідомлення
+      msgs.forEach((msg, index) => {
+        console.log(`Message ${index}:`, msg);
       });
-
-      socket.on("messagesRead", ({ userId, unreadCountInChat }) => {
-        if (userId === userData.id) {
-          setUnreadCount((prev) => Math.max(prev - unreadCountInChat, 0));
-        }
-      });
-
-      return () => {
-        socket.off("message");
-        socket.off("messagesRead");
-      };
-    }
-  }, [socket, userData]);
+    
+      const newUnread = msgs.filter(
+        (msg) =>
+          msg.receiverId === userData.id &&
+          !msg.isRead
+      ).length;
+    
+      if (newUnread > 0) {
+        setUnreadCount((prev) => prev + newUnread);
+      }
+    });
+    
+  
+    return () => {
+      socket.off("message");
+    };
+  }, [userData, socket]);
+  
 
   useEffect(() => {
     if (!userData?.id || !socket) return;
@@ -119,13 +131,14 @@ function NavbarUser({ userData }) {
     return () => {
       socket.off("messagesRead");
     };
-  }, [userData, socket]);
+  }, [userData]);
 
-  console.log("unreadCount+++++", unreadCount);
+  // console.log("unreadCount+++++", unreadCount)
+
+  // Очищення пошукового тексту при зміні маршруту
 
   return (
     <div className="navbar">
-      
       <div className="wrapper">
         <div className="search">
           <input type="text" placeholder="Search..." />
@@ -151,10 +164,10 @@ function NavbarUser({ userData }) {
             <FullscreenExitOutlinedIcon className="icon" />
           </div>
           <Link to="/messenger">
-          <div className="item">
-            <NotificationsOutlinedIcon className="icon" />
-            {unreadCount > 0 && <div className="counter">{unreadCount}</div>}
-          </div>
+            <div className="item">
+              <NotificationsOutlinedIcon className="icon" />
+              {unreadCount > 0 && <div className="counter">{unreadCount}</div>}
+            </div>
           </Link>
           <Link to="/social">
             <div className="item">
