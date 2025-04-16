@@ -4,6 +4,11 @@
   .close {
     padding: 5px;
     margin: 10px;
+    cursor: pointer;
+    background: inherit;
+    border: solid 1px;
+
+    color: inherit;
   }
 }
 
@@ -15,13 +20,13 @@
 .centerTodo {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid lightgrey;
+  border-top: 1px solid #555;
 
   .todo {
     padding: 10px;
     flex: 1;
     flex-direction: column;
-    border-right: 1px solid lightgrey;
+    border-right: 1px solid #555;
 
     .titleTodo {
       color: rgb(192, 23, 23);
@@ -32,21 +37,28 @@
       display: flex;
       flex-direction: column;
       width: 300px;
-      color: #555;
+
       .task_description {
         margin: 10px;
         padding: 5px;
         -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
         box-shadow: 2px 4px 10px 1px rgba(119, 119, 119, 0.47);
-
-        
-      
+      }
+      .topTaskDescription {
+        align-content: center;
+        margin-bottom: 5px;
+      }
+      .doingButt {
+        border: solid 1px #555;
+        border-radius: 2px;
+        background: inherit;
+        color: inherit;
       }
     }
   }
 
   .doing {
-    border-right: 1px solid lightgrey;
+    border-right: 1px solid #555;
     padding: 10px;
     flex: 1;
     flex-direction: column;
@@ -56,20 +68,30 @@
     }
 
     .list {
-      color: #555;
-
       .task_description {
-        margin: 10px;
+        
         padding: 5px;
         -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
         box-shadow: 2px 4px 10px 1px rgba(119, 119, 119, 0.47);
 
-        
-      
-      }
+        .topTaskDescription {
+          align-content: center;
+          margin-bottom: 5px;
+        }
 
-      .doneButt{
-        margin-left: 70px;
+        .todoButt {
+          border: solid 1px #555;
+          border-radius: 2px;
+          background: inherit;
+          color: inherit;
+        }
+        .doneButt {
+          float: right;
+          border: solid 1px #555;
+          border-radius: 2px;
+          background: inherit;
+          color: inherit;
+        }
       }
     }
   }
@@ -84,15 +106,22 @@
     }
 
     .list {
-      color: #555;
       .task_description {
         margin: 10px;
         padding: 5px;
         -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
         box-shadow: 2px 4px 10px 1px rgba(119, 119, 119, 0.47);
+      }
 
-        
-      
+      .topTaskDescription {
+        align-content: center;
+        margin-bottom: 5px;
+      }
+      .todoButt {
+        border: solid 1px #555;
+        border-radius: 2px;
+        background: inherit;
+        color: inherit;
       }
     }
   }
@@ -104,7 +133,6 @@ form {
   // justify-content: center;
 
   textarea {
-    margin: 20px;
     width: 250px; /* Початкова ширина textarea */
     height: 100px; /* Встановлює висоту textarea */
     font-size: 16px; /* Розмір тексту всередині textarea */
@@ -124,6 +152,8 @@ form {
     color: forestgreen;
     border: 1px solid green;
     border-radius: 5px;
+    cursor: pointer;
+    background: inherit;
   }
   .deleteKanban {
     margin: 20px;
@@ -131,5 +161,7 @@ form {
     color: rgb(192, 23, 23);
     border: 1px solid rgb(128, 0, 0);
     border-radius: 5px;
+    cursor: pointer;
+    background: inherit;
   }
 }

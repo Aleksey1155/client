@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../../axiosInstance";
 import ReactQuill from "react-quill";
 import { DateTime } from "luxon";
@@ -7,8 +7,10 @@ import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import "./updatetask.scss";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import Zoom from "react-medium-image-zoom";
+import { useTranslation } from "react-i18next";
 
 const UpdateTask = () => {
+  const { t } = useTranslation();
   const [task, setTask] = useState({
     project_id: "",
     title: "",
@@ -31,8 +33,6 @@ const UpdateTask = () => {
   const [images, setImages] = useState([]);
 
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const taskId = location.pathname.split("/")[2];
   const { id: taskId } = useParams();
 
   useEffect(() => {
@@ -134,7 +134,7 @@ const UpdateTask = () => {
 
   const handleDeleteImg = async (id) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити цей image?"
+      t("updatetask.deleteImageConfirmation") // Ключ: "updatetask.deleteImageConfirmation"
     );
     if (confirmed) {
       try {
@@ -156,7 +156,7 @@ const UpdateTask = () => {
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please select a file");
+      alert(t("updatetask.selectFileAlert")); // Ключ: "updatetask.selectFileAlert"
       return;
     }
 
@@ -181,7 +181,7 @@ const UpdateTask = () => {
       }, 1000);
     } catch (error) {
       console.error("Upload Error: ", error);
-      alert("Помилка завантаження файлу");
+      alert(t("updatetask.uploadFileErrorAlert")); // Ключ: "updatetask.uploadFileErrorAlert"
     }
   };
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -194,16 +194,16 @@ const UpdateTask = () => {
     <div className="updatetask">
       <div className="updatetaskContainer">
         <div className="top">
-          <p className="title">Update task</p>
+          <p className="title">{t("updatetask.updateTaskTitle")}</p> {/* Ключ: "updatetask.updateTaskTitle" */}
           <button className="button" onClick={handleClick}>
-            Редагувати
+            {t("updatetask.editButton")} {/* Ключ: "updatetask.editButton" */}
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
               <button className="buttonAddFile" onClick={handlePick}>
-                Add file
+                {t("updatetask.addFileButton")} {/* Ключ: "updatetask.addFileButton" */}
               </button>
               <input
                 className="hidden"
@@ -213,7 +213,7 @@ const UpdateTask = () => {
                 accept="image/*, .png, .jpg, .web"
               />
               <button className="buttonAddFile" onClick={handleUpload}>
-                Upload now!
+                {t("updatetask.uploadNowButton")} {/* Ключ: "updatetask.uploadNowButton" */}
               </button>
             </div>
 
@@ -221,16 +221,16 @@ const UpdateTask = () => {
               <img
                 className="noimage"
                 src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                alt=""
+                alt={t("updatetask.noImageAlt")} // Ключ: "updatetask.noImageAlt"
               />
             )}
 
             {selectedFile && !uploaded && (
               <div className="selectedFile">
                 <ul>
-                  <li>Name: {selectedFile.name}</li>
-                  <li>Type: {selectedFile.type}</li>
-                  <li>Size: {selectedFile.size}</li>
+                  <li>{t("updatetask.fileName")}: {selectedFile.name}</li> {/* Ключ: "updatetask.fileName" */}
+                  <li>{t("updatetask.fileType")}: {selectedFile.type}</li> {/* Ключ: "updatetask.fileType" */}
+                  <li>{t("updatetask.fileSize")}: {selectedFile.size}</li> {/* Ключ: "updatetask.fileSize" */}
                 </ul>
               </div>
             )}
@@ -241,30 +241,26 @@ const UpdateTask = () => {
                 <img
                   className="image"
                   src={uploaded.uploadedFiles[0].filePath}
-                  alt=""
+                  alt={uploaded.uploadedFiles[0].fileName}
                 />
               </div>
             )}
-
-            {/* {uploaded && (
-              <img className="image" src={uploaded.filePath} alt="" />
-            )} */}
           </div>
           <div className="right">
             <form>
               <div className="formInput">
-                <label>Task Title</label>
+                <label>{t("updatetask.taskTitleLabel")}</label> {/* Ключ: "updatetask.taskTitleLabel" */}
                 <input
                   className="input"
                   type="text"
-                  placeholder="name"
+                  placeholder={t("updatetask.taskTitlePlaceholder")} // Ключ: "updatetask.taskTitlePlaceholder"
                   onChange={handleChange}
                   name="title"
                   value={task.title}
                 />
               </div>
               <div className="formInput">
-                <label>Project</label>
+                <label>{t("updatetask.projectLabel")}</label> {/* Ключ: "updatetask.projectLabel" */}
                 <select
                   className="select"
                   name="project_id"
@@ -272,7 +268,7 @@ const UpdateTask = () => {
                   value={task.project_id}
                 >
                   <option value="" disabled>
-                    Виберіть проект
+                    {t("updatetask.selectProjectOption")} {/* Ключ: "updatetask.selectProjectOption" */}
                   </option>
                   {projects.map((project) => (
                     <option key={project.id} value={project.id}>
@@ -287,11 +283,11 @@ const UpdateTask = () => {
                   e.currentTarget.querySelector("input").showPicker()
                 }
               >
-                <label>start_date</label>
+                <label>{t("updatetask.startDateLabel")}</label> {/* Ключ: "updatetask.startDateLabel" */}
                 <input
                   className="inputDate"
                   type="date"
-                  placeholder="start_date"
+                  placeholder={t("updatetask.startDatePlaceholder")} // Ключ: "updatetask.startDatePlaceholder"
                   onChange={handleChange}
                   name="start_date"
                   value={task.start_date}
@@ -303,11 +299,11 @@ const UpdateTask = () => {
                   e.currentTarget.querySelector("input").showPicker()
                 }
               >
-                <label>end_date</label>
+                <label>{t("updatetask.endDateLabel")}</label> {/* Ключ: "updatetask.endDateLabel" */}
                 <input
                   className="inputDate"
                   type="date"
-                  placeholder="end_date"
+                  placeholder={t("updatetask.endDatePlaceholder")} // Ключ: "updatetask.endDatePlaceholder"
                   onChange={handleChange}
                   name="end_date"
                   value={task.end_date}
@@ -319,11 +315,11 @@ const UpdateTask = () => {
                   e.currentTarget.querySelector("input").showPicker()
                 }
               >
-                <label>actual_end_date</label>
+                <label>{t("updatetask.actualEndDateLabel")}</label> {/* Ключ: "updatetask.actualEndDateLabel" */}
                 <input
                   className="inputDate"
                   type="date"
-                  placeholder="actual_end_date"
+                  placeholder={t("updatetask.actualEndDatePlaceholder")} // Ключ: "updatetask.actualEndDatePlaceholder"
                   onChange={handleChange}
                   name="actual_end_date"
                   value={task.actual_end_date || ""} // якщо null, підставляється ""
@@ -331,7 +327,7 @@ const UpdateTask = () => {
               </div>
 
               <div className="formInput">
-                <label>Status</label>
+                <label>{t("updatetask.statusLabel")}</label> {/* Ключ: "updatetask.statusLabel" */}
                 <select
                   className="select"
                   name="status_id"
@@ -346,10 +342,10 @@ const UpdateTask = () => {
                 </select>
               </div>
               <div className="formInput">
-                <label>Priority</label>
+                <label>{t("updatetask.priorityLabel")}</label> {/* Ключ: "updatetask.priorityLabel" */}
                 <select
                   className="select"
-                  name="status_id"
+                  name="priority_id"
                   onChange={handleChange}
                   value={task.priority_id}
                 >
@@ -361,7 +357,7 @@ const UpdateTask = () => {
                 </select>
               </div>
               <div className="formInput">
-                <label>Rating</label>
+                <label>{t("updatetask.ratingLabel")}</label> {/* Ключ: "updatetask.ratingLabel" */}
                 <select
                   className="select"
                   name="rating"
@@ -369,7 +365,7 @@ const UpdateTask = () => {
                   value={task.rating}
                 >
                   <option value="" disabled>
-                    Виберіть рейтинг
+                    {t("updatetask.selectRatingOption")} {/* Ключ: "updatetask.selectRatingOption" */}
                   </option>
                   {[1, 2, 3, 4, 5].map((rating) => (
                     <option key={rating} value={rating}>
@@ -382,7 +378,7 @@ const UpdateTask = () => {
           </div>
         </div>
         <div className="image-container">
-          <div className="title">Task Images</div>
+          <div className="title">{t("updatetask.taskImagesTitle")}</div> {/* Ключ: "updatetask.taskImagesTitle" */}
           <div className="images">
             {images.map((image, index) => (
               <div key={index}>
@@ -393,7 +389,7 @@ const UpdateTask = () => {
                 <Zoom>
                   <img
                     src={image.url}
-                    alt={`Image ${index + 1}`}
+                    alt={`${t("updatetask.image")} ${index + 1}`} // Ключ: "updatetask.image"
                     className="image"
                   />
                 </Zoom>
@@ -402,7 +398,7 @@ const UpdateTask = () => {
           </div>
         </div>
         <div className="bottom">
-          <div className="title">Description</div>
+          <div className="title">{t("updatetask.descriptionTitle")}</div> {/* Ключ: "updatetask.descriptionTitle" */}
           <div className="description">
             <div className="formInput">
               <ReactQuill

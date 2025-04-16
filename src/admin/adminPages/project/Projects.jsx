@@ -3,64 +3,63 @@ import axiosInstance from "../../../axiosInstance";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import "./projects.scss";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../i18n";
+
 
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "numeric", day: "numeric" };
-  return new Date(dateString).toLocaleDateString(undefined, options);
+  return new Date(dateString).toLocaleDateString(i18n.language, options);
 };
 
-const projectColumns = [
-  { field: "orderNumber", headerName: "N", width: 12 }, // Колонка з порядковим номером
-  {
-    field: "image_url",
-    headerName: "Image",
-    width: 0,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">
-          {params.row.image_url ? (
-            <img className="cellImg" src={params.row.image_url} alt="" />
-          ) : (
-            <span>No image</span>
-          )}
-        </div>
-      );
-    },
-  },
-  {
-    field: "title",
-    headerName: "Title",
-    width: 250,
-  },
-  {
-    field: "start_date",
-    headerName: "Start Date",
-    width: 120,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">{formatDate(params.row.start_date)}</div>
-      );
-    },
-  },
-  {
-    field: "end_date",
-    headerName: "End Date",
-    width: 120,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">{formatDate(params.row.end_date)}</div>
-      );
-    },
-  },
-  {
-    field: "status_name",
-    headerName: "Status Name",
-    width: 120,
-  },
-];
 
 const Projects = () => {
+  const { t } = useTranslation();
   const [projects, setProjects] = useState([]);
+
+  const columns = [
+    { field: "orderNumber", headerName: t("projects.n"), width: 50 }, // Ключ: "projects.n"
+    {
+      field: "image_url",
+      headerName: t("projects.image"), // Ключ: "projects.image"
+      width: 100,
+      renderCell: (params) => (
+        <div className="cellWithImg">
+          {params.row.image_url ? (
+            <img className="cellImg" src={params.row.image_url} alt={params.row.title} />
+          ) : (
+            <span>{t("projects.noImage")}</span> // Ключ: "projects.noImage"
+          )}
+        </div>
+      ),
+    },
+    {
+      field: "title",
+      headerName: t("projects.title"), // Ключ: "projects.title"
+      width: 250,
+    },
+    {
+      field: "start_date",
+      headerName: t("projects.startDate"), // Ключ: "projects.startDate"
+      width: 120,
+      renderCell: (params) => (
+        <div className="cellWithImg">{formatDate(params.row.start_date)}</div>
+      ),
+    },
+    {
+      field: "end_date",
+      headerName: t("projects.endDate"), // Ключ: "projects.endDate"
+      width: 120,
+      renderCell: (params) => (
+        <div className="cellWithImg">{formatDate(params.row.end_date)}</div>
+      ),
+    },
+    {
+      field: "status_name",
+      headerName: t("projects.statusName"), // Ключ: "projects.statusName"
+      width: 120,
+    },
+  ];
 
   useEffect(() => {
     const fetchAllProjects = async () => {
@@ -69,6 +68,7 @@ const Projects = () => {
         // Додаємо порядковий номер для кожного проекту
         const projectsWithOrderNumber = res.data.map((project, index) => ({
           ...project,
+          id: project.id, // Ensure 'id' exists and is used by DataGrid
           orderNumber: index + 1, // Порядковий номер
         }));
         setProjects(projectsWithOrderNumber);
@@ -82,7 +82,7 @@ const Projects = () => {
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити цей проект?"
+      t("projects.deleteConfirmation") // Ключ: "projects.deleteConfirmation"
     );
     if (confirmed) {
       try {
@@ -97,51 +97,55 @@ const Projects = () => {
   const actionColumn = [
     {
       field: "action",
-      headerName: "Action",
+      headerName: t("projects.action"), // Ключ: "projects.action"
       width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-            {/* Link with dynamic routing */}
-            <Link
-              to={`/admin/project/${params.row.id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="viewButton">Деталі</div>
-            </Link>
+      renderCell: (params) => (
+        <div className="cellAction">
+          {/* Link with dynamic routing */}
+          <Link
+            to={`/admin/project/${params.row.id}`}
+            style={{ textDecoration: "none" }}
+          >
+            <div className="viewButton">{t("projects.details")}</div> 
+          </Link>
 
-            <button
-              className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
-            >
-              Видалити
-            </button>
-          </div>
-        );
-      },
+          <button
+            className="deleteButton"
+            onClick={() => handleDelete(params.row.id)}
+          >
+            {t("projects.delete")} 
+          </button>
+        </div>
+      ),
     },
   ];
 
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
+  };
+  
   return (
     <div className="projects">
       <div className="containerProjects">
         <div className="datatableTitle">
-          Projects
+          {t("projects.projectsTitle")}
           <Link to="/admin/add_project" className="link">
-            Add New
+            {t("projects.addNew")}
           </Link>
         </div>
         <div className="dataGrid">
           <DataGrid
             className="datagrid"
             rows={projects}
-            columns={projectColumns.concat(actionColumn)} // Колонка `id` не включена
+            columns={columns.concat(actionColumn)}
             pageSize={9}
             rowsPerPageOptions={[9]}
             checkboxSelection
+            getRowId={(row) => row.id} // Ensure 'id' is correctly used as row id
             initialState={{
               sorting: {
-                sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
+                sortModel: [{ field: "orderNumber", sort: "asc" }], // Сортування за порядковим номером
               },
             }}
             sx={{

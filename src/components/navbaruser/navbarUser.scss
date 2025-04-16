@@ -21,8 +21,8 @@
     .search {
       display: flex;
       align-items: center;
-      border: 0.5px solid lightgrey;
-      padding: 3px;
+     
+ 
 
       input {
         border: none;
@@ -42,6 +42,11 @@
         align-items: center;
         margin: 10px;
         position: relative;
+
+        .button{
+          color: inherit;
+          border: solid 1px;
+        }
 
         .icon {
           font-size: 20px;

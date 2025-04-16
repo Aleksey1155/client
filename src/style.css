@@ -27,13 +27,15 @@ body {
 /* Світла тема (за замовчуванням) */
 :root {
   --DataGrid-containerBackground: #ffffff; /* Світлий фон за замовчуванням */
-  --header-bg: #f5f5f5;
+  --header-bg: #f3f0f0;
   --header-text: #555;
   --text-color: #000;
   --svg-icon: #7451f8;
   --chat-bg: #bbcfb7;
   --block-border: #000000;
   --block-bg: #ffffff;
+  --no-image: url("/images/no-image-light.png");
+
   background-color: white;
   color: #222;
 }
@@ -48,6 +50,7 @@ body {
   --chat-bg: black;
   --block-border: #d8d7d7;
   --block-bg: #000000;
+  --no-image: url("/images/no-image-dark.png");
 
   background-color: black;
   color: #8d8c8c;
@@ -209,4 +212,9 @@ body {
 .blockMessage::after {
   
   border-color: transparent var(--block-bg) transparent transparent !important;
+}
+
+.search-results {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
 }

@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { ThemeContext } from "../../../ThemeContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./addtask.scss";
-
-const hostUrl = "http://localhost:3001";
+import { useTranslation } from "react-i18next";
 
 const AddTask = () => {
+  const { darkMode } = useContext(ThemeContext);
+  const { t } = useTranslation();
   const [task, setTask] = useState({
     project_id: "",
     title: "",
@@ -29,7 +31,7 @@ const AddTask = () => {
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
-        const res = await axios.get(`${hostUrl}/task_statuses`);
+        const res = await axiosInstance.get(`/task_statuses`);
         setStatuses(res.data);
       } catch (err) {
         console.log(err);
@@ -38,7 +40,7 @@ const AddTask = () => {
 
     const fetchPriorities = async () => {
       try {
-        const res = await axios.get(`${hostUrl}/task_priorities`);
+        const res = await axiosInstance.get(`/task_priorities`);
         setPriorities(res.data);
       } catch (err) {
         console.log(err);
@@ -47,7 +49,7 @@ const AddTask = () => {
 
     const fetchAllProjects = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/projects"); // Запит на отримання всіх проєктів
+        const res = await axiosInstance.get(`/projects`); // Запит на отримання всіх проєктів
         setProjects(res.data);
       } catch (err) {
         console.log(err);
@@ -76,32 +78,27 @@ const AddTask = () => {
     e.preventDefault();
 
     try {
-      // 1. Додаємо завдання
-      const taskRes = await axios.post(`${hostUrl}/tasks`, task);
-      const taskId = taskRes.data.insertId; // Отримуємо id нового завдання
+      const taskRes = await axiosInstance.post("/tasks", task);
+      const taskId = taskRes.data.insertId;
 
-      console.log("Created Task ID:", taskId); // Логування taskId
-
-      // 2. Якщо вибрано файли, додаємо їх до таблиці task_images
       if (selectedFiles.length > 0 && taskId) {
         const formData = new FormData();
         selectedFiles.forEach((file) => {
           formData.append("files", file);
         });
-        formData.append("task_id", taskId); // Додаємо task_id
+        formData.append("task_id", taskId);
 
-        await axios.post(`${hostUrl}/upload_task`, formData, {
+        await axiosInstance.post("/upload_task", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
       }
 
-      // Перенаправляємо користувача після успішного додавання завдання та файлів
       navigate("/admin/tasks");
     } catch (err) {
-      console.error("Error adding task:", err); // Логування помилки
-      alert("An error occurred while adding the task."); // Повідомлення користувача
+      console.error("Error adding task:", err);
+      alert(t("addtask.addTaskErrorAlert")); // Ключ: "addtask.addTaskErrorAlert"
     }
   };
 
@@ -113,16 +110,16 @@ const AddTask = () => {
     <div className="addtask">
       <div className="addtaskContainer">
         <div className="top">
-          <p className="title">New task</p>
+          <p className="title">{t("addtask.newTaskTitle")}</p> {/* Ключ: "addtask.newTaskTitle" */}
           <button className="button" onClick={handleClick}>
-            Додати
+            {t("addtask.addButton")} {/* Ключ: "addtask.addButton" */}
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
               <button className="buttonAddFile" onClick={handlePick}>
-                Add file
+                {t("addtask.addFileButton")} {/* Ключ: "addtask.addFileButton" */}
               </button>
               <input
                 className="hidden"
@@ -137,8 +134,12 @@ const AddTask = () => {
             {selectedFiles.length === 0 && (
               <img
                 className="noimage"
-                src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                alt="No images"
+                src={
+                  darkMode
+                    ? "/images/no-image-icon-dark.jpg"
+                    : "/images/no-image-icon-light.jpg"
+                }
+                alt={t("addtask.noImageAlt")} // Ключ: "addtask.noImageAlt"
               />
             )}
 
@@ -147,8 +148,8 @@ const AddTask = () => {
                 {selectedFiles.map((file, index) => (
                   <div key={index} className="selectedFile">
                     <ul>
-                      <li>Name: {file.name.slice(-15)}</li>
-                      <li>Size: {(file.size / 1024).toFixed(2)} KB</li>
+                      <li>{t("addtask.fileName")}: {file.name.slice(-15)}</li> {/* Ключ: "addtask.fileName" */}
+                      <li>{t("addtask.fileSize")}: {(file.size / 1024).toFixed(2)} KB</li> {/* Ключ: "addtask.fileSize" */}
                     </ul>
                   </div>
                 ))}
@@ -158,17 +159,17 @@ const AddTask = () => {
           <div className="right">
             <form>
               <div className="formInput">
-                <label>Task title</label>
+                <label>{t("addtask.taskTitleLabel")}</label> {/* Ключ: "addtask.taskTitleLabel" */}
                 <input
                   className="input"
                   type="text"
-                  placeholder="Назва нового завдання"
+                  placeholder={t("addtask.taskTitlePlaceholder")} // Ключ: "addtask.taskTitlePlaceholder"
                   onChange={handleChange}
                   name="title"
                 />
               </div>
               <div className="formInput">
-                <label>Project</label>
+                <label>{t("addtask.projectLabel")}</label> {/* Ключ: "addtask.projectLabel" */}
                 <select
                   className="select"
                   name="project_id"
@@ -176,7 +177,7 @@ const AddTask = () => {
                   value={task.project_id}
                 >
                   <option value="" disabled>
-                    Виберіть проект
+                    {t("addtask.selectProjectOption")} {/* Ключ: "addtask.selectProjectOption" */}
                   </option>
                   {projects.map((project) => (
                     <option key={project.id} value={project.id}>
@@ -191,11 +192,11 @@ const AddTask = () => {
                   e.currentTarget.querySelector("input").showPicker()
                 }
               >
-                <label>Start Date</label>
+                <label>{t("addtask.startDateLabel")}</label> {/* Ключ: "addtask.startDateLabel" */}
                 <input
                   className="inputDate"
                   type="date"
-                  placeholder="start_date"
+                  placeholder={t("addtask.startDatePlaceholder")} // Ключ: "addtask.startDatePlaceholder"
                   onChange={handleChange}
                   name="start_date"
                 />
@@ -206,18 +207,18 @@ const AddTask = () => {
                   e.currentTarget.querySelector("input").showPicker()
                 }
               >
-                <label>End Date</label>
+                <label>{t("addtask.endDateLabel")}</label> {/* Ключ: "addtask.endDateLabel" */}
                 <input
                   className="inputDate"
                   type="date"
-                  placeholder="end_date"
+                  placeholder={t("addtask.endDatePlaceholder")} // Ключ: "addtask.endDatePlaceholder"
                   onChange={handleChange}
                   name="end_date"
                 />
               </div>
 
               <div className="formInput">
-                <label>Status</label>
+                <label>{t("addtask.statusLabel")}</label> {/* Ключ: "addtask.statusLabel" */}
                 <select
                   className="select"
                   name="status_id"
@@ -225,7 +226,7 @@ const AddTask = () => {
                   value={task.status_id}
                 >
                   <option value="" disabled>
-                    Виберіть статус
+                    {t("addtask.selectStatusOption")} {/* Ключ: "addtask.selectStatusOption" */}
                   </option>
                   {statuses.map((status) => (
                     <option key={status.id} value={status.id}>
@@ -235,7 +236,7 @@ const AddTask = () => {
                 </select>
               </div>
               <div className="formInput">
-                <label>Priority</label>
+                <label>{t("addtask.priorityLabel")}</label> {/* Ключ: "addtask.priorityLabel" */}
                 <select
                   className="select"
                   name="priority_id"
@@ -243,7 +244,7 @@ const AddTask = () => {
                   value={task.priority_id}
                 >
                   <option value="" disabled>
-                    Виберіть приоритет
+                    {t("addtask.selectPriorityOption")} {/* Ключ: "addtask.selectPriorityOption" */}
                   </option>
 
                   {priorities.map((priority) => (
@@ -257,13 +258,13 @@ const AddTask = () => {
           </div>
         </div>
         <div className="image-container">
-          <div className="title">Project Images</div>
+          <div className="title">{t("addtask.projectImagesTitle")}</div> {/* Ключ: "addtask.projectImagesTitle" */}
           <div className="images">
             {selectedFiles.map((file, index) => (
               <img
                 key={index}
                 src={URL.createObjectURL(file)}
-                alt={`Preview ${index}`}
+                alt={`${t("addtask.preview")} ${index}`} // Ключ: "addtask.preview"
                 className="image-preview"
               />
             ))}
@@ -271,7 +272,7 @@ const AddTask = () => {
         </div>
 
         <div className="bottom">
-          <div className="title">Description</div>
+          <div className="title">{t("addtask.descriptionTitle")}</div> {/* Ключ: "addtask.descriptionTitle" */}
 
           <div className="description">
             <ReactQuill

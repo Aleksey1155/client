@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import axiosInstance from "../../axiosInstance";
-import { Link, useLocation } from "react-router-dom";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
@@ -11,16 +11,20 @@ import Comments from "../comments/Comments";
 import UpdatePost from "../updatepost/UpdatePost";
 import SocialProfile from "../../pages/socialprofile/SocialProfile";
 import "./post.scss";
+import i18n from "../../i18n";
 
 function Post({ post, userData }) {
-  const location = useLocation(); // Get the current location
-  // Check if the current path includes '/admin'
-  const isAdmin = location.pathname.includes("/admin");
+  const { t } = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
-  // console.log("User DATA INSIDE POST", userData);
-  // console.log("POST INSIDE POST", post);
+  const isAdmin = location.pathname.includes("/admin");
 
-  console.log("DATA POST ++", post);
+  const [commentsCount, setCommentsCount] = useState(0);
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const commentRef = useRef();
 
   const handleNavigation = () => {
     navigate(
@@ -33,22 +37,14 @@ function Post({ post, userData }) {
     );
   };
 
-  const [commentsCount, setCommentsCount] = useState(0);
-  const [commentOpen, setCommentOpen] = useState(false);
-  const [isOpen, setOpen] = useState(false);
-  const [liked, setLiked] = useState(false); // чи вже лайкнув
-  const [likesCount, setLikesCount] = useState(0); // кількість лайків
-
-  console.log("liked", liked);
-
   useEffect(() => {
     axiosInstance
       .get(`comments/count?postId=${post.id}`)
       .then((response) => {
         setCommentsCount(response.data.count);
       })
-      .catch((error) => console.error("Error fetching comments:", error));
-  }, [post.id]);
+      .catch((error) => console.error(t("post.errorFetchingComments"), error)); // Ключ: "post.errorFetchingComments"
+  }, [post.id, t]);
 
   useEffect(() => {
     async function fetchLikes() {
@@ -59,23 +55,20 @@ function Post({ post, userData }) {
             (like) => like.entityId === post.id && like.type === "post"
           );
           setLikesCount(postLikes.length);
-          console.log("postLikes", postLikes);
           const isLiked = postLikes.some(
             (like) => like.fromUserId === userData.id
           );
           setLiked(isLiked);
         }
       } catch (error) {
-        console.error("Error fetching likes:", error);
+        console.error(t("post.errorFetchingLikes"), error); // Ключ: "post.errorFetchingLikes"
         setLikesCount(0);
         setLiked(false);
       }
     }
 
     fetchLikes();
-  }, [post, userData.id]);
-
-  const commentRef = useRef();
+  }, [post, userData.id, t]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -96,26 +89,23 @@ function Post({ post, userData }) {
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this post?"
+      t("post.confirmDelete") // Ключ: "post.confirmDelete"
     );
     if (!confirmDelete) return;
 
     try {
-      // Видаляємо пост
       await axiosInstance.delete(`/posts/${id}`);
-
-      // Оновлюємо локальний стан, наприклад, можна змінити дані або переадресувати користувача
       window.location.reload();
     } catch (err) {
-      console.error("Error deleting post:", err);
+      console.error(t("post.errorDeletingPost"), err); // Ключ: "post.errorDeletingPost"
     }
   };
 
-  // Функція для форматування дати
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
+  
 
   const addLike = async () => {
     try {
@@ -125,11 +115,10 @@ function Post({ post, userData }) {
         type: "post",
         entityId: post.id,
       });
-
       setLiked(res.data.liked);
-      setLikesCount(res.data.count); // count повертається з бекенду
+      setLikesCount(res.data.count);
     } catch (err) {
-      console.error("Помилка при лайкуванні:", err);
+      console.error(t("post.errorLiking"), err); // Ключ: "post.errorLiking"
     }
   };
 
@@ -144,14 +133,13 @@ function Post({ post, userData }) {
                 onClick={handleNavigation}
                 style={{ cursor: "pointer", color: "inherit" }}
               >
-                <span className="name">Author of the post - {post.name}</span>
+                <span className="name">
+                  {t("post.author")} - {post.name} {/* Ключ: "post.author" */}
+                </span>
               </span>
-
               <span className="date">{formatDate(post.created_time)}</span>
             </div>
           </div>
-
-          {/* Показ тільки для власників посту && <= Якщо перша умова true, тоді виконується друга частина.*/}
 
           {(isAdmin || post.user_id === userData?.id) && (
             <div className="menuPost">
@@ -165,17 +153,15 @@ function Post({ post, userData }) {
                     className="menu_itemPost"
                     onClick={() => handleDelete(post.id)}
                   >
-                    Delete
+                    {t("post.delete")} {/* Ключ: "post.delete" */}
                   </li>
                   <li className="menu_itemPost" onClick={() => setOpen(false)}>
-                    Exit
+                    {t("post.exit")} {/* Ключ: "post.exit" */}
                   </li>
                 </ul>
               </nav>
             </div>
           )}
-
-          {/* -------------------------------- */}
         </div>
         <div className="contentPost">
           <p>{post.description}</p>
@@ -191,16 +177,16 @@ function Post({ post, userData }) {
             }}
           >
             {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-            {likesCount} likes
+            {likesCount} {t("post.likes")} {/* Ключ: "post.likes" */}
           </div>
 
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            {commentsCount} Comments
+            {commentsCount} {t("post.comments")} {/* Ключ: "post.comments" */}
           </div>
           <div className="item">
             <ShareOutlinedIcon />
-            12 Shares
+            12 {t("post.shares")} {/* Ключ: "post.shares" */}
           </div>
         </div>
         {commentOpen && (

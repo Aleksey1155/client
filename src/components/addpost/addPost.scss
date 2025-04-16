@@ -3,6 +3,7 @@
       color: #f31b1b;
       font-size: 30px;
       font-weight: bold;
+
     }
 
     .topContainerAddPost {
@@ -10,6 +11,7 @@
       display: flex;
       align-items: center;
       justify-content: space-around;
+      background: inherit;
 
       .closeAddPost {
         text-decoration: none;
@@ -17,7 +19,7 @@
         padding: 10px 10px;
         border: 1px solid #816005e0;
         border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        background: inherit;
         width: 150px;
         height: 35px;
         font-size: 15px;

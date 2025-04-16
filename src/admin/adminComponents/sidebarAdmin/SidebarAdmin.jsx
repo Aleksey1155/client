@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../../ThemeContext";
+import { useTranslation } from "react-i18next";
 import "./sidebarAdmin.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -19,6 +20,7 @@ import InterestsOutlinedIcon from "@mui/icons-material/InterestsOutlined";
 import UserProfile from "../../../pages/userprofile/UserProfile";
 
 function SidebarAdmin() {
+  const { t, i18n } = useTranslation();
   const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {}, [darkMode]);
@@ -42,77 +44,77 @@ function SidebarAdmin() {
         </div>
         <div className="center">
           <ul>
-            <p className="title">MAIN</p>
+          <p className="title">{t("main")}</p>
             <Link to="/admin">
               <li>
                 <HomeOutlinedIcon className="icon" />
-                <span>Home</span>
+                <span>{t("home")}</span>
               </li>
             </Link>
             <Link to="/admin/dashboard">
               <li>
                 <DashboardIcon className="icon" />
-                <span>Dashboard</span>
+                <span>{t("dashboard")}</span>
               </li>
             </Link>
             <Link to="/admin/social">
               <li>
                 <InterestsOutlinedIcon className="icon" />
-                <span>Social</span>
+                <span>{t("social")}</span>
               </li>
             </Link>
-            <p className="title">LIST</p>
+            <p className="title">{t("list")}</p>
             <Link to="/admin/users">
               <li>
                 <PersonOutlineIcon className="icon" />
-                <span>Users</span>
+                <span>{t("users")}</span>
               </li>
             </Link>
             <Link to="/admin/projects">
               <li>
                 <FolderSharedOutlinedIcon className="icon" />
-                <span>Projects</span>
+                <span>{t("sidebarProjects")}</span>
               </li>
             </Link>
             <Link to="/admin/tasks">
               <li>
                 <AssignmentOutlinedIcon className="icon" />
-                <span>Tasks</span>
+                <span>{t("sidebarTasks")}</span>
               </li>
             </Link>
             <Link to="/admin/assignments">
               <li>
                 <CheckBoxOutlinedIcon className="icon" />
-                <span>Assignments</span>
+                <span>{t("sidebarAssignments")}</span>
               </li>
             </Link>
-            <p className="title">USEFUL</p>
+            <p className="title">{t("useful")}</p>
             <Link to="/admin/statistics">
               <li>
                 <BarChartOutlinedIcon className="icon" />
-                <span>Statistics</span>
+                <span>{t("sidebarStatistics")}</span>
               </li>
             </Link>
             <li>
               <NotificationsNoneOutlinedIcon className="icon" />
-              <span>Notification</span>
+              <span>{t("notification")}</span>
             </li>
             <li>
               <AttachMoneyOutlinedIcon className="icon" />
-              <span>Finance</span>
+              <span>{t("finance")}</span>
             </li>
-            <p className="title">SERVICE</p>
+            <p className="title">{t("service")}</p>
             <li>
               <ListOutlinedIcon className="icon" />
-              <span>Logs</span>
+              <span>{t("logs")}</span>
             </li>
             <Link to="/admin/settings">
               <li>
                 <SettingsOutlinedIcon className="icon" />
-                <span>Settings</span>
+                <span>{t("sidebarSettings")}</span>
               </li>
             </Link>
-            <p className="title">USER</p>
+            <p className="title">{t("user")}</p>
 
             <li>
               <AccountBoxOutlinedIcon className="icon" />
@@ -121,7 +123,7 @@ function SidebarAdmin() {
 
             <li onClick={handleLogout}>
               <LogoutOutlinedIcon className="icon" />
-              <span>Logout</span>
+              <span>{t("logout")}</span>
             </li>
           </ul>
         </div>

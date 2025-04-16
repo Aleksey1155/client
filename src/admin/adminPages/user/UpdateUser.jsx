@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../../axiosInstance";
 import config from "../../../config";
-import axios from "axios";
+import { useTranslation } from "react-i18next";
+
 import "./updateuser.scss";
 
-const hostUrl = "http://localhost:3001";
-
 const UpdateUser = () => {
+  const { t } = useTranslation();
   const [user, setUser] = useState({
     email: "",
-
     name: "",
     phone: "",
     img: "",
@@ -27,9 +26,6 @@ const UpdateUser = () => {
   const filePicker = useRef(null);
 
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const userId = location.pathname.split("/")[2];
-
   const { id: userId } = useParams();
 
   useEffect(() => {
@@ -72,7 +68,6 @@ const UpdateUser = () => {
     e.preventDefault();
     try {
       await axiosInstance.put(`/users/${userId}`, user);
-
       navigate(`/admin/users/${userId}`);
     } catch (err) {
       console.log(err);
@@ -85,11 +80,9 @@ const UpdateUser = () => {
     setSelectedFile(file);
   };
 
-  //*********************************************************** */
-
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please select a file");
+      alert(t("updateuser.selectFileAlert")); // Ключ: "updateuser.selectFileAlert"
       return;
     }
 
@@ -107,38 +100,12 @@ const UpdateUser = () => {
       console.log("Server Response:", data); // Додано для перевірки
 
       setUploaded(data);
-
       window.location.reload();
     } catch (error) {
       console.error("Upload error:", error);
+      alert(t("updateuser.uploadErrorAlert")); // Ключ: "updateuser.uploadErrorAlert"
     }
   };
-
-  // const handleUpload = async () => {
-  //   if (!selectedFile) {
-  //     alert("Please select a file");
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append("files", selectedFile);
-  //   formData.append("userId", userId); // Передаємо userId на сервер
-
-  //   const res = await fetch(`${hostUrl}/upload_user`, {
-  //     method: "POST",
-  //     body: formData,
-  //   });
-
-  //   console.log("Selected File: ", selectedFile);
-
-  //   const data = await res.json();
-  //   setUploaded(data);
-  //   // // Затримка на 1 секунду перед оновленням сторінки
-  //   // setTimeout(() => {
-  //   //   navigate(0); // Перенаправляємо на ту ж сторінку для оновлення
-  //   // }, 1000); // 1000 мс = 1 секунда
-  // };
-  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const handlePick = () => {
     filePicker.current.click();
@@ -148,15 +115,17 @@ const UpdateUser = () => {
     <div className="updateuser">
       <div className="updateuserContainer">
         <div className="top">
-          <p className="title">Update user</p>
-          <button className="button" onClick={handleClick}>
-            Редагувати
+          <p className="title">{t("updateuser.title")}</p> {/* Ключ: "updateuser.title" */}
+          <button className="buttonUpdateUser" onClick={handleClick}>
+            {t("updateuser.editButton")} {/* Ключ: "updateuser.editButton" */}
           </button>
         </div>
         <div className="bottom">
           <div className="left">
             <div>
-              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>
+                {t("updateuser.addFileButton")} {/* Ключ: "updateuser.addFileButton" */}
+              </button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -164,24 +133,28 @@ const UpdateUser = () => {
                 onChange={handleFileChange}
                 accept="image/*, .png, .jpg, .web"
               />
-              <button className="buttonAddFile" onClick={handleUpload}>Upload now!</button>
+              <button className="buttonAddFile" onClick={handleUpload}>
+                {t("updateuser.uploadNowButton")} {/* Ключ: "updateuser.uploadNowButton" */}
+              </button>
             </div>
 
-            {!selectedFile && <img className="noimage" src={user.img} alt="" />}
+            {!selectedFile && (
+              <img className="noimage" src={user.img} alt={t("updateuser.noImageAlt")} /> /* Ключ: "updateuser.noImageAlt" */
+            )}
 
             {selectedFile && !uploaded && (
               <div className="selectedFile">
                 <div>
                   <ul>
-                    <li>Name: {selectedFile.name}</li>
-                    <li>Type: {selectedFile.type}</li>
-                    <li>Size: {selectedFile.size}</li>
+                    <li>{t("updateuser.fileName")}: {selectedFile.name}</li> {/* Ключ: "updateuser.fileName" */}
+                    <li>{t("updateuser.fileType")}: {selectedFile.type}</li> {/* Ключ: "updateuser.fileType" */}
+                    <li>{t("updateuser.fileSize")}: {selectedFile.size}</li> {/* Ключ: "updateuser.fileSize" */}
                   </ul>
                 </div>
                 <div>
                   <img
                     src={URL.createObjectURL(selectedFile)}
-                    alt="Preview"
+                    alt={t("updateuser.previewAlt")} // Ключ: "updateuser.previewAlt"
                     className="image-preview"
                   />
                 </div>
@@ -194,34 +167,19 @@ const UpdateUser = () => {
                 <img
                   className="image"
                   src={uploaded.uploadedFiles[0].filePath}
-                  alt=""
+                  alt={t("updateuser.uploadedImageAlt")} // Ключ: "updateuser.uploadedImageAlt"
                 />
               </div>
             )}
-
-            {/* ------------------------ Для Cloudinary ------------------- */}
-
-            {/* {uploaded &&
-              uploaded.uploadedFiles &&
-              uploaded.uploadedFiles.length > 0 && (
-                <div>
-                  <h2>{uploaded.uploadedFiles[0].fileName}</h2>
-                  <img
-                    className="image"
-                    src={uploaded.uploadedFiles[0].filePath}
-                    alt=""
-                  />
-                </div>
-              )} */}
           </div>
           <div className="right">
             <form>
               <div className="formInput">
-                <label>Username</label>
+                <label>{t("updateuser.usernameLabel")}</label> {/* Ключ: "updateuser.usernameLabel" */}
                 <input
                   className="input"
                   type="text"
-                  placeholder="name"
+                  placeholder={t("updateuser.usernamePlaceholder")} // Ключ: "updateuser.usernamePlaceholder"
                   onChange={handleChange}
                   name="name"
                   value={user.name}
@@ -229,11 +187,11 @@ const UpdateUser = () => {
               </div>
 
               <div className="formInput">
-                <label>Email</label>
+                <label>{t("updateuser.emailLabel")}</label> {/* Ключ: "updateuser.emailLabel" */}
                 <input
                   className="input"
                   type="text"
-                  placeholder="email"
+                  placeholder={t("updateuser.emailPlaceholder")} // Ключ: "updateuser.emailPlaceholder"
                   onChange={handleChange}
                   name="email"
                   value={user.email}
@@ -241,11 +199,11 @@ const UpdateUser = () => {
               </div>
 
               <div className="formInput">
-                <label>Phone</label>
+                <label>{t("updateuser.phoneLabel")}</label> {/* Ключ: "updateuser.phoneLabel" */}
                 <input
                   className="input"
                   type="text"
-                  placeholder="phone"
+                  placeholder={t("updateuser.phonePlaceholder")} // Ключ: "updateuser.phonePlaceholder"
                   onChange={handleChange}
                   name="phone"
                   value={user.phone}
@@ -253,29 +211,29 @@ const UpdateUser = () => {
               </div>
 
               <div className="formInput">
-                <label>Description</label>
+                <label>{t("updateuser.descriptionLabel")}</label> {/* Ключ: "updateuser.descriptionLabel" */}
                 <textarea
                   className="textarea"
                   type="text"
-                  placeholder="опис"
+                  placeholder={t("updateuser.descriptionPlaceholder")} // Ключ: "updateuser.descriptionPlaceholder"
                   onChange={handleChange}
                   name="descr"
                   value={user.descr}
                 />
               </div>
               <div className="formInput">
-                <label>Photo</label>
+                <label>{t("updateuser.photoLabel")}</label> {/* Ключ: "updateuser.photoLabel" */}
                 <input
                   className="input"
                   type="text"
-                  placeholder="photo"
+                  placeholder={t("updateuser.photoPlaceholder")} // Ключ: "updateuser.photoPlaceholder"
                   onChange={handleChange}
                   name="img"
                   value={user.img}
                 />
               </div>
               <div className="formInput">
-                <label>Roles</label>
+                <label>{t("updateuser.rolesLabel")}</label> {/* Ключ: "updateuser.rolesLabel" */}
                 <select
                   className="select"
                   name="role_id"
@@ -283,7 +241,7 @@ const UpdateUser = () => {
                   value={user.role_id}
                 >
                   <option value="" disabled>
-                    Виберіть посаду
+                    {t("updateuser.selectRole")} {/* Ключ: "updateuser.selectRole" */}
                   </option>
                   {roles.map((role) => (
                     <option key={role.id} value={role.id}>
@@ -293,7 +251,7 @@ const UpdateUser = () => {
                 </select>
               </div>
               <div className="formInput">
-                <label>Jobs</label>
+                <label>{t("updateuser.jobsLabel")}</label> {/* Ключ: "updateuser.jobsLabel" */}
                 <select
                   className="select"
                   name="job_id"
@@ -301,7 +259,7 @@ const UpdateUser = () => {
                   value={user.job_id}
                 >
                   <option value="" disabled>
-                    Виберіть посаду
+                    {t("updateuser.selectJob")} {/* Ключ: "updateuser.selectJob" */}
                   </option>
                   {jobs.map((job) => (
                     <option key={job.id} value={job.id}>

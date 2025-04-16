@@ -7,12 +7,21 @@ import "./updatePost.scss";
 
 const customStyles = {
   content: {
-    top: "350px",
-    left: "40%",
-    right: "700px",
-    bottom: "-10%",
-    marginRight: "-50%",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    
+    backgroundColor: "var(--block-bg) !important", // Темний фон
+    color: "var(--header-tex) !important", // Білий текст
+    border: "1px solid #444", // Темна рамка
+    borderRadius: "10px",
+    padding: "20px",
     transform: "translate(-50%, -50%)",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)", // Темний прозорий фон
+    zIndex: 1000,
   },
 };
 
@@ -142,7 +151,7 @@ function UpdatePost({ post, userData }) {
             <div className="bottomUpdatePost">
               <div className="leftUpdatePost">
                 <div>
-                  <button onClick={handlePick}>Add file</button>
+                  <button className="buttonAddFile" onClick={handlePick}>Add file</button>
                   <input
                     className="hiddenUpdatePost"
                     ref={filePicker}
@@ -150,7 +159,7 @@ function UpdatePost({ post, userData }) {
                     onChange={handleFileChange}
                     accept="image/*, .png, .jpg, .web"
                   />
-                  <button onClick={handleUpload}>Upload now!</button>
+                  <button className="buttonAddFile" onClick={handleUpload}>Upload now!</button>
                 </div>
 
                 {!selectedFile && (
@@ -191,7 +200,7 @@ function UpdatePost({ post, userData }) {
               {/* КІНЕЦЬ Додавання зображення  */}
             </div>
             <div className="textareaUpdatePost">
-              <textarea
+              <textarea className="textarea"
                 type="text"
                 placeholder="description"
                 onChange={handleChange}

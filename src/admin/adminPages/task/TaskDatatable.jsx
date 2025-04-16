@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { useParams, Link } from "react-router-dom";
 import "./taskdatatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
+import { useTranslation } from "react-i18next";
 
 // Функція для форматування дати
 const formatDate = (dateString) => {
@@ -10,41 +11,63 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString(); // Форматування дати в локальному форматі
 };
 
-
-const taskColumns = [
-  { field: "task_id", headerName: "TaskId", width: 100 },
-  {
-    field: "user_name",
-    headerName: "User",
-    width: 300,
-    renderCell: (params) => {
-      return params.row.user_name ? params.row.user_name : "Unknown";
-    },
-  },
-  {
-    field: "assigned_date",
-    headerName: "Assignment Date",
-    width: 250,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">
-          {formatDate(params.row.assigned_date)}
-        </div>
-      );
-    },
-  },
-];
-
 function TaskDatatable({ taskId }) {
+  const { t } = useTranslation();
   const [assignment, setAssignment] = useState([]);
 
   // Перевірка чи це сторінка адміністратора
   const isAdmin = window.location.pathname.includes("/admin");
 
+  const columnsConfig = [
+    { field: "task_id", headerName: t("taskdatatable.taskId"), width: 100 }, // Ключ: "taskdatatable.taskId"
+    {
+      field: "user_name",
+      headerName: t("taskdatatable.user"), // Ключ: "taskdatatable.user"
+      width: 300,
+      renderCell: (params) => {
+        return params.row.user_name ? params.row.user_name : t("taskdatatable.unknown"); // Ключ: "taskdatatable.unknown"
+      },
+    },
+    {
+      field: "assigned_date",
+      headerName: t("taskdatatable.assignmentDate"), // Ключ: "taskdatatable.assignmentDate"
+      width: 250,
+      renderCell: (params) => (
+        <div className="cellWithImg">{formatDate(params.row.assigned_date)}</div>
+      ),
+    },
+  ];
+
+  const actionColumnConfig = [
+    {
+      field: "action",
+      headerName: t("taskdatatable.action"), // Ключ: "taskdatatable.action"
+      width: 200,
+      renderCell: (params) => (
+        <div className="cellAction">
+          {/* Link з динамічним роутингом */}
+          <Link
+            to={`/admin/update_assignment/${params.row.id}`}
+            style={{ textDecoration: "none" }}
+          >
+            <div className="view-Button">{t("taskdatatable.details")}</div> {/* Ключ: "taskdatatable.details" */}
+          </Link>
+
+          <button
+            className="deleteButton"
+            onClick={() => handleDelete(params.row.id)}
+          >
+            {t("taskdatatable.delete")} {/* Ключ: "taskdatatable.delete" */}
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   useEffect(() => {
     const fetchAllAssignment = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/assignments");
+        const res = await axiosInstance.get("/assignments");
         // Фільтрація призначень для цього завдання
         setAssignment(
           res.data.filter((assignment) => assignment.task_id === Number(taskId))
@@ -59,11 +82,11 @@ function TaskDatatable({ taskId }) {
 
   const handleDelete = async (assignmentId) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити це призначення?"
+      t("taskdatatable.deleteConfirmation") // Ключ: "taskdatatable.deleteConfirmation"
     );
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3001/assignments/${assignmentId}`);
+        await axiosInstance.delete(`/assignments/${assignmentId}`);
         setAssignment(
           assignment.filter((assignment) => assignment.id !== assignmentId)
         );
@@ -73,40 +96,14 @@ function TaskDatatable({ taskId }) {
     }
   };
 
-  const actionColumn = [
-    {
-      field: "action",
-      headerName: "Action",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-            {/* Link з динамічним роутингом */}
-            <Link
-              to={`/admin/update_assignment/${params.row.id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="view-Button">Деталі</div>
-            </Link>
-
-            <button
-              className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
-            >
-              Видалити
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
-
   // Умовно додаємо actionColumn лише для адміністратора
-  const columns = isAdmin ? taskColumns.concat(actionColumn) : taskColumns;
+  const columns = isAdmin
+    ? columnsConfig.concat(actionColumnConfig)
+    : columnsConfig;
 
   return (
     <div>
-      <div className="projectTitle">Assignment</div>
+      <div className="projectTitle">{t("taskdatatable.assignmentTitle")}</div> {/* Ключ: "taskdatatable.assignmentTitle" */}
 
       <div className="datatable">
         <DataGrid
@@ -118,7 +115,8 @@ function TaskDatatable({ taskId }) {
           checkboxSelection
           getRowId={(row) => row.id} // Вказуємо, що id йде з поля id
           sx={{
-            "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
+            "--DataGrid-containerBackground":
+              "var(--DataGrid-containerBackground) !important",
           }}
         />
       </div>
@@ -127,6 +125,3 @@ function TaskDatatable({ taskId }) {
 }
 
 export default TaskDatatable;
-
-
-

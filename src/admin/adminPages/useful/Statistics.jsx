@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import "./statistics.scss";
 import axiosInstance from "../../../axiosInstance";
 import Graphs from "../../adminComponents/graphs/Graphs";
+import { useTranslation } from "react-i18next";
 
 function Statistics() {
+  const { t } = useTranslation();
   const [data, setData] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,7 +28,7 @@ function Statistics() {
     <div className="statistics">
       <div className="statistics-container">
         <div className="statCatContaner">
-          <h2> STATISTICS</h2>
+          <h2>{t("statistics.title")}</h2> {/* Ключ: "statistics.title" */}
           <div className="statCatWidget">
             <div className="statCatList">
               {data.length > 0 ? (
@@ -42,7 +45,7 @@ function Statistics() {
                         <img
                           className="statCard5"
                           src={item.img}
-                          alt={item.name || "Image"}
+                          alt={item.name || t("statistics.imageAlt")} // Ключ: "statistics.imageAlt"
                         />
                         <div className="statCard">{item.email}</div>
                         <div className="statCard">{item.phone}</div>
@@ -52,12 +55,10 @@ function Statistics() {
                   );
                 })
               ) : (
-                <p>No data available</p>
+                <p>{t("statistics.noData")}</p> // Ключ: "statistics.noData"
               )}
             </div>
           </div>
-
-          {/* {JSON.stringify(data)} */}
 
           <div className="charts">
             <Graphs selectedItem={selectedItem} />

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import axiosInstance from "../../axiosInstance";
 import "./social.scss";
 import Stories from "../../components/stories/Stories";
@@ -7,6 +8,7 @@ import Posts from "../../components/posts/Posts";
 import GeneralChat from "../../components/generalchat/GeneralChat";
 
 function Social() {
+   const { t } = useTranslation();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true); // Додано стан завантаження
     const navigate = useNavigate();
@@ -39,17 +41,11 @@ function Social() {
       <div className="social">
         
         <div className="containerSocial">
-        <span className="title">Social Page</span>
+        <span className="title">{t("socialPage")}</span>
           <Stories userId = {userData.id} />
           <Posts userData = {userData} />
        
-        <div className="user">
-          <p> Welcome, {userData.name}!</p>
-          <p>
-            Email: {userData.email} ID: {userData.id}
-          </p>
-          {/* Додаткова інформація про користувача */}
-        </div>
+        
         </div>
           <GeneralChat userData = {userData} />
           

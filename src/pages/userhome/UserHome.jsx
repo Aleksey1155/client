@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import axiosInstance from "../../axiosInstance";
 import "./userHome.scss";
 import News from "../../components/news/News";
@@ -7,6 +8,7 @@ import CalendarModal from "../../components/calendarmodal/CalendarModal";
 import Kanban from "../../components/kanban/Kanban";
 
 function UserHome() {
+  const { t, i18n } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [homeData, setHomeData] = useState([]);
 
@@ -89,11 +91,13 @@ function UserHome() {
     tasks: Object.values(project.tasks),
   }));
 
+ 
+
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
-
+  
   // Функція для перевірки, чи є дата кінця завдання близькою до поточної дати (2 дні)
   const isCloseToEnd = (endDate) => {
     const today = new Date();
@@ -131,7 +135,7 @@ function UserHome() {
   return (
     <div className="userHome">
       <div className="containerUserHome">
-        <span className="title">Home Page</span>
+        <span className="title">{t("homePage")}</span>
         <div className="top">
           <div className="topCalendar">
             <CalendarModal tasks={uniqueTasks} />
@@ -145,11 +149,11 @@ function UserHome() {
                           : `/messenger`
                       }>
           <div className="topDiscussions">
-            <span className="titleDiscussions">Discussions</span>
+            <span className="titleDiscussions">{t("messenger")}</span>
           </div>
           </Link>
           <div className="topFiles">
-            <span className="title">Files</span>
+            <span className="title">{t("files")}</span>
           </div>
         </div>
 
@@ -256,13 +260,7 @@ function UserHome() {
             </div>
           ))}
 
-        <div className="user">
-          <p>Welcome, {userData?.name}!</p>
-          <p>
-            Email: {userData?.email} ID: {userData?.id}
-          </p>
-          <p>User Role: {userData?.role_name}</p>
-        </div>
+        
       </div>
       <News />
     </div>

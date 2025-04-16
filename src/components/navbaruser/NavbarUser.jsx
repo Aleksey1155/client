@@ -3,7 +3,9 @@ import { useSocket } from "../../SocketContext"; //
 import { ThemeContext } from "../../ThemeContext";
 import { useLocation } from "react-router-dom"; // Імпортуємо useLocation
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./navbarUser.scss";
+import SearchBar from "../../components/searchBar/SearchBar";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -15,6 +17,7 @@ import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import axiosInstance from "../../axiosInstance";
 
 function NavbarUser({ userData }) {
+  const { t, i18n } = useTranslation();
   const socket = useSocket();
   const [unreadCount, setUnreadCount] = useState(0); // <-- число
   const location = useLocation(); // Отримуємо поточне розташування маршруту
@@ -24,16 +27,15 @@ function NavbarUser({ userData }) {
 
   useEffect(() => {
     if (!socket) return;
-  
+
     socket.onAny((event, ...args) => {
       console.log("📡 SOCKET EVENT:", event, args);
     });
-  
+
     return () => {
       socket.offAny();
     };
   }, [socket]);
-  
 
   useEffect(() => {
     const fetchUnreadCount = async () => {
@@ -52,12 +54,12 @@ function NavbarUser({ userData }) {
     fetchUnreadCount();
   }, [userData]);
 
- useEffect(() => {
-     if (userData?.id && socket) {
-       socket.emit("joinRoom", userData.id);
-       // console.log("Joined socket room:++++++", userData.id);
-     }
-   }, [userData]);
+  useEffect(() => {
+    if (userData?.id && socket) {
+      socket.emit("joinRoom", userData.id);
+      // console.log("Joined socket room:++++++", userData.id);
+    }
+  }, [userData]);
 
   // console.log("userData.id////", userData.id );
 
@@ -68,7 +70,7 @@ function NavbarUser({ userData }) {
     socket.on("notification", (notif) => {
       console.log("Received notification USER NAVBAR +++:", notif);
       if (Array.isArray(notif)) {
-        notif.forEach(n => {
+        notif.forEach((n) => {
           if (n.receiverId === userData.id) {
             setUnreadCount((prev) => prev + 1);
           }
@@ -77,7 +79,6 @@ function NavbarUser({ userData }) {
         setUnreadCount((prev) => prev + 1);
       }
     });
-    
 
     return () => {
       socket.off("notification");
@@ -86,32 +87,28 @@ function NavbarUser({ userData }) {
 
   useEffect(() => {
     if (!userData?.id || !socket) return;
-  
+
     socket.on("message", (msgs) => {
       console.log("Received message USER NAVBAR +++:", msgs);
-      
+
       // Логування кожного повідомлення
       msgs.forEach((msg, index) => {
         console.log(`Message ${index}:`, msg);
       });
-    
+
       const newUnread = msgs.filter(
-        (msg) =>
-          msg.receiverId === userData.id &&
-          !msg.isRead
+        (msg) => msg.receiverId === userData.id && !msg.isRead
       ).length;
-    
+
       if (newUnread > 0) {
         setUnreadCount((prev) => prev + newUnread);
       }
     });
-    
-  
+
     return () => {
       socket.off("message");
     };
   }, [userData, socket]);
-  
 
   useEffect(() => {
     if (!userData?.id || !socket) return;
@@ -133,6 +130,10 @@ function NavbarUser({ userData }) {
     };
   }, [userData]);
 
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   // console.log("unreadCount+++++", unreadCount)
 
   // Очищення пошукового тексту при зміні маршруту
@@ -140,14 +141,19 @@ function NavbarUser({ userData }) {
   return (
     <div className="navbar">
       <div className="wrapper">
-        <div className="search">
-          <input type="text" placeholder="Search..." />
-          <SearchOutlinedIcon />
-        </div>
+      <div className="search">
+              {userData.name}
+            </div>
+        {t("welcome")}
         <div className="item">
           <div className="item">
             <LanguageOutlinedIcon className="icon" />
-            English
+            <button className="button" onClick={() => changeLanguage("en")}>
+              EN
+            </button>
+            <button className="button" onClick={() => changeLanguage("uk")}>
+              UA
+            </button>
           </div>
           <div
             className="item"

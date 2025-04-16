@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSocket } from "../../SocketContext";
+import { useTranslation } from "react-i18next";
 import axiosInstance from "../../axiosInstance";
 import io from "socket.io-client";
 import "./message.scss";
 
-
 function Message({ userData, selectedUser }) {
   const socket = useSocket();
+  const { t } = useTranslation();
 
-  
-  
-  if (!selectedUser) {
-    return <div className="noSelectedUser">👈 Вибери співрозмовника</div>;
-  }
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [replyTo, setReplyTo] = useState(null);
@@ -20,6 +16,8 @@ function Message({ userData, selectedUser }) {
   const chatId = selectedUser
     ? [selectedUser.id, userData.id].sort().join("_")
     : null;
+
+  
 
   // Функція для форматування дати
   const formatDate = (timestamp) => {
@@ -73,20 +71,18 @@ function Message({ userData, selectedUser }) {
 
     const markMessagesAsRead = async () => {
       if (!chatId || !userData?.id || !socket) return;
-  
+
       try {
         await axiosInstance.put(`/api/messages/read/${chatId}/${userData.id}`);
       } catch (err) {
         console.error("Failed to mark messages as read", err);
       }
     };
-  
+
     markMessagesAsRead();
 
     fetchMessages();
   }, [chatId, userData]);
-
- 
 
   const handleSendMessage = async () => {
     try {
@@ -122,10 +118,10 @@ function Message({ userData, selectedUser }) {
       console.error("Error sending message:", error);
     }
   };
-  
+
   const handleEditMessage = async (messageId, newText) => {
     try {
-      if (!messageId || !socket ) {
+      if (!messageId || !socket) {
         console.error("Error: Message ID is undefined");
         return;
       }
@@ -159,11 +155,9 @@ function Message({ userData, selectedUser }) {
 
   const groupedMessages = groupMessagesByDate(messages);
 
-  
   useEffect(() => {
     console.log("Message component socket:", socket);
   }, [socket]);
-
 
   useEffect(() => {
     socket.on("message", (msg) => {
@@ -212,7 +206,7 @@ function Message({ userData, selectedUser }) {
           prevMessages
             .map((msg) =>
               msg.replyTo && msg.replyTo.id === messageId
-                ? { ...msg, replyTo: "Deleted" } // Позначаємо, що відповідь була видалена
+                ? { ...msg, replyTo: t("message.deleted") } // Позначаємо, що відповідь була видалена // Ключ: "message.deleted"
                 : msg
             )
             .filter((msg) => msg.id !== messageId) // Видаляємо саме повідомлення
@@ -224,31 +218,35 @@ function Message({ userData, selectedUser }) {
       socket.off("message_updated");
       socket.off("message_deleted");
     };
-  }, [chatId]);
+  }, [chatId, socket, t]);
 
   useEffect(() => {
     if (!chatId || !userData?.id || !socket) return;
-  
+
     const markMessagesAsRead = async () => {
       try {
         await axiosInstance.put(`/api/messages/read/${chatId}/${userData.id}`);
-        
-        //  Тут  повідомляємо всіх через сокет
+
+        //  Тут  повідомляємо всіх через сокет
         socket.emit("markMessagesAsRead", {
           chatId,
-          userId: userData.id
+          userId: userData.id,
         });
-  
       } catch (err) {
         console.error("Failed to mark messages as read", err);
       }
     };
-  
-    markMessagesAsRead();
-  }, [chatId, userData]);
-  
 
-  
+    markMessagesAsRead();
+  }, [chatId, userData, socket]);
+
+  if (!selectedUser) {
+    return (
+      <div className="noSelectedUser">
+        <h2>{t("message.chooseConversation")}</h2> {/* Ключ: "message.chooseConversation" */}
+      </div>
+    );
+  }
 
   return (
     <div className="messageHome">
@@ -291,25 +289,35 @@ function Message({ userData, selectedUser }) {
                         {/* <span className="userName">{message.userName}</span> */}
                         <div className="messageTextHome">
                           {message.replyTo ? (
-                            message.replyTo === "Deleted" ? (
+                            message.replyTo === t("message.deleted") ? ( // Ключ: "message.deleted"
                               <div className="replyTagHome">
-                                | ↳ Message deleted
+                                | ↳ {t("message.messageDeleted")} {/* Ключ: "message.messageDeleted" */}
                               </div>
                             ) : typeof message.replyTo === "object" ? (
                               <div className="replyTagHome">
-                                | ↳{" "}
-                                {message.replyTo.message.length > 40
-                                  ? message.replyTo.message.slice(0, 40) + "..."
-                                  : message.replyTo.message}
+                                {/* */}
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html:
+                                      "| ↳ " +
+                                      (message.replyTo.message.length > 40
+                                        ? message.replyTo.message.slice(0, 40) +
+                                          "..."
+                                        : message.replyTo.message),
+                                  }}
+                                />
                               </div>
                             ) : (
                               <div className="replyTagHome">
-                                | ↳ Loading reply...
+                                | ↳ {t("message.loadingReply")}... {/* Ключ: "message.loadingReply" */}
                               </div>
                             )
                           ) : null}
-
-                          {message.message}
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: message.message,
+                            }}
+                          />
                         </div>
                       </div>
 
@@ -325,7 +333,7 @@ function Message({ userData, selectedUser }) {
                               onClick={() =>
                                 handleEditMessage(
                                   message.id,
-                                  prompt("Edit:", message.message)
+                                  prompt(t("message.editPrompt"), message.message) // Ключ: "message.editPrompt"
                                 )
                               }
                             >
@@ -359,9 +367,9 @@ function Message({ userData, selectedUser }) {
         {/* <div className="messageBottom">2 хв тому</div> */}
         {replyTo && (
           <p>
-            Replying to message: "
+            {t("message.replyingTo")} "{/* Ключ: "message.replyingTo" */}
             {messages.find((msg) => msg.id === replyTo)?.message ||
-              "Loading..."}
+              t("message.loading")} {/* Ключ: "message.loading" */}
             "
           </p>
         )}
@@ -374,7 +382,7 @@ function Message({ userData, selectedUser }) {
             onChange={(e) => setNewMessage(e.target.value)}
           />
           <button className="send-messageHome" onClick={handleSendMessage}>
-            Send
+            {t("message.send")} {/* Ключ: "message.send" */}
           </button>
         </div>
       </div>

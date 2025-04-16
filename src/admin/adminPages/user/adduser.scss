@@ -101,17 +101,17 @@
           
           }
 
-          .button {
+          .buttonAddUser {
             text-decoration: none;
             color: #2fa90ae0;
             padding: 10px 10px;
             border: 1px solid #228105e0;
             border-radius: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            background: inherit;
             width: 150px;
           }
 
-          .button:hover {
+          .buttonAddUser:hover {
             background-color: #2fa90ae0;
             color: white;
           }

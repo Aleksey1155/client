@@ -11,6 +11,7 @@ import sourceData from "/src/assets/sourceData.json";
 import { grey } from "@mui/material/colors";
 import Competences from "../competences/Competences";
 import TaskScatterPlot from "./TaskScatterPlot";
+import { useTranslation } from "react-i18next";
 
 Chart.register(...registerables);
 
@@ -23,6 +24,7 @@ Chart.defaults.plugins.title.font.size = 20;
 Chart.defaults.plugins.title.color = "#555";
 
 const Graphs = ({ selectedItem }) => {
+  const { t } = useTranslation();
   const [data, setData] = useState([]);
   const [communication, setCommunication] = useState([]);
 
@@ -102,7 +104,7 @@ const Graphs = ({ selectedItem }) => {
     <div className="canvas-container">
       <div className="selectedItemInfo"></div>
 
-      <h2>Key Performance Indicators</h2>
+      <h1>{t("graphs.kpiTitle")}</h1> {/* Ключ: "graphs.kpiTitle" */}
       <Competences
         userData={data}
         selectedItem={selectedItem}
@@ -113,14 +115,14 @@ const Graphs = ({ selectedItem }) => {
           <Bar
             data={{
               labels: [
-                "Усі завдання",
-                "Виконані",
-                "Незавершені",
-                "Прострочені",
+                t("graphs.allTasks"), // Ключ: "graphs.allTasks"
+                t("graphs.completedTasks"), // Ключ: "graphs.completedTasks"
+                t("graphs.incompleteTasks"), // Ключ: "graphs.incompleteTasks"
+                t("graphs.overdueTasks"), // Ключ: "graphs.overdueTasks"
               ],
               datasets: [
                 {
-                  label: "Кількість завдань",
+                  label: t("graphs.taskCount"), // Ключ: "graphs.taskCount"
                   data: [
                     data?.length || 0,
                     data?.filter((task) => task.actual_end_date !== null)
@@ -149,10 +151,10 @@ const Graphs = ({ selectedItem }) => {
             options={{
               plugins: {
                 title: {
-                  text: `Tasks Statistic ${
+                  text: `${t("graphs.tasksStatistic")} ${ // Ключ: "graphs.tasksStatistic"
                     selectedItem?.name ||
                     selectedItem?.title ||
-                    "невідомого користувача"
+                    t("graphs.unknownUser") // Ключ: "graphs.unknownUser"
                   }`,
                   color: "#777",
                 },
@@ -168,26 +170,26 @@ const Graphs = ({ selectedItem }) => {
             }}
           />
         </div>
-        {/* ++++++++++++++++++++++++++  communicationCard start  +++++++++++++++++++++++++++++++++++++++++ */}
+        {/* ++++++++++++++++++++++++++   communicationCard start   +++++++++++++++++++++++++++++++++++++++++ */}
         <div className="communicationCard">
           <Line
             data={{
               labels,
               datasets: [
                 {
-                  label: "Posts",
+                  label: t("graphs.posts"), // Ключ: "graphs.posts"
                   data: postsData, // Кількість постів у кожний день
                   backgroundColor: "#064FF0",
                   borderColor: "#064FF0",
                 },
                 {
-                  label: "Comments",
+                  label: t("graphs.comments"), // Ключ: "graphs.comments"
                   data: commentsData, // Кількість коментарів у кожний день
                   backgroundColor: "#FF3030",
                   borderColor: "#FF3030",
                 },
                 {
-                  label: "Messages",
+                  label: t("graphs.messages"), // Ключ: "graphs.messages"
                   data: messagesData, // Кількість повідомлень у кожний день
                   backgroundColor: "#26ca17ba",
                   borderColor: "#26ca17ba",
@@ -203,8 +205,8 @@ const Graphs = ({ selectedItem }) => {
               plugins: {
                 title: {
                   display: true,
-                  text: `Communication of ${
-                    selectedItem?.name || selectedItem?.title || "unknown user"
+                  text: `${t("graphs.communication")} ${ // Ключ: "graphs.communication"
+                    selectedItem?.name || selectedItem?.title || t("graphs.unknownUser") // Ключ: "graphs.unknownUser"
                   }`,
                   color: "#777",
                 },
@@ -219,18 +221,18 @@ const Graphs = ({ selectedItem }) => {
           />
         </div>
 
-        {/* ++++++++++++++++++++++++++  communicationCard end  +++++++++++++++++++++++++++++++++++++++++ */}
+        {/* ++++++++++++++++++++++++++   communicationCard end   +++++++++++++++++++++++++++++++++++++++++ */}
       </div>
 
       <div className="ratingTimeCard">
         <Line
           data={{
             labels: filteredRatingData.map((task) =>
-              new Date(task.actual_end_date).toLocaleDateString("uk-UA")
+              new Date(task.actual_end_date).toLocaleDateString()
             ),
             datasets: [
               {
-                label: "Rating Task",
+                label: t("graphs.taskRating"), // Ключ: "graphs.taskRating"
                 data: filteredRatingData.map((task) => task.task_rating),
                 borderColor: "#26ca17ba",
                 backgroundColor: "#26ca17ba",
@@ -259,10 +261,10 @@ const Graphs = ({ selectedItem }) => {
             },
             plugins: {
               title: {
-                text: `Rating Tasks of ${
+                text: `${t("graphs.ratingTasks")} ${ // Ключ: "graphs.ratingTasks"
                   selectedItem?.name ||
                   selectedItem?.title ||
-                  "невідомого користувача"
+                  t("graphs.unknownUser") // Ключ: "graphs.unknownUser"
                 }`,
                 color: "#777",
                 font: {
@@ -275,52 +277,9 @@ const Graphs = ({ selectedItem }) => {
           }}
         />
       </div>
-      {/* <div className="dateDeviationCard">
-        <Line
-          data={{
-            labels: filteredRatingData.map((task) =>
-              new Date(task.end_date).toLocaleDateString("uk-UA")
-            ),
-            datasets: [
-              {
-                label: "Deviation from Planned Date",
-                data: filteredRatingData.map((task) => task.task_rating),
-                borderColor: "#26ca17ba",
-                backgroundColor: "#26ca17ba",
-                tension: 0.3,
-              },
-            ],
-          }}
-          options={{
-           
-            y: {
-              type: "linear",
-              min: 0,
-              max: 2,
-              ticks: {
-                stepSize: 1,
-              },
-            },
-            plugins: {
-              title: {
-                text: `Deviation from Planned Date of ${
-                  selectedItem?.name ||
-                  selectedItem?.title ||
-                  "невідомого користувача"
-                }`,
-                color: "#777",
-                font: {
-                  size: 20, // Так менять размер шрифта!!!!!!!!!!!!!!!
-                  weight: "bold", // Font weight
-                  // family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif" // Font family
-                },
-              },
-            },
-          }}
-        />
-      </div> */}
+
       <div className="taskScatterPlot">
-        <TaskScatterPlot tasks = {data} selectedItem = {selectedItem}/>
+        <TaskScatterPlot tasks={data} selectedItem={selectedItem} />
       </div>
     </div>
   );

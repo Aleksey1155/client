@@ -23,8 +23,7 @@
       .searchNavbarAdmin {
         display: flex;
         align-items: center;
-        border: 0.5px solid lightgrey;
-        padding: 3px;
+
 
         input {
           border: none;
@@ -47,6 +46,11 @@
 
           .iconNavbarAdmin {
             font-size: 20px;
+          }
+
+          .button{
+            color: inherit;
+            border: solid 1px;
           }
 
           .avatarNavbarAdmin {

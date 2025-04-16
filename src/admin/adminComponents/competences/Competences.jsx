@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import "./competences.scss"
 
 function Competences({ userData, selectedItem, communication }) {
+  const { t } = useTranslation();
   const [quality, setQuality] = useState(0);
   const [trust, setTrust] = useState(0);
   const [efficiency, setEfficiency] = useState(0);
   const [workload, setWorkload] = useState(0);
   const [diligence, setDiligence] = useState(0);
   const [motivation, setMotivation] = useState(0);
-  const [communicationPercentage, setCommunicationPercentage] = useState(0)
+  const [communicationPercentage, setCommunicationPercentage] = useState(0);
 
   useEffect(() => {
     if (userData.length > 0) {
@@ -140,33 +143,29 @@ function Competences({ userData, selectedItem, communication }) {
 
       setMotivation(motivation.toFixed(2));
 
-      // розрахунок
+      // розрахунок відсотка комунікації
       if (userData.length > 0 && communication.length > 0) {
-        const userId = userData[0].user_id; // Беремо user_id першого запису, оскільки всі у userData вже для одного користувача
-        
+        const userId = userData[0].user_id; // Беремо user_id першого запису
         const userActivities = communication.filter((item) => item.userId === userId);
-    
         const percentage = (userActivities.length / communication.length) * 100;
         setCommunicationPercentage(percentage.toFixed(2));
       }
-      
     }
   }, [userData, communication]);
-  
 
   return (
     <div className="competences">
-      {selectedItem ? (
+      {/* {selectedItem ? (
         <>
           <pre>{JSON.stringify(selectedItem, null, 2)}</pre>
           <div><h2>{selectedItem.name}</h2></div>
         </>
       ) : (
-        <div><h2>Виберіть об'єкт</h2></div>
-      )}
+        <div><h2>{t("competences.selectObject")}</h2></div> // Ключ: "competences.selectObject"
+      )} */}
 
-      <h2>Tasks</h2>
-      <div className="list">
+      {/* <h2>{t("competences.tasks")}</h2> Ключ: "competences.tasks" */}
+      {/* <div className="list">
         {userData.length > 0 ? (
           userData.map((item, index) => (
             <div key={index} className="list-item">
@@ -174,18 +173,18 @@ function Competences({ userData, selectedItem, communication }) {
             </div>
           ))
         ) : (
-          <p>No data available</p>
+          <p>{t("competences.noData")}</p> // Ключ: "competences.noData"
         )}
-      </div>
+      </div> */}
 
       <div className="ability">
-        <div className="ability-item">Efficiency: {efficiency}%</div>
-        <div className="ability-item">Quality: {quality}од.</div>
-        <div className="ability-item">Workload: {workload}%</div>
-        <div className="ability-item">Communication: {communicationPercentage}</div>
-        <div className="ability-item">Trust: {trust}%</div>
-        <div className="ability-item">Diligence Старанність: {diligence}%</div>
-        <div className="ability-item">Motivation: {motivation}%</div>
+        <div className="ability-item">{t("competences.efficiency")}: {efficiency}%</div> {/* Ключ: "competences.efficiency" */}
+        <div className="ability-item">{t("competences.quality")}: {quality} од.</div> {/* Ключ: "competences.quality" */}
+        <div className="ability-item">{t("competences.workload")}: {workload}%</div> {/* Ключ: "competences.workload" */}
+        <div className="ability-item">{t("competences.communication")}: {communicationPercentage}%</div> {/* Ключ: "competences.communication" */}
+        <div className="ability-item">{t("competences.trust")}: {trust}%</div> {/* Ключ: "competences.trust" */}
+        <div className="ability-item">{t("competences.diligence")}: {diligence}%</div> {/* Ключ: "competences.diligence" */}
+        <div className="ability-item">{t("competences.motivation")}: {motivation}%</div> {/* Ключ: "competences.motivation" */}
       </div>
     </div>
   );

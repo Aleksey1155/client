@@ -1,56 +1,56 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import axiosInstance from "../../../axiosInstance";
-import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import "./assignment.scss";
-
-const formatDate = (dateString) => {
-  const options = { year: "numeric", month: "numeric", day: "numeric" };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
-
-const assignmentColumns = [
-  { field: "id", headerName: "ID", width: 12 },
-  { field: "task_title", headerName: "Task", width: 200 }, // Колонка з порядковим номером
-  {
-    field: "image_url",
-    headerName: "Image",
-    width: 0,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">
-          {params.row.image_url ? (
-            <img className="cellImg" src={params.row.image_url} alt="" />
-          ) : (
-            <span>No image</span>
-          )}
-        </div>
-      );
-    },
-  },
-  {
-    field: "user_name",
-    headerName: "User",
-    width: 200,
-  },
-  {
-    field: "assigned_date",
-    headerName: "assigned_date",
-    width: 120,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">
-          {formatDate(params.row.assigned_date)}
-        </div>
-      );
-    },
-  },
-];
+import i18n from "../../../i18n";
 
 const Assignments = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [assignments, setAssignments] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
+  };
+  
+  const assignmentColumns = [
+    { field: "id", headerName: t("assignments.id"), width: 12 }, // Ключ: "assignments.id"
+    { field: "task_title", headerName: t("assignments.task"), width: 200 }, // Ключ: "assignments.task"
+    {
+      field: "image_url",
+      headerName: t("assignments.image"), // Ключ: "assignments.image"
+      width: 0,
+      renderCell: (params) => {
+        return (
+          <div className="cellWithImg">
+            {params.row.image_url ? (
+              <img className="cellImg" src={params.row.image_url} alt="" />
+            ) : (
+              <span>{t("assignments.noImage")}</span> // Ключ: "assignments.noImage"
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      field: "user_name",
+      headerName: t("assignments.user"), // Ключ: "assignments.user"
+      width: 200,
+    },
+    {
+      field: "assigned_date",
+      headerName: t("assignments.assignedDate"), // Ключ: "assignments.assignedDate"
+      width: 120,
+      renderCell: (params) => {
+        return <div className="cellWithImg">{formatDate(params.row.assigned_date)}</div>;
+      },
+    },
+  ];
 
   useEffect(() => {
     const fetchAllAssignments = async () => {
@@ -58,7 +58,7 @@ const Assignments = () => {
         const res = await axiosInstance.get("/assignments");
         setAssignments(res.data);
       } catch (err) {
-        console.log(err);
+        console.error(t("assignments.fetchAssignmentsError"), err); // Ключ: "assignments.fetchAssignmentsError"
       }
     };
 
@@ -67,37 +67,30 @@ const Assignments = () => {
         const res = await axiosInstance.get("/users");
         setUsers(res.data);
       } catch (err) {
-        console.log(err);
+        console.error(t("assignments.fetchUsersError"), err); // Ключ: "assignments.fetchUsersError"
       }
     };
 
     fetchAllAssignments();
     fetchUsers();
-  }, []);
+  }, [t]);
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити цей проект?"
+      t("assignments.deleteConfirmation") // Ключ: "assignments.deleteConfirmation"
     );
     if (confirmed) {
       try {
         await axiosInstance.delete("/assignments/" + id);
-        setAssignments(
-          assignments.filter((assignment) => assignment.id !== id)
-        );
+        setAssignments(assignments.filter((assignment) => assignment.id !== id));
       } catch (err) {
-        console.log(err);
+        console.error(t("assignments.deleteError"), err); // Ключ: "assignments.deleteError"
       }
     }
   };
 
   const handleFilterChange = (e) => {
     setSelectedUser(e.target.value);
-  };
-
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "numeric", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const filteredAssignments = selectedUser
@@ -109,7 +102,7 @@ const Assignments = () => {
   const actionColumn = [
     {
       field: "action",
-      headerName: "Action",
+      headerName: t("assignments.action"), // Ключ: "assignments.action"
       width: 200,
       renderCell: (params) => {
         return (
@@ -119,14 +112,14 @@ const Assignments = () => {
               to={`/admin/update_assignment/${params.row.id}`}
               style={{ textDecoration: "none" }}
             >
-              <div className="viewButton">Редаг</div>
+              <div className="viewButton">{t("assignments.edit")}</div> {/* Ключ: "assignments.edit" */}
             </Link>
 
             <button
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
             >
-              Видалити
+              {t("assignments.delete")} {/* Ключ: "assignments.delete" */}
             </button>
           </div>
         );
@@ -138,22 +131,22 @@ const Assignments = () => {
     <div className="assignments">
       <div className="containerAssignments">
         <div className="datatableTitle">
-          Assignments
+          {t("assignments.title")} {/* Ключ: "assignments.title" */}
           <Link to="/admin/add_assignment" className="link">
-            Add New
+            {t("assignments.addNew")} {/* Ключ: "assignments.addNew" */}
           </Link>
         </div>
         <div className="dataGrid">
           <DataGrid
             className="datagrid"
             rows={assignments}
-            columns={assignmentColumns.concat(actionColumn)} // Колонка `id` не включена
+            columns={assignmentColumns.concat(actionColumn)}
             pageSize={9}
             rowsPerPageOptions={[9]}
             checkboxSelection
             initialState={{
               sorting: {
-                sortModel: [{ field: "orderNumber", sort: "desc" }], // Сортування за порядковим номером
+                sortModel: [{ field: "id", sort: "desc" }],
               },
             }}
             sx={{

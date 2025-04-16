@@ -1,18 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { ThemeContext } from "../../../ThemeContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import "./adduser.scss";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
-
-const hostUrl = "http://localhost:3001";
+import { useTranslation } from "react-i18next";
 
 const AddUser = () => {
+  const { darkMode } = useContext(ThemeContext);
+  const { t } = useTranslation();
   const [user, setUser] = useState({
     email: "",
     password: "",
     name: "",
     phone: "",
-    img: "", // поле для зребеження зображення користувача
+    img: "",
     descr: "",
     role_id: "",
     job_id: "",
@@ -21,7 +23,7 @@ const AddUser = () => {
   const filePicker = useRef(null);
   const [roles, setRoles] = useState([]);
   const [jobs, setJobs] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null); // Оновлено
+  const [selectedFile, setSelectedFile] = useState(null);
   const [uploaded, setUploaded] = useState();
 
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ const AddUser = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const res = await axios.get(`${hostUrl}/roles`);
+        const res = await axiosInstance.get("/roles");
         setRoles(res.data);
       } catch (err) {
         console.log(err);
@@ -38,7 +40,7 @@ const AddUser = () => {
 
     const fetchJobs = async () => {
       try {
-        const res = await axios.get(`${hostUrl}/jobs`);
+        const res = await axiosInstance.get("/jobs");
         setJobs(res.data);
       } catch (err) {
         console.log(err);
@@ -63,35 +65,32 @@ const AddUser = () => {
 
     try {
       // 1. Додаємо користувача
-      const userRes = await axios.post(`${hostUrl}/users`, user);
-      const userId = userRes.data.insertId; // Отримуємо ID нового користувача з відповіді сервера
-      console.log(userId);
-      // 2. Якщо вибрано файли, додаємо їх
+      const userRes = await axiosInstance.post("/users", user);
+      const userId = userRes.data.insertId;
+
+      // 2. Якщо вибрано файл, завантажуємо його
       if (selectedFile) {
         const formData = new FormData();
         formData.append("files", selectedFile);
-        formData.append("userId", userId); // Передаємо userId на сервер
+        formData.append("userId", userId);
 
-        // В ПОСТАХ ТЕ ж САМЕ
-
-        const res = await fetch(`${hostUrl}/upload_user`, {
-          method: "POST",
-          body: formData,
+        const uploadRes = await axiosInstance.post("/upload_user", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
-        const data = await res.json();
-        console.log("Uploaded files:", data.uploadedFiles);
-
+        const data = uploadRes.data;
         if (data.uploadedFiles) {
           setUploaded(data.uploadedFiles);
         }
       }
 
-      // Після успішного додавання користувача та зображення перенаправляємо
+      // Перенаправлення після завершення
       navigate("/admin/users");
     } catch (err) {
       console.error(err);
-      alert("An error occurred while adding the user.");
+      alert(t("adduser.error")); // Додайте ключ "adduser.error" у ваші файли перекладів
     }
   };
 
@@ -103,12 +102,14 @@ const AddUser = () => {
     <div className="adduser">
       <div className="adduserContainer">
         <div className="top">
-          <p className="title">New user</p>
+          <p className="title">{t("adduser.title")}</p> {/* Ключ: "adduser.title" */}
         </div>
         <div className="bottom">
           <div className="left">
             <div>
-              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>
+                {t("adduser.addFile")} {/* Ключ: "adduser.addFile" */}
+              </button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -121,8 +122,12 @@ const AddUser = () => {
             {!selectedFile && (
               <img
                 className="noimage"
-                src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                alt=""
+                src={
+                  darkMode
+                    ? "/images/no-image-icon-dark.jpg"
+                    : "/images/no-image-icon-light.jpg"
+                }
+                alt={t("adduser.noImageAlt")} // Ключ: "adduser.noImageAlt"
               />
             )}
 
@@ -130,15 +135,15 @@ const AddUser = () => {
               <div className="selectedFile">
                 <div>
                   <ul>
-                    <li>Name: {selectedFile.name}</li>
-                    <li>Type: {selectedFile.type}</li>
-                    <li>Size: {selectedFile.size}</li>
+                    <li>{t("adduser.fileName")}: {selectedFile.name}</li> {/* Ключ: "adduser.fileName" */}
+                    <li>{t("adduser.fileType")}: {selectedFile.type}</li> {/* Ключ: "adduser.fileType" */}
+                    <li>{t("adduser.fileSize")}: {selectedFile.size}</li> {/* Ключ: "adduser.fileSize" */}
                   </ul>
                 </div>
                 <div>
                   <img
                     src={URL.createObjectURL(selectedFile)}
-                    alt="Preview"
+                    alt={t("adduser.previewAlt")} // Ключ: "adduser.previewAlt"
                     className="image-preview"
                   />
                 </div>
@@ -151,7 +156,7 @@ const AddUser = () => {
                 <img
                   className="image"
                   src={uploaded.uploadedFiles[0].filePath}
-                  alt=""
+                  alt={t("adduser.uploadedImageAlt")} // Ключ: "adduser.uploadedImageAlt"
                 />
               </div>
             )}
@@ -160,62 +165,61 @@ const AddUser = () => {
           <div className="right">
             <form>
               <div className="formInput">
-                <label>Username</label>
+                <label>{t("adduser.usernameLabel")}</label> {/* Ключ: "adduser.usernameLabel" */}
                 <input
-                 className="input"
+                  className="input"
                   type="text"
-                  placeholder="ПІБ нового виконавця"
+                  placeholder={t("adduser.usernamePlaceholder")} // Ключ: "adduser.usernamePlaceholder"
                   onChange={handleChange}
                   name="name"
                 />
               </div>
 
               <div className="formInput">
-                <label>Email</label>
+                <label>{t("adduser.emailLabel")}</label> {/* Ключ: "adduser.emailLabel" */}
                 <input
                   className="input"
                   type="text"
-                  placeholder="email нового виконавця"
+                  placeholder={t("adduser.emailPlaceholder")} // Ключ: "adduser.emailPlaceholder"
                   onChange={handleChange}
                   name="email"
                 />
               </div>
 
               <div className="formInput">
-                <label>Password</label>
+                <label>{t("adduser.passwordLabel")}</label> {/* Ключ: "adduser.passwordLabel" */}
                 <input
-                 className="input"
+                  className="input"
                   type="text"
-                  placeholder="Пароль нового виконавця"
+                  placeholder={t("adduser.passwordPlaceholder")} // Ключ: "adduser.passwordPlaceholder"
                   onChange={handleChange}
                   name="password"
                 />
               </div>
 
               <div className="formInput">
-                <label>Phone</label>
+                <label>{t("adduser.phoneLabel")}</label> {/* Ключ: "adduser.phoneLabel" */}
                 <input
-                 className="input"
+                  className="input"
                   type="text"
-                  placeholder="номер телефону"
+                  placeholder={t("adduser.phonePlaceholder")} // Ключ: "adduser.phonePlaceholder"
                   onChange={handleChange}
                   name="phone"
                 />
               </div>
 
               <div className="formInput">
-                <label>Description</label>
+                <label>{t("adduser.descriptionLabel")}</label> {/* Ключ: "adduser.descriptionLabel" */}
                 <textarea
                   className="textarea"
-                  type="text"
-                  placeholder="опис"
+                  placeholder={t("adduser.descriptionPlaceholder")} // Ключ: "adduser.descriptionPlaceholder"
                   onChange={handleChange}
                   name="descr"
                 />
               </div>
 
               <div className="formInput">
-                <label>Role</label>
+                <label>{t("adduser.roleLabel")}</label> {/* Ключ: "adduser.roleLabel" */}
                 <select
                   className="select"
                   name="role_id"
@@ -223,7 +227,7 @@ const AddUser = () => {
                   value={user.role_id}
                 >
                   <option value="" disabled>
-                    Виберіть роль
+                    {t("adduser.selectRole")} {/* Ключ: "adduser.selectRole" */}
                   </option>
                   {roles.map((role) => (
                     <option key={role.id} value={role.id}>
@@ -232,8 +236,9 @@ const AddUser = () => {
                   ))}
                 </select>
               </div>
+
               <div className="formInput">
-                <label>Jobs</label>
+                <label>{t("adduser.jobsLabel")}</label> {/* Ключ: "adduser.jobsLabel" */}
                 <select
                   className="select"
                   name="job_id"
@@ -241,7 +246,7 @@ const AddUser = () => {
                   value={user.job_id}
                 >
                   <option value="" disabled>
-                    Виберіть посаду
+                    {t("adduser.selectJob")} {/* Ключ: "adduser.selectJob" */}
                   </option>
                   {jobs.map((job) => (
                     <option key={job.id} value={job.id}>
@@ -250,8 +255,9 @@ const AddUser = () => {
                   ))}
                 </select>
               </div>
-              <button className="button" onClick={handleClick}>
-                Додати
+
+              <button className="buttonAddUser" onClick={handleClick}>
+                {t("adduser.addUserButton")} {/* Ключ: "adduser.addUserButton" */}
               </button>
             </form>
           </div>

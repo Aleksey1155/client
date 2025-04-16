@@ -1,9 +1,9 @@
 import "./projectdatatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import axios from "axios";
+import axiosInstance from "../../../axiosInstance";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 
 // Функція для форматування дати
 const formatDate = (dateString) => {
@@ -11,51 +11,41 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString(); // Форматування дати в локальному форматі
 };
 
-const projectColumns = [
-  { field: "title", headerName: "Task Title", width: 200 },
- 
-  {
-    field: "task.start_date",
-    headerName: "Start Date",
-    width: 120,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">
-          
-          {formatDate(params.row.start_date)}
-        </div>
-      );
-    } // Форматування дати для start_date
-  },
-  {
-    field: "task.end_date",
-    headerName: "End Date",
-    width: 120,
-    renderCell: (params) => {
-      return (
-        <div className="cellWithImg">
-          
-          {formatDate(params.row.end_date)}
-        </div>
-      );
-    } // Форматування дати для end_date
-  },
-   { field: "priority_name", headerName: "Priority", width: 120 },
-  { field: "status_name", headerName: "Status", width: 120 },
-];
-
 const ProjectDatatable = ({ projectId }) => {
+  const { t } = useTranslation();
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState([]);
-  // const [taskStatuses, setTaskStatuses] = useState([]);
-  // const [taskPriorities, setTaskPriorities] = useState([]);
+
+  const columns = [
+    { field: "title", headerName: t("projectdatatable.taskTitle"), width: 200 }, // Ключ: "projectdatatable.taskTitle"
+    {
+      field: "task.start_date",
+      headerName: t("projectdatatable.startDate"), // Ключ: "projectdatatable.startDate"
+      width: 120,
+      renderCell: (params) => (
+        <div className="cellWithImg">
+          {formatDate(params.row.start_date)}
+        </div>
+      ),
+    },
+    {
+      field: "task.end_date",
+      headerName: t("projectdatatable.endDate"), // Ключ: "projectdatatable.endDate"
+      width: 120,
+      renderCell: (params) => (
+        <div className="cellWithImg">
+          {formatDate(params.row.end_date)}
+        </div>
+      ),
+    },
+    { field: "priority_name", headerName: t("projectdatatable.priority"), width: 120 }, // Ключ: "projectdatatable.priority"
+    { field: "status_name", headerName: t("projectdatatable.status"), width: 120 }, // Ключ: "projectdatatable.status"
+  ];
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3001/projects/${projectId}`
-        );
+        const res = await axiosInstance.get(`/projects/${projectId}`);
         setProject(res.data);
       } catch (err) {
         console.log(err);
@@ -64,7 +54,7 @@ const ProjectDatatable = ({ projectId }) => {
 
     const fetchAllTasks = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/tasks");
+        const res = await axiosInstance.get("/tasks");
         setTasks(
           res.data.filter((task) => task.project_id === Number(projectId))
         );
@@ -73,45 +63,17 @@ const ProjectDatatable = ({ projectId }) => {
       }
     };
 
-    // const fetchTaskStatuses = async () => {
-    //   try {
-    //     const res = await axios.get("http://localhost:3001/task_statuses");
-    //     setTaskStatuses(res.data);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
-
-    // const fetchTaskPriorities = async () => {
-    //   try {
-    //     const res = await axios.get("http://localhost:3001/task_priorities");
-    //     setTaskPriorities(res.data);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
     fetchProject();
     fetchAllTasks();
-    // fetchTaskStatuses();
-    // fetchTaskPriorities();
   }, [projectId]);
-
-  
-
-  // const truncateDescription = (description, maxLength) => {
-  //   if (description.length > maxLength) {
-  //     return description.substring(0, maxLength) + "...";
-  //   }
-  //   return description;
-  // };
 
   const handleDelete = async (taskId) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити це завдання?"
+      t("projectdatatable.deleteConfirmation") // Ключ: "projectdatatable.deleteConfirmation"
     );
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3001/tasks/${taskId}`);
+        await axiosInstance.delete(`/tasks/${taskId}`);
         setTasks(tasks.filter((task) => task.id !== taskId));
       } catch (err) {
         console.log(err);
@@ -120,59 +82,53 @@ const ProjectDatatable = ({ projectId }) => {
   };
 
   if (!project) {
-    return <div>Loading...</div>;
+    return <div>{t("projectdatatable.loading")}...</div>; // Ключ: "projectdatatable.loading"
   }
 
   const actionColumn = [
     {
       field: "action",
-      headerName: "Action",
+      headerName: t("projectdatatable.action"), // Ключ: "projectdatatable.action"
       width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-            {/* Link with dynamic routing */}
-            <Link
-              to={`/admin/task/${params.row.id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="view-Button">Деталі</div>
-            </Link>
+      renderCell: (params) => (
+        <div className="cellAction">
+          {/* Link with dynamic routing */}
+          <Link
+            to={`/admin/task/${params.row.id}`}
+            style={{ textDecoration: "none" }}
+          >
+            <div className="view-Button">{t("projectdatatable.details")}</div> {/* Ключ: "projectdatatable.details" */}
+          </Link>
 
-            <button
-              className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
-            >
-              Видалити
-            </button>
-          </div>
-        );
-      },
+          <button
+            className="deleteButton"
+            onClick={() => handleDelete(params.row.id)}
+          >
+            {t("projectdatatable.delete")} {/* Ключ: "projectdatatable.delete" */}
+          </button>
+        </div>
+      ),
     },
   ];
 
-
-
   return (
     <div className="projectDatatable">
-     
-      <div className="projectTitle">Project Tasks</div>
+      <div className="projectTitle">{t("projectdatatable.projectTasks")}</div> {/* Ключ: "projectdatatable.projectTasks" */}
 
       <div className="datatable">
-          <DataGrid
-            className="datagrid"
-            rows={tasks}
-           columns={projectColumns.concat(actionColumn)}
-            pageSize={9}
-            rowsPerPageOptions={[9]}
-            checkboxSelection
-            getRowId={(row) => row.id} // Вказуємо, що id йде з поля id
-            sx={{
-              "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
-            }}
-          />
-        </div>
-     
+        <DataGrid
+          className="datagrid"
+          rows={tasks}
+          columns={columns.concat(actionColumn)}
+          pageSize={9}
+          rowsPerPageOptions={[9]}
+          checkboxSelection
+          getRowId={(row) => row.id} // Вказуємо, що id йде з поля id
+          sx={{
+            "--DataGrid-containerBackground": "var(--DataGrid-containerBackground) !important",
+          }}
+        />
+      </div>
     </div>
   );
 };

@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../../axiosInstance";
 import ReactQuill from "react-quill";
 import { DateTime } from "luxon";
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import "./updateproject.scss";
-import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 import Zoom from "react-medium-image-zoom";
+import { useTranslation } from "react-i18next";
 
 const UpdateProject = () => {
+  const { t } = useTranslation();
   const [project, setProject] = useState({
     title: "",
     description: "",
@@ -27,11 +28,7 @@ const UpdateProject = () => {
   const [images, setImages] = useState([]);
 
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const projectId = location.pathname.split("/")[2];
   const { id: projectId } = useParams();
-
-  console.log("selectedFile --" + selectedFile); //--------------------
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -78,7 +75,6 @@ const UpdateProject = () => {
     };
 
     fetchImages();
-
     fetchProject();
     fetchStatuses();
   }, [projectId]);
@@ -89,20 +85,19 @@ const UpdateProject = () => {
       [e.target.name]: e.target.value === "" ? null : e.target.value,
     }));
   };
-  
-  
+
   const handleEditorChange = (content) => {
     setProject((prev) => ({ ...prev, description: content }));
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
-  
+
     const updatedProject = {
       ...project,
       actual_end_date: project.actual_end_date || null,
     };
-  
+
     try {
       await axiosInstance.put(`/projects/${projectId}`, updatedProject);
       navigate(`/admin/project/${projectId}`);
@@ -110,11 +105,10 @@ const UpdateProject = () => {
       console.log(err);
     }
   };
-  
 
   const handleDeleteImg = async (id) => {
     const confirmed = window.confirm(
-      "Ви впевнені, що хочете видалити цей image?"
+      t("updateproject.deleteImageConfirmation") // Ключ: "updateproject.deleteImageConfirmation"
     );
     if (confirmed) {
       try {
@@ -127,15 +121,13 @@ const UpdateProject = () => {
   };
 
   const handleFileChange = (event) => {
-    console.log(event.target.files); //--------------------------------
     const file = event.target.files[0];
     setSelectedFile(file);
   };
 
-  //*********************************************************** */
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please select a file");
+      alert(t("updateproject.selectFileAlert")); // Ключ: "updateproject.selectFileAlert"
       return;
     }
 
@@ -150,9 +142,6 @@ const UpdateProject = () => {
         },
       });
 
-      console.log("Selected File: ", selectedFile);
-      console.log("Upload Response: ", res.data);
-
       setUploaded(res.data);
 
       setTimeout(() => {
@@ -160,10 +149,9 @@ const UpdateProject = () => {
       }, 1000);
     } catch (error) {
       console.error("Upload Error: ", error);
-      alert("Помилка завантаження файлу");
+      alert(t("updateproject.uploadErrorAlert")); // Ключ: "updateproject.uploadErrorAlert"
     }
   };
-  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const handlePick = () => {
     filePicker.current.click();
@@ -173,15 +161,17 @@ const UpdateProject = () => {
     <div className="updateproject">
       <div className="updateprojectContainer">
         <div className="top">
-          <p className="title">Update project</p>
+          <p className="title">{t("updateproject.title")}</p> {/* Ключ: "updateproject.title" */}
           <button className="button" onClick={handleClick}>
-            Редагувати
+            {t("updateproject.editButton")} {/* Ключ: "updateproject.editButton" */}
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
-              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>
+                {t("updateproject.addFileButton")} {/* Ключ: "updateproject.addFileButton" */}
+              </button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -189,23 +179,25 @@ const UpdateProject = () => {
                 onChange={handleFileChange}
                 accept="image/*, .png, .jpg, .web"
               />
-              <button className="buttonAddFile" onClick={handleUpload}>Upload now!</button>
+              <button className="buttonAddFile" onClick={handleUpload}>
+                {t("updateproject.uploadNowButton")} {/* Ключ: "updateproject.uploadNowButton" */}
+              </button>
             </div>
 
             {!selectedFile && (
               <img
                 className="noimage"
                 src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                alt=""
+                alt={t("updateproject.noImageAlt")} // Ключ: "updateproject.noImageAlt"
               />
             )}
 
             {selectedFile && !uploaded && (
               <div className="selectedFile">
                 <ul>
-                  <li>Name: {selectedFile.name}</li>
-                  <li>Type: {selectedFile.type}</li>
-                  <li>Size: {selectedFile.size}</li>
+                  <li>{t("updateproject.fileName")}: {selectedFile.name}</li> {/* Ключ: "updateproject.fileName" */}
+                  <li>{t("updateproject.fileType")}: {selectedFile.type}</li> {/* Ключ: "updateproject.fileType" */}
+                  <li>{t("updateproject.fileSize")}: {selectedFile.size}</li> {/* Ключ: "updateproject.fileSize" */}
                 </ul>
               </div>
             )}
@@ -216,23 +208,19 @@ const UpdateProject = () => {
                 <img
                   className="image"
                   src={uploaded.uploadedFiles[0].filePath}
-                  alt=""
+                  alt={uploaded.uploadedFiles[0].fileName}
                 />
               </div>
             )}
-
-            {/* {uploaded && (
-              <img className="image" src={uploaded.filePath} alt="" />
-            )} */}
           </div>
           <div className="right">
             <form>
               <div className="formInput">
-                <label>Project Title</label>
+                <label>{t("updateproject.projectTitleLabel")}</label> {/* Ключ: "updateproject.projectTitleLabel" */}
                 <input
-                className="input"
+                  className="input"
                   type="text"
-                  placeholder="name"
+                  placeholder={t("updateproject.projectTitlePlaceholder")} // Ключ: "updateproject.projectTitlePlaceholder"
                   onChange={handleChange}
                   name="title"
                   value={project.title}
@@ -241,22 +229,22 @@ const UpdateProject = () => {
               <div className="formInput"></div>
 
               <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
-                <label>start_date</label>
+                <label>{t("updateproject.startDateLabel")}</label> {/* Ключ: "updateproject.startDateLabel" */}
                 <input
-                 className="inputDate"
+                  className="inputDate"
                   type="date"
-                  placeholder="start_date"
+                  placeholder={t("updateproject.startDatePlaceholder")} // Ключ: "updateproject.startDatePlaceholder"
                   onChange={handleChange}
                   name="start_date"
                   value={project.start_date}
                 />
               </div>
               <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
-                <label>end_date</label>
+                <label>{t("updateproject.endDateLabel")}</label> {/* Ключ: "updateproject.endDateLabel" */}
                 <input
-                 className="inputDate"
+                  className="inputDate"
                   type="date"
-                  placeholder="end_date"
+                  placeholder={t("updateproject.endDatePlaceholder")} // Ключ: "updateproject.endDatePlaceholder"
                   onChange={handleChange}
                   name="end_date"
                   value={project.end_date}
@@ -264,11 +252,11 @@ const UpdateProject = () => {
               </div>
 
               <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
-                <label>actual_end_date</label>
+                <label>{t("updateproject.actualEndDateLabel")}</label> {/* Ключ: "updateproject.actualEndDateLabel" */}
                 <input
-                 className="inputDate"
+                  className="inputDate"
                   type="date"
-                  placeholder="actual_end_date"
+                  placeholder={t("updateproject.actualEndDatePlaceholder")} // Ключ: "updateproject.actualEndDatePlaceholder"
                   onChange={handleChange}
                   name="actual_end_date"
                   value={project.actual_end_date || ""} // якщо null, підставляється ""
@@ -276,9 +264,9 @@ const UpdateProject = () => {
               </div>
 
               <div className="formInput">
-                <label>Status</label>
+                <label>{t("updateproject.statusLabel")}</label> {/* Ключ: "updateproject.statusLabel" */}
                 <select
-                className="select"
+                  className="select"
                   name="status_id"
                   onChange={handleChange}
                   value={project.status_id}
@@ -294,7 +282,7 @@ const UpdateProject = () => {
           </div>
         </div>
         <div className="image-container">
-          <div className="title">Project Images</div>
+          <div className="title">{t("updateproject.projectImagesTitle")}</div> {/* Ключ: "updateproject.projectImagesTitle" */}
           <div className="images">
             {images.map((image, index) => (
               <div key={index}>
@@ -305,7 +293,7 @@ const UpdateProject = () => {
                 <Zoom>
                   <img
                     src={image.url}
-                    alt={`Image ${index + 1}`}
+                    alt={`${t("updateproject.image")} ${index + 1}`} // Ключ: "updateproject.image"
                     className="image"
                   />
                 </Zoom>
@@ -314,7 +302,7 @@ const UpdateProject = () => {
           </div>
         </div>
         <div className="bottom">
-          <div className="title">Description</div>
+          <div className="title">{t("updateproject.descriptionTitle")}</div> {/* Ключ: "updateproject.descriptionTitle" */}
           <div className="description">
             <div className="formInput">
               <ReactQuill
@@ -355,7 +343,6 @@ const UpdateProject = () => {
           </div>
         </div>
       </div>
-      {/* Відображення інформації про вибраний файл */}
     </div>
   );
 };

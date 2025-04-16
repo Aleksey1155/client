@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { ThemeContext } from "../../../ThemeContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../axiosInstance";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./addproject.scss";
-
-
+import { useTranslation } from "react-i18next";
 
 const AddProject = () => {
+  const { darkMode } = useContext(ThemeContext);
+  const { t } = useTranslation();
   const [project, setProject] = useState({
     title: "",
     description: "",
@@ -20,7 +22,6 @@ const AddProject = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -50,37 +51,35 @@ const AddProject = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    
+
     try {
       // 1. Додаємо проект
       const projectRes = await axiosInstance.post(`/projects`, project);
       const projectId = projectRes.data.insertId; // Отримуємо з серверу id нового проекту
-    
+
       // 2. Якщо вибрано файли, додаємо їх до таблиці project_images
       if (selectedFiles.length > 0) {
         const formData = new FormData();
         selectedFiles.forEach((file) => {
           formData.append("files", file);
         });
-    
+
         formData.append("project_id", projectId);
-    
+
         await axiosInstance.post(`/upload_project`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
       }
-    
+
       // Після успішного додавання проекту та зображень перенаправляємо користувача
       navigate("/admin/projects");
     } catch (err) {
       console.error(err); // Логування помилки
-      alert('An error occurred while adding the project.'); // Повідомлення користувача
+      alert(t("addproject.error")); // Повідомлення користувача
     }
   };
-  
-  
 
   const handlePick = () => {
     filePicker.current.click();
@@ -90,15 +89,17 @@ const AddProject = () => {
     <div className="addproject">
       <div className="addprojectContainer">
         <div className="top">
-          <p className="title">New project</p>
+          <p className="title">{t("addproject.title")}</p> {/* Ключ: "addproject.title" */}
           <button className="button" onClick={handleClick}>
-            Додати
+            {t("addproject.addButton")} {/* Ключ: "addproject.addButton" */}
           </button>
         </div>
         <div className="center">
           <div className="left">
             <div>
-              <button className="buttonAddFile" onClick={handlePick}>Add file</button>
+              <button className="buttonAddFile" onClick={handlePick}>
+                {t("addproject.addFileButton")} {/* Ключ: "addproject.addFileButton" */}
+              </button>
               <input
                 className="hidden"
                 ref={filePicker}
@@ -112,8 +113,12 @@ const AddProject = () => {
             {selectedFiles.length === 0 && (
               <img
                 className="noimage"
-                src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                alt="No images"
+                src={
+                  darkMode
+                    ? "/images/no-image-icon-dark.jpg"
+                    : "/images/no-image-icon-light.jpg"
+                }
+                alt={t("addproject.noImageAlt")} // Ключ: "addproject.noImageAlt"
               />
             )}
 
@@ -122,8 +127,8 @@ const AddProject = () => {
                 {selectedFiles.map((file, index) => (
                   <div key={index} className="selectedFile">
                     <ul>
-                      <li>Name: {file.name.slice(-15)}</li>
-                      <li>Size: {(file.size / 1024).toFixed(2)} KB</li>
+                      <li>{t("addproject.fileName")}: {file.name.slice(-15)}</li> {/* Ключ: "addproject.fileName" */}
+                      <li>{t("addproject.fileSize")}: {(file.size / 1024).toFixed(2)} KB</li> {/* Ключ: "addproject.fileSize" */}
                     </ul>
                   </div>
                 ))}
@@ -133,11 +138,11 @@ const AddProject = () => {
           <div className="right">
             <form>
               <div className="formInput">
-                <label>Project title</label>
+                <label>{t("addproject.projectTitleLabel")}</label> {/* Ключ: "addproject.projectTitleLabel" */}
                 <input
-                className="input"
+                  className="input"
                   type="text"
-                  placeholder="Назва нового проекту"
+                  placeholder={t("addproject.projectTitlePlaceholder")} // Ключ: "addproject.projectTitlePlaceholder"
                   onChange={handleChange}
                   name="title"
                 />
@@ -146,37 +151,36 @@ const AddProject = () => {
               <div className="formInput"></div>
 
               <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
-                <label>Start Date</label>
+                <label>{t("addproject.startDateLabel")}</label> {/* Ключ: "addproject.startDateLabel" */}
                 <input
-                 className="inputDate"
+                  className="inputDate"
                   type="date"
-                  placeholder="start_date"
+                  placeholder={t("addproject.startDatePlaceholder")} // Ключ: "addproject.startDatePlaceholder"
                   onChange={handleChange}
                   name="start_date"
                 />
               </div>
               <div className="formInput" onClick={(e) => e.currentTarget.querySelector("input").showPicker()}>
-
-                <label>End Date</label>
+                <label>{t("addproject.endDateLabel")}</label> {/* Ключ: "addproject.endDateLabel" */}
                 <input
-                className="inputDate"
+                  className="inputDate"
                   type="date"
-                  placeholder="end_date"
+                  placeholder={t("addproject.endDatePlaceholder")} // Ключ: "addproject.endDatePlaceholder"
                   onChange={handleChange}
                   name="end_date"
                 />
               </div>
 
               <div className="formInput">
-                <label>Status</label>
+                <label>{t("addproject.statusLabel")}</label> {/* Ключ: "addproject.statusLabel" */}
                 <select
-                className="select"
+                  className="select"
                   name="status_id"
                   onChange={handleChange}
                   value={project.status_id}
                 >
                   <option value="" disabled>
-                    Виберіть статус
+                    {t("addproject.selectStatus")} {/* Ключ: "addproject.selectStatus" */}
                   </option>
                   {statuses.map((status) => (
                     <option key={status.id} value={status.id}>
@@ -189,13 +193,13 @@ const AddProject = () => {
           </div>
         </div>
         <div className="image-container">
-          <div className="title">Project Images</div>
+          <div className="title">{t("addproject.projectImagesTitle")}</div> {/* Ключ: "addproject.projectImagesTitle" */}
           <div className="images">
             {selectedFiles.map((file, index) => (
               <img
                 key={index}
                 src={URL.createObjectURL(file)}
-                alt={`Preview ${index}`}
+                alt={`${t("addproject.preview")} ${index}`} // Ключ: "addproject.preview"
                 className="image-preview"
               />
             ))}
@@ -203,7 +207,7 @@ const AddProject = () => {
         </div>
 
         <div className="bottom">
-          <div className="title">Description</div>
+          <div className="title">{t("addproject.descriptionTitle")}</div> {/* Ключ: "addproject.descriptionTitle" */}
 
           <div className="description">
             <ReactQuill

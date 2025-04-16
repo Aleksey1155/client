@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import axiosInstance from "../../../axiosInstance";
 import "./addassignment.scss";
 
 const AddAssignment = () => {
+  const { t } = useTranslation();
   const [assignment, setAssignment] = useState({
     task_id: "",
     user_id: "",
@@ -20,7 +22,7 @@ const AddAssignment = () => {
         const res = await axiosInstance.get("/users");
         setUsers(res.data);
       } catch (err) {
-        console.log(err);
+        console.error(t("addAssignment.fetchUsersError"), err); // Ключ: "addAssignment.fetchUsersError"
       }
     };
     const fetchTasks = async () => {
@@ -28,13 +30,13 @@ const AddAssignment = () => {
         const res = await axiosInstance.get("/tasks"); // Додаємо завдання
         setTasks(res.data);
       } catch (err) {
-        console.log(err);
+        console.error(t("addAssignment.fetchTasksError"), err); // Ключ: "addAssignment.fetchTasksError"
       }
     };
 
     fetchUsers();
     fetchTasks();
-  }, []);
+  }, [t]);
 
   const handleChange = (e) => {
     setAssignment((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -46,34 +48,32 @@ const AddAssignment = () => {
       await axiosInstance.post("/assignments", assignment);
       navigate("/admin/assignments");
     } catch (err) {
-      console.log(err);
+      console.error(t("addAssignment.addError"), err); // Ключ: "addAssignment.addError"
     }
   };
-
-  console.log(assignment);
 
   return (
     <div className="addassignment">
       <div className="addassignmentContainer">
         <div className="top">
-          <p className="title">New Assignment</p>
+          <p className="title">{t("addAssignment.title")}</p> {/* Ключ: "addAssignment.title" */}
           <button className="button" onClick={handleClick}>
-            Додати
+            {t("addAssignment.addButton")} {/* Ключ: "addAssignment.addButton" */}
           </button>
         </div>
         <div className="center">
           <div className="right">
             <form>
               <div className="formInput">
-                <label>Task</label>
+                <label>{t("addAssignment.taskLabel")}</label> {/* Ключ: "addAssignment.taskLabel" */}
                 <select
                   className="select"
-                  name="task_id" //  task_id замість task_title
+                  name="task_id" //  task_id замість task_title
                   onChange={handleChange}
                   value={assignment.task_id || ""}
                 >
                   <option value="" disabled>
-                    Виберіть завдання
+                    {t("addAssignment.selectTask")} {/* Ключ: "addAssignment.selectTask" */}
                   </option>
                   {tasks.map((task) => (
                     <option key={task.id} value={task.id}>
@@ -84,7 +84,7 @@ const AddAssignment = () => {
               </div>
 
               <div className="formInput">
-                <label>Date Assignment</label>
+                <label>{t("addAssignment.dateLabel")}</label> {/* Ключ: "addAssignment.dateLabel" */}
                 <input
                   className="select"
                   type="date"
@@ -93,7 +93,7 @@ const AddAssignment = () => {
                 />
               </div>
               <div className="formInput">
-                <label>Assignment</label>
+                <label>{t("addAssignment.userLabel")}</label> {/* Ключ: "addAssignment.userLabel" */}
                 <select
                   className="select"
                   name="user_id"
@@ -101,7 +101,7 @@ const AddAssignment = () => {
                   value={assignment.user_id || ""}
                 >
                   <option value="" disabled>
-                    Виберіть виконавця
+                    {t("addAssignment.selectUser")} {/* Ключ: "addAssignment.selectUser" */}
                   </option>
                   {users.map((user) => (
                     <option key={user.id} value={user.id}>

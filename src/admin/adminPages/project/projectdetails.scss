@@ -12,7 +12,6 @@
     &::-webkit-scrollbar {
       display: none;
     }
-    
 
     .topProjectDetails {
       padding: 20px;
@@ -20,76 +19,78 @@
       gap: 10px;
 
       .leftProjectDetails {
+        display: flex;
         flex: 1;
         -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
         box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
         padding: 20px;
-        position: relative;
-
-        .editProjectDetails {
-          position: absolute;
-          top: 0;
-          right: 0;
-          padding: 5px;
-          font-size: 16px;
-          color: #9988d8;
-          background-color: #817d8f18;
-          cursor: pointer;
-          border-radius: 0px 0px 0px 5px;
-        }
-
-        .title {
-          font-size: 12px;
-          color: gray;
-          margin-bottom: 20px;
-          position: absolute;
-          top: 0;
-          left: 0;
-        }
-        .item {
+        align-items: flex-start;
+      
+        .itemImgProject {
+          margin-right: 20px;
           display: flex;
-          gap: 20px;
-
+          flex-direction: column;
+      
+          .title {
+            font-size: 12px;
+            align-self: flex-start;
+          }
+      
           .itemImg {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
           }
-
+        }
+      
+        .itemProject {
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+          gap: 20px;
+          align-self: flex-end;
+          padding-left: 20px;
+          .editProjectDetails {
+           
+            padding-left: 20px;
+            font-size: 16px;
+            color: #9988d8;
+            background-color: #817d8f18;
+            cursor: pointer;
+            border-radius: 0px 0px 0px 5px;
+           
+          }
+      
           .details {
             display: flex;
             flex-direction: column;
-            margin-left: auto; /* Переміщує блок вправо */
-            
-
+            width: 100%;
+      
             .itemTitle {
               width: 150px;
               margin-bottom: 10px;
-              color: #555;
-              word-wrap: break-word; /* Переносити довгі слова */
-              overflow-wrap: break-word; /* Альтернативний синтаксис */
+             
+              word-wrap: break-word;
+              overflow-wrap: break-word;
             }
-            
-
+      
             .detailItem {
               display: flex;
               flex-direction: column;
               margin-bottom: 10px;
               font-size: 14px;
-
+      
               .itemKey {
                 font-weight: bold;
                 color: gray;
                 margin: 5px 5px 0px 0px;
               }
-
+      
               .itemValue {
                 font-weight: 300;
               }
-              
             }
-           
           }
         }
       }
@@ -102,15 +103,11 @@
           font-size: 12px;
           color: gray;
           margin-bottom: 20px;
-          
-          
-          
         }
       }
     }
 
     .bottom {
-      
       -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
       box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
       padding: 20px;
@@ -121,8 +118,6 @@
       font-size: 12px;
       color: gray;
       margin-bottom: 20px;
-      
-      
     }
   }
 }

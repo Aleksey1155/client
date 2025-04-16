@@ -9,9 +9,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useTranslation } from "react-i18next";
 
 const DashboardTable = () => {
-  // Змінні стану для зберігання даних, отриманих з API та фільтрів
+  const { t } = useTranslation();
+
   const [dashboardData, setDashboardData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [taskStatus, setTaskStatus] = useState("");
@@ -21,7 +23,6 @@ const DashboardTable = () => {
   const [taskStatuses, setTaskStatuses] = useState([]);
   const [projectStatuses, setProjectStatuses] = useState([]);
 
-  // Виконується при першому рендері для отримання даних з API
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -33,52 +34,43 @@ const DashboardTable = () => {
       }
     };
 
-    // Отримання даних про користувачів
     const fetchUsers = async () => {
       try {
         const res = await axiosInstance.get("/users");
-        // console.log("Users Data:", res.data);
         setUsers(res.data);
       } catch (err) {
         console.log(err);
       }
     };
 
-    // Отримання даних про статуси завдань
     const fetchTaskStatuses = async () => {
       try {
         const res = await axiosInstance.get("/task_statuses");
-        // console.log("Task Statuses Data:", res.data);
         setTaskStatuses(res.data);
       } catch (err) {
         console.log(err);
       }
     };
 
-    // Отримання даних про статуси проектів
     const fetchProjectStatuses = async () => {
       try {
         const res = await axiosInstance.get("/project_statuses");
-        // console.log("Project Statuses Data:", res.data);
         setProjectStatuses(res.data);
       } catch (err) {
         console.log(err);
       }
     };
 
-    // Викликаємо функції для отримання даних
     fetchDashboardData();
     fetchUsers();
     fetchTaskStatuses();
     fetchProjectStatuses();
   }, []);
 
-  // Виконується при зміні фільтрів
   useEffect(() => {
     filterData();
   }, [taskStatus, projectStatus, userId]);
 
-  // Функція для фільтрації даних відповідно до вибраних фільтрів
   const filterData = () => {
     let filtered = dashboardData;
 
@@ -99,13 +91,11 @@ const DashboardTable = () => {
     setFilteredData(filtered);
   };
 
-  // Функція для форматування дати
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // Функція для перевірки, чи є дата кінця завдання близькою до поточної дати (2 дні)
   const isCloseToEnd = (endDate) => {
     const today = new Date();
     const end = new Date(endDate);
@@ -115,39 +105,33 @@ const DashboardTable = () => {
     return diffDays <= 2 && diffDays >= 0;
   };
 
-  // Функція для перевірки, чи дата закінчилась і статус "Виконується"
   const isEndDatePassedAndInProgress = (endDate, taskStatus) => {
     const today = new Date();
     const end = new Date(endDate);
-
-    // Перевірка, чи дата закінчилась і статус завдання "Виконується"
-    return end < today && taskStatus === "Виконується";
+    return end < today && taskStatus === t("status.inProgress");
   };
 
   return (
     <div className="dashboardTable">
       <div className="dashboardContainer">
         <div className="top">
-          {/* Посилання для додавання проекту */}
           <div className="addlinks">
-            <p className="titleAdd">Додати проект</p>
+            <p className="titleAdd">{t("addProject")}</p>
             <Link to="/admin/add_project" className="addlink">
-              Додати новий проект
+              {t("addNewProject")}
             </Link>
           </div>
-          <div className="tableTitle">Таблиця завдань та призначень</div>
+          <div className="tableTitle">{t("tableTitle")}</div>
 
-          {/* Фільтри для таблиці */}
           <div className="filtersSelect">
             <div className="selectTask">
-              <p className="titleSelect">Фільтр статус завдання</p>
+              <p className="titleSelect">{t("taskStatusFilter")}</p>
               <select
                 className="select"
-                name="select"
                 onChange={(e) => setTaskStatus(e.target.value)}
                 value={taskStatus}
               >
-                <option value="">Всі</option>
+                <option value="">{t("all")}</option>
                 {taskStatuses.map((status) => (
                   <option key={status.id} value={status.status_name}>
                     {status.status_name}
@@ -156,14 +140,13 @@ const DashboardTable = () => {
               </select>
             </div>
             <div className="selectProject">
-              <p className="titleSelect">Фільтр статус проекта</p>
+              <p className="titleSelect">{t("projectStatusFilter")}</p>
               <select
                 className="select"
-                name="select"
                 onChange={(e) => setProjectStatus(e.target.value)}
                 value={projectStatus}
               >
-                <option value="">Всі</option>
+                <option value="">{t("all")}</option>
                 {projectStatuses.map((status) => (
                   <option key={status.id} value={status.status_name}>
                     {status.status_name}
@@ -172,14 +155,13 @@ const DashboardTable = () => {
               </select>
             </div>
             <div className="selectUser">
-              <p className="titleSelect">Фільтр по виконавцям </p>
+              <p className="titleSelect">{t("userFilter")}</p>
               <select
                 className="select"
-                name="select"
                 onChange={(e) => setUserId(e.target.value)}
                 value={userId}
               >
-                <option value="">Всі</option>
+                <option value="">{t("all")}</option>
                 {users.map((user) => (
                   <option key={user.id} value={user.id}>
                     {user.name}
@@ -189,46 +171,35 @@ const DashboardTable = () => {
             </div>
           </div>
         </div>
-        {/* Таблиця з даними */}
 
         <TableContainer component={Paper} className="table">
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 650 }} aria-label="dashboard table">
             <TableHead>
               <TableRow>
-                <TableCell className="tableCell">Назва Завдання</TableCell>
-                <TableCell className="tableCell">Назва проекту</TableCell>
-                <TableCell className="tableCell">ПІБ Виконавця</TableCell>
-                <TableCell className="tableCell">Дата Призначення</TableCell>
-                <TableCell className="tableCell">Початок Завдання</TableCell>
-                <TableCell className="tableCell">Кінець Завдання</TableCell>
-                <TableCell className="tableCell">Статус Завдання</TableCell>
-                <TableCell className="tableCell">Статус Проекту</TableCell>
+                <TableCell className="tableCell">{t("taskTitle")}</TableCell>
+                <TableCell className="tableCell">{t("projectTitle")}</TableCell>
+                <TableCell className="tableCell">{t("executor")}</TableCell>
+                <TableCell className="tableCell">{t("assignedDate")}</TableCell>
+                <TableCell className="tableCell">{t("startDate")}</TableCell>
+                <TableCell className="tableCell">{t("endDate")}</TableCell>
+                <TableCell className="tableCell">{t("taskStatus")}</TableCell>
+                <TableCell className="tableCell">{t("projectStatus")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredData.map((row, index) => (
                 <TableRow key={index}>
                   <TableCell className="tableCell">{row.task_title}</TableCell>
-                  <TableCell className="tableCell">
-                    {" "}
-                    {row.project_title}{" "}
-                  </TableCell>
+                  <TableCell className="tableCell">{row.project_title}</TableCell>
                   <TableCell className="tableCell">{row.user_name}</TableCell>
-                  <TableCell className="tableCell">
-                    {formatDate(row.assigned_date)}
-                  </TableCell>
-                  <TableCell className="tableCell">
-                    {formatDate(row.start_date)}
-                  </TableCell>
+                  <TableCell className="tableCell">{formatDate(row.assigned_date)}</TableCell>
+                  <TableCell className="tableCell">{formatDate(row.start_date)}</TableCell>
                   <TableCell className="tableCell">
                     <span
                       className={`enddate ${
                         isCloseToEnd(row.end_date)
                           ? "closeToEnd"
-                          : isEndDatePassedAndInProgress(
-                              row.end_date,
-                              row.task_status
-                            )
+                          : isEndDatePassedAndInProgress(row.end_date, row.task_status)
                           ? "endPassedInProgress"
                           : ""
                       }`}
@@ -236,15 +207,10 @@ const DashboardTable = () => {
                       {formatDate(row.end_date)}
                     </span>
                   </TableCell>
-
                   <TableCell className="tableCell">
-                    <span className={`status ${row.task_status}`}>
-                      {row.task_status}
-                    </span>
+                    <span className={`status ${row.task_status}`}>{row.task_status}</span>
                   </TableCell>
-                  <TableCell className="tableCell">
-                    {row.project_status}
-                  </TableCell>
+                  <TableCell className="tableCell">{row.project_status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

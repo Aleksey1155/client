@@ -1,0 +1,67 @@
+.search-bar {
+    position: relative;
+    width: 250px;
+  
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    
+      input.input {
+        padding-right: 60px; // місце для іконок
+      }
+    
+      .icon {
+        position: absolute;
+        right: 10px;
+        color: gray;
+        cursor: default;
+      }
+    
+      .clear-icon {
+        position: absolute;
+        right: 35px;
+        color: #999;
+        cursor: pointer;
+        transition: color 0.2s;
+    
+        &:hover {
+          color: #aa6868;
+        }
+      }
+    }
+    
+  
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 999;
+  
+      .result-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-bottom: 1px solid #eee;
+        transition: background 0.2s ease;
+        color: #888;
+        background: inherit !important;
+      
+        &:hover {
+          background: #f3f3f3;
+        }
+      
+        .result-icon {
+          color: #9d68da;
+        }
+      }
+      
+    }
+  }
+  

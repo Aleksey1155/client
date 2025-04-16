@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState, useMemo } from "react";
+
+import { useTranslation } from "react-i18next";
+import axiosInstance from "../../axiosInstance";
 import "./news.scss";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 
@@ -19,6 +21,7 @@ const months = [
 ];
 
 function News() {
+  const { t, i18n } = useTranslation();
   const [newss, setNewss] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredNews, setFilteredNews] = useState([]);
@@ -32,7 +35,7 @@ function News() {
   useEffect(() => {
     const fetchAllNews = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/news");
+        const res = await axiosInstance.get("/news");
         // Сортуємо новини від біл до менш id і беремо останні 10
         const sortedNews = res.data.sort((a, b) => b.id - a.id).slice(0, 10);
         setNewss(res.data);
@@ -49,11 +52,12 @@ function News() {
       year: "numeric",
       month: "numeric",
       day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
+  
 
   const handleDeleteNews = async (id) => {
     const confirmed = window.confirm(
@@ -61,7 +65,7 @@ function News() {
     );
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3001/news/${id}`);
+        await axiosInstance.delete(`/news/${id}`);
         window.location.reload();
       } catch (err) {
         console.log(err);
@@ -96,9 +100,9 @@ function News() {
     <div className="news">
       <div className="containerNews">
         <div className="newsName">
-          <span>Our News</span>
+          <span>{t("ourNews")}</span>
           <div className="archive" onClick={toggleDropdown}>
-            archive
+            {t("archive")}
           </div>
           {showDropdown && (
             <div className="dropdown">
@@ -134,7 +138,7 @@ function News() {
 
         {/* Якщо немає новин за вибраний місяць */}
         {selectedMonth && filteredNews.length === 0 && (
-          <div className="blockMessage">
+          <div className="blockMessageNews">
             <span>
               Даних немає за {selectedMonth} {selectedYear}
             </span>
@@ -143,7 +147,7 @@ function News() {
 
         {/* Виводимо новини */}
         {filteredNews.map((news) => (
-          <div className="blockMessage" key={news.id}>
+          <div className="blockMessageNews" key={news.id}>
             <span className="userName">{news.role_name}</span>
             {isAdmin ? (
               <RemoveCircleOutlineOutlinedIcon
@@ -154,8 +158,8 @@ function News() {
               ""
             )}
 
-            <div className="message">{news.news_text}</div>
-            <span className="data">date {formatDate(news.news_date)}</span>
+            <div className="messageNews">{news.news_text}</div>
+            <span className="data">{t("date")} {formatDate(news.news_date)}</span>
           </div>
         ))}
       </div>

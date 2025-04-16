@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../ThemeContext";
+import { useTranslation } from "react-i18next";
 import "./sidebarUser.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
@@ -13,6 +14,7 @@ import InterestsOutlinedIcon from "@mui/icons-material/InterestsOutlined";
 import UserProfile from "../../pages/userprofile/UserProfile";
 
 function SidebarUser() {
+  const { t, i18n } = useTranslation();
   const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {}, [darkMode]);
@@ -34,48 +36,34 @@ function SidebarUser() {
         </div>
         <div className="center">
           <ul>
-            <p className="title">MAIN</p>
+          <p className="title">{t("main")}</p>
             <Link to="/">
               <li>
                 <DashboardIcon className="icon" />
-                <span>Dashboard</span>
+                <span>{t("dashboard")}</span>
               </li>
             </Link>
             <Link to="/social">
               <li>
                 <InterestsOutlinedIcon className="icon" />
-                <span>Social</span>
+                <span>{t("social")}</span>
               </li>
             </Link>
-            <p className="title">LIST</p>
+           
 
-            <p className="title">USEFUL</p>
-            <li>
-              <BarChartOutlinedIcon className="icon" />
-              <span>Statistics</span>
-            </li>
+            <p className="title">{t("useful")}</p>
             <li>
               <NotificationsNoneOutlinedIcon className="icon" />
               <span>Notification</span>
             </li>
-            <li>
-              <AttachMoneyOutlinedIcon className="icon" />
-              <span>Finance</span>
-            </li>
-            <p className="title">SERVICE</p>
-
-            <li>
-              <SettingsOutlinedIcon className="icon" />
-              <span>Settings</span>
-            </li>
-            <p className="title">USER</p>
+            <p className="title">{t("user")}</p>
             <li>
               <AccountBoxOutlinedIcon className="icon" />
               <UserProfile />
             </li>
             <li onClick={handleLogout}>
               <LogoutOutlinedIcon className="icon" />
-              <span>Logout</span>
+              <span>{t("logout")}</span>
             </li>
           </ul>
         </div>

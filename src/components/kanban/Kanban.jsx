@@ -1,41 +1,48 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
+import { useTranslation } from "react-i18next";
 import Modal from "react-modal";
 import "./kanban.scss";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 
 const customStyles = {
   content: {
-    top: "350px",
+    top: "50%",
     left: "50%",
-    right: "100px",
-    bottom: "-10%",
-    marginRight: "-50%",
+    right: "auto",
+    bottom: "auto",
+    width: "1150px",
+    height: "600px",
+    backgroundColor: "var(--block-bg) !important", // Темний фон
+    color: "var(--header-tex) !important", // Білий текст
+    border: "1px solid #444", // Темна рамка
+    borderRadius: "10px",
+    padding: "20px",
     transform: "translate(-50%, -50%)",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)", // Темний прозорий фон
+    zIndex: 1000,
   },
 };
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 function Kanban({ userId }) {
+  const { t, i18n } = useTranslation();
   const [tasks, setTasks] = useState([]);
   const [addtask, setAddtask] = useState({
     user_id: userId || "", // Додаємо перевірку на випадок undefined
     task_description: "",
   });
-  
-
 
   useEffect(() => {
-
     setAddtask((prev) => ({ ...prev, user_id: userId })); // Додаємо user_id у стан
 
-
-    
     const fetchAllTasks = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/kanban/${userId}`);
+        const res = await axiosInstance.get(`/kanban/${userId}`);
 
         setTasks(res.data);
       } catch (err) {
@@ -70,7 +77,7 @@ function Kanban({ userId }) {
     );
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3001/kanban/${id}`);
+        await axiosInstance.delete(`/kanban/${id}`);
         setTasks(tasks.filter((task) => task.id !== id));
       } catch (err) {
         console.log(err);
@@ -84,28 +91,26 @@ function Kanban({ userId }) {
 
   const handleClick = async (e) => {
     e.preventDefault();
-  
+
     if (!addtask.task_description.trim()) {
       alert("Поле завдання не може бути порожнім!");
       return;
     }
-  
+
     if (!addtask.user_id) {
       console.error("Помилка: user_id не визначено!");
       return;
     }
-  
+
     try {
-      await axios.post("http://localhost:3001/kanban", addtask);
-      const res = await axios.get(`http://localhost:3001/kanban/${userId}`);
+      await axiosInstance.post("/kanban", addtask);
+      const res = await axiosInstance.get(`/kanban/${userId}`);
       setTasks(res.data);
       setAddtask((prev) => ({ ...prev, task_description: "" })); // Очищуємо лише поле завдання
     } catch (err) {
       console.log("Error while adding task:", err);
     }
   };
-  
-  
 
   const handleDeleteKanban = async (userId) => {
     const confirmed = window.confirm(
@@ -113,7 +118,7 @@ function Kanban({ userId }) {
     );
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3001/delkanban/${userId}`);
+        await axiosInstance.delete(`/delkanban/${userId}`);
         // Оновити стан tasks після видалення Kanban
         setTasks([]);
       } catch (err) {
@@ -124,10 +129,10 @@ function Kanban({ userId }) {
 
   const changeTaskStatus = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost:3001/kanban/${id}`, {
+      await axiosInstance.put(`/kanban/${id}`, {
         status: newStatus,
       });
-      const res = await axios.get(`http://localhost:3001/kanban/${userId}`);
+      const res = await axiosInstance.get(`/kanban/${userId}`);
       setTasks(res.data);
     } catch (err) {
       console.log("Error while changing task status:", err);
@@ -137,7 +142,7 @@ function Kanban({ userId }) {
   return (
     <div className="kanban">
       <div className="containerKanban">
-        <span onClick={openModal}>Kanban</span>
+        <span onClick={openModal}>{t("kanban")}</span>
         <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
@@ -148,9 +153,9 @@ function Kanban({ userId }) {
           <h2 ref={(_subtitle) => (subtitle = _subtitle)}>TODO LIST</h2>
           <div className="top">
             <button className="close" onClick={closeModal}>
-              close
+              {t("close")}
             </button>
-            <span className="listText">ToDo List for simple user`s tasks</span>
+            <span className="listText">{t("ToDoListForSimpleUserTasks")}</span>
           </div>
           <div className="centerTodo">
             {/* TODO column */}
@@ -162,19 +167,21 @@ function Kanban({ userId }) {
                   .map((task) => (
                     <div key={task.id} className="task">
                       <div className="task_description">
-                        <RemoveCircleOutlineOutlinedIcon
-                          className="iconDel"
-                          onClick={() => handleDeleteTask(task.id)}
-                        />
-                        <div className="text_description">
-                          {task.task_description}
+                        <div className="topTaskDescription">
+                          <RemoveCircleOutlineOutlinedIcon
+                            className="iconDel"
+                            onClick={() => handleDeleteTask(task.id)}
+                          />
+                          <div className="text_description">
+                            {task.task_description}
+                          </div>
                         </div>
                         {/* Button to move task to Doing */}
                         <button
                           className="doingButt"
                           onClick={() => changeTaskStatus(task.id, "Doing")}
                         >
-                          Move to Doing
+                          {t("moveTo")} Doing
                         </button>
                       </div>
                     </div>
@@ -191,26 +198,28 @@ function Kanban({ userId }) {
                   .map((task) => (
                     <div key={task.id} className="task">
                       <div className="task_description">
-                        <RemoveCircleOutlineOutlinedIcon
-                          className="iconDel"
-                          onClick={() => handleDeleteTask(task.id)}
-                        />
-                        <div className="text_description">
-                          {task.task_description}
+                        <div className="topTaskDescription"> 
+                          <RemoveCircleOutlineOutlinedIcon
+                            className="iconDel"
+                            onClick={() => handleDeleteTask(task.id)}
+                          />
+                          <div className="text_description">
+                            {task.task_description}
+                          </div>
                         </div>
                         {/* Button to move task back to TODO */}
                         <button
                           className="todoButt"
                           onClick={() => changeTaskStatus(task.id, "ToDo")}
                         >
-                          Move to ToDo
+                          {t("moveTo")} ToDo
                         </button>
                         {/* Button to move task to Done */}
                         <button
                           className="doneButt"
                           onClick={() => changeTaskStatus(task.id, "Done")}
                         >
-                          Move to Done
+                          {t("moveTo")} Done
                         </button>
                       </div>
                     </div>
@@ -227,18 +236,21 @@ function Kanban({ userId }) {
                   .map((task) => (
                     <div key={task.id} className="task">
                       <div className="task_description">
-                        <RemoveCircleOutlineOutlinedIcon
-                          className="iconDel"
-                          onClick={() => handleDeleteTask(task.id)}
-                        />
-                        <div className="text_description">
-                          {task.task_description}
+                        <div className="topTaskDescription">
+                          <RemoveCircleOutlineOutlinedIcon
+                            className="iconDel"
+                            onClick={() => handleDeleteTask(task.id)}
+                          />
+                          <div className="text_description">
+                            {task.task_description}
+                          </div>
                         </div>
                         {/* Button to move task back to Doing */}
                         <button
+                          className="todoButt"
                           onClick={() => changeTaskStatus(task.id, "Doing")}
                         >
-                          Move to Doing
+                          {t("moveTo")} Doing
                         </button>
                       </div>
                     </div>
@@ -248,20 +260,21 @@ function Kanban({ userId }) {
           </div>
           <form onSubmit={(e) => e.preventDefault()}>
             <textarea
+              className="textarea"
               type="text"
-              placeholder="task text"
+              placeholder={t("taskText")}
               onChange={handleChange}
               name="task_description"
               value={addtask.task_description} // Додаємо значення поля
             />
             <button className="addTask" onClick={handleClick}>
-              Add Task
+              {t("addTask")}
             </button>
             <button
               className="deleteKanban"
               onClick={() => handleDeleteKanban(userId)}
             >
-              Delete Kanban
+              {t("deleteKanban")}
             </button>
           </form>
         </Modal>

@@ -1,6 +1,6 @@
 
 .title{
-    color: #555;
+    color: inherit;
     font-size: 20px;
     margin: 20px;
 }
@@ -8,7 +8,25 @@
 .close{
     margin: 20px;
 }
-
+// button{
+//     color: var(--text-color);
+//     background: inherit;
+//     cursor: pointer;
+// }
+.rbc-toolbar button {
+    color: var(--text-color); // або будь-який колір, напр. #fff
+  }
 .calendarButton {
     cursor: pointer;
+  }
+
+  .rbc-off-range-bg{
+    background: inherit;
+  }
+  .rbc-today{
+    background: var(--header-bg);
+  }
+
+  .rbc-active{
+    background-color: #a51111;
   }

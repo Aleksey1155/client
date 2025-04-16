@@ -3,7 +3,9 @@ import { useSocket } from "../../../SocketContext"; //
 import { ThemeContext } from "../../../ThemeContext";
 import { useLocation } from "react-router-dom"; // Імпортуємо useLocation
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./navbarAdmin.scss";
+import SearchBar from "../../../components/searchBar/SearchBar";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -15,6 +17,7 @@ import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import axiosInstance from "../../../axiosInstance";
 
 function NavbarAdmin({ userData }) {
+  const { t, i18n } = useTranslation();
   const socket = useSocket();
   const [unreadCount, setUnreadCount] = useState(0); // <-- число
   const location = useLocation(); // Отримуємо поточне розташування маршруту
@@ -23,16 +26,16 @@ function NavbarAdmin({ userData }) {
   console.log("📣 Unread Counts in NavbarUser:", unreadCount);
 
   useEffect(() => {
-      if (!socket) return;
-    
-      socket.onAny((event, ...args) => {
-        console.log("📡 SOCKET EVENT:", event, args);
-      });
-    
-      return () => {
-        socket.offAny();
-      };
-    }, [socket]);
+    if (!socket) return;
+
+    socket.onAny((event, ...args) => {
+      console.log("📡 SOCKET EVENT:", event, args);
+    });
+
+    return () => {
+      socket.offAny();
+    };
+  }, [socket]);
 
   useEffect(() => {
     const fetchUnreadCount = async () => {
@@ -61,44 +64,41 @@ function NavbarAdmin({ userData }) {
   // console.log("userData.id////", userData.id );
 
   // Слушаем notification!!!!!!!!!!!!!!!!!!!!!!!
-    useEffect(() => {
-      if (!userData?.id || !socket) return;
-  
-      socket.on("notification", (notif) => {
-        if (Array.isArray(notif)) {
-          notif.forEach(n => {
-            if (n.receiverId === userData.id) {
-              setUnreadCount((prev) => prev + 1);
-            }
-          });
-        } else if (notif.receiverId === userData.id) {
-          setUnreadCount((prev) => prev + 1);
-        }
-      });
-  
-      return () => {
-        socket.off("notification");
-      };
-    }, [userData, socket]);
-  
+  useEffect(() => {
+    if (!userData?.id || !socket) return;
+
+    socket.on("notification", (notif) => {
+      if (Array.isArray(notif)) {
+        notif.forEach((n) => {
+          if (n.receiverId === userData.id) {
+            setUnreadCount((prev) => prev + 1);
+          }
+        });
+      } else if (notif.receiverId === userData.id) {
+        setUnreadCount((prev) => prev + 1);
+      }
+    });
+
+    return () => {
+      socket.off("notification");
+    };
+  }, [userData, socket]);
 
   useEffect(() => {
     if (!userData?.id || !socket) return;
 
     socket.on("message", (msgs) => {
       console.log("Received message ADMIN NAVBAR +++:", msgs);
-      
+
       // Логування кожного повідомлення
       msgs.forEach((msg, index) => {
         console.log(`Message ${index}:`, msg);
       });
-    
+
       const newUnread = msgs.filter(
-        (msg) =>
-          msg.receiverId === userData.id &&
-          !msg.isRead
+        (msg) => msg.receiverId === userData.id && !msg.isRead
       ).length;
-    
+
       if (newUnread > 0) {
         setUnreadCount((prev) => prev + newUnread);
       }
@@ -129,6 +129,10 @@ function NavbarAdmin({ userData }) {
     };
   }, [userData]);
 
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   // console.log("unreadCount+++++", unreadCount)
 
   // Очищення пошукового тексту при зміні маршруту
@@ -138,13 +142,20 @@ function NavbarAdmin({ userData }) {
       <div className="containerNavbarAdmin">
         <div className="wrapperNavbarAdmin">
           <div className="searchNavbarAdmin">
-            <input type="text" placeholder="Search..." />
-            <SearchOutlinedIcon />
+            <div className="search">
+              <SearchBar placeholder={t("search") + "..."} />
+            </div>
           </div>
+          {t("welcome")}
           <div className="itemsNavbarAdmin">
             <div className="itemNavbarAdmin">
               <LanguageOutlinedIcon className="iconNavbarAdmin" />
-              English
+              <button className="button" onClick={() => changeLanguage("en")}>
+                EN
+              </button>
+              <button className="button" onClick={() => changeLanguage("uk")}>
+                UA
+              </button>
             </div>
             <div
               className="itemNavbarAdmin"

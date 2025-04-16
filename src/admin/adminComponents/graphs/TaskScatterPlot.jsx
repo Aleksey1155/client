@@ -1,17 +1,19 @@
 import React from "react";
 import { Scatter } from "react-chartjs-2";
 import { Chart, LinearScale, PointElement, Title, Tooltip, Legend } from "chart.js";
+import { useTranslation } from "react-i18next";
 
 Chart.register(LinearScale, PointElement, Title, Tooltip, Legend);
 
 const TaskScatterPlot = ({ tasks, selectedItem }) => {
+  const { t } = useTranslation();
   const dataPoints = tasks.map((task) => {
     if (!task.actual_end_date) return null; // Пропускаємо невиконані завдання
     const plannedDate = new Date(task.end_date).getTime();
     const actualDate = new Date(task.actual_end_date).getTime();
     const isEarly = actualDate < plannedDate;
     const isLate = actualDate > plannedDate;
-    
+
     return {
       x: actualDate,
       y: plannedDate,
@@ -22,13 +24,13 @@ const TaskScatterPlot = ({ tasks, selectedItem }) => {
   const data = {
     datasets: [
       {
-        label: "Task Completion",
+        label: t("taskScatterPlot.taskCompletion"), // Ключ: "taskScatterPlot.taskCompletion"
         data: dataPoints,
         pointBackgroundColor: dataPoints.map((point) => point.backgroundColor),
         pointRadius: 6,
       },
       {
-        label: "Ideal Line",
+        label: t("taskScatterPlot.idealLine"), // Ключ: "taskScatterPlot.idealLine"
         data: [
           { x: Math.min(...dataPoints.map((p) => p.x)), y: Math.min(...dataPoints.map((p) => p.y)) },
           { x: Math.max(...dataPoints.map((p) => p.x)), y: Math.max(...dataPoints.map((p) => p.y)) },
@@ -52,7 +54,7 @@ const TaskScatterPlot = ({ tasks, selectedItem }) => {
         },
         title: {
           display: true,
-          text: "Фактична дата завершення",
+          text: t("taskScatterPlot.actualCompletionDate"), // Ключ: "taskScatterPlot.actualCompletionDate"
         },
       },
       y: {
@@ -62,28 +64,27 @@ const TaskScatterPlot = ({ tasks, selectedItem }) => {
         },
         title: {
           display: true,
-          text: "Запланована дата завершення",
+          text: t("taskScatterPlot.plannedCompletionDate"), // Ключ: "taskScatterPlot.plannedCompletionDate"
         },
       },
     },
     plugins: {
       title: {
-        text: `Task Scatter Plot of ${
+        text: `${t("taskScatterPlot.taskScatterPlotOf")} ${ // Ключ: "taskScatterPlot.taskScatterPlotOf"
           selectedItem?.name ||
           selectedItem?.title ||
-          "невідомого користувача"
+          t("taskScatterPlot.unknownUser") // Ключ: "taskScatterPlot.unknownUser"
         }`,
         color: "#777",
         font: {
-          size: 20, // Так менять размер шрифта!!!!!!!!!!!!!!!
-          weight: "bold", // Font weight
-          // family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif" // Font family
+          size: 20,
+          weight: "bold",
         },
       },
       legend: { display: true },
       tooltip: {
         callbacks: {
-          label: (context) => `Planned: ${new Date(context.raw.y).toLocaleDateString()}, Actual: ${new Date(context.raw.x).toLocaleDateString()}`,
+          label: (context) => `${t("taskScatterPlot.planned")}: ${new Date(context.raw.y).toLocaleDateString()}, ${t("taskScatterPlot.actual")}: ${new Date(context.raw.x).toLocaleDateString()}`, // Ключі: "taskScatterPlot.planned", "taskScatterPlot.actual"
         },
       },
     },
