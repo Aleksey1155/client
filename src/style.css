@@ -218,3 +218,13 @@ body {
   background-color: var(--header-bg) !important;
   color: var(--header-text) !important;
 }
+
+.modal{
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
+}
+
+/* input[type="file"]{
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
+} */

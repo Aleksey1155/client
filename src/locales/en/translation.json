@@ -525,5 +525,32 @@
     "fetchUsersError": "Error fetching users:",
     "fetchTasksError": "Error fetching tasks:",
     "updateError": "Error updating assignment:"
+  },
+  "fileFormModal": {
+    "title": "Send file to admin",
+    "commentPlaceholder": "Comment",
+    "selectFileButton": "📎 Select file",
+    "sendButton": "Send",
+    "cancelButton": "Cancel",
+    "selectFileAlert": "Please select a file",
+    "sentAlert": "Letter sent",
+    "errorAlert": "An error occurred while sending"
+  },
+  "addStory": {
+    "addNewStory": "Add New Story",
+    "modalLabel": "Add New Story Modal",
+    "welcome": "Welcome, {{name}}!",
+    "loading": "Loading...",
+    "close": "Close",
+    "addYourStory": "Add your Story",
+    "addPostButton": "Add Story",
+    "addFile": "Add file",
+    "noImageAlt": "No image selected",
+    "fileName": "Name",
+    "fileType": "Type",
+    "fileSize": "Size",
+    "previewAlt": "Image preview",
+    "writeAPost": "Write a Story",
+    "error": "An error occurred while adding the Story."
   }
 }

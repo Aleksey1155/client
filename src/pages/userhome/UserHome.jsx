@@ -6,11 +6,13 @@ import "./userHome.scss";
 import News from "../../components/news/News";
 import CalendarModal from "../../components/calendarmodal/CalendarModal";
 import Kanban from "../../components/kanban/Kanban";
+import FileFormModal from "../../components/fileFormModal/FileFormModal"
 
 function UserHome() {
   const { t, i18n } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [homeData, setHomeData] = useState([]);
+  const [showFileModal, setShowFileModal] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -91,13 +93,11 @@ function UserHome() {
     tasks: Object.values(project.tasks),
   }));
 
- 
-
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
-  
+
   // Функція для перевірки, чи є дата кінця завдання близькою до поточної дати (2 дні)
   const isCloseToEnd = (endDate) => {
     const today = new Date();
@@ -143,18 +143,20 @@ function UserHome() {
           <div className="topKanban">
             <Kanban userId={userData?.id} />
           </div>
-           <Link to={
-                        isAdmin
-                          ? `/admin/messenger`
-                          : `/messenger`
-                      }>
-          <div className="topDiscussions">
-            <span className="titleDiscussions">{t("messenger")}</span>
-          </div>
+          <Link to={isAdmin ? `/admin/messenger` : `/messenger`}>
+            <div className="topDiscussions">
+              <span className="titleDiscussions">{t("messenger")}</span>
+            </div>
           </Link>
-          <div className="topFiles">
+          <div className="topFiles" onClick={() => setShowFileModal(true)}>
             <span className="title">{t("files")}</span>
           </div>
+          {showFileModal && (
+            <FileFormModal
+              userName={userData?.name}
+              onClose={() => setShowFileModal(false)}
+            />
+          )}
         </div>
 
         {/* Фільтруємо проекти і завдання для користувачів */}
@@ -165,22 +167,22 @@ function UserHome() {
             if (userData && userData.role_name === "admin") {
               return true;
             }
-        
+
             // Якщо userData не існує, повертаємо false
             if (!userData) {
               return false;
             }
-        
+
             // Інакше фільтруємо лише ті, в яких користувач бере участь
             const isUserInvolved = project.tasks.some(
               (task) => task.user_ids.includes(userData.id) // Перевіряємо, чи є user_id у масиві user_ids
             );
-        
+
             console.log(
               `User ${userData.id} involved in project ${project.project_id}:`,
               isUserInvolved
             );
-        
+
             return isUserInvolved;
           })
           .map((project) => (
@@ -188,7 +190,9 @@ function UserHome() {
               <div className="projectbord">
                 <div className="projectTitle">{project.project_title}</div>
                 <div className="projectInfo">
-                  <span className="projectStatus">{project.project_status}</span>
+                  <span className="projectStatus">
+                    {project.project_status}
+                  </span>
                   <span className="projectEndDate">
                     {formatDate(project.project_end_date)}
                   </span>
@@ -259,8 +263,6 @@ function UserHome() {
               </div>
             </div>
           ))}
-
-        
       </div>
       <News />
     </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./stories.scss";
 import axiosInstance from "../../axiosInstance";
-import axios from "axios";
+
 
 const stories = [
     {
