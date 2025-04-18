@@ -20,11 +20,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Start backend
-        run: |
-          npm start &
-          sleep 5 
-        working-directory: ./backend
 
       - name: Start Vite server
         run: npm run dev &
