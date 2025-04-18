@@ -95,19 +95,19 @@ function SidebarAdmin() {
                 <span>{t("sidebarStatistics")}</span>
               </li>
             </Link>
-            <li>
+            {/* <li>
               <NotificationsNoneOutlinedIcon className="icon" />
               <span>{t("notification")}</span>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <AttachMoneyOutlinedIcon className="icon" />
               <span>{t("finance")}</span>
-            </li>
+            </li> */}
             <p className="title">{t("service")}</p>
-            <li>
+            {/* <li>
               <ListOutlinedIcon className="icon" />
               <span>{t("logs")}</span>
-            </li>
+            </li> */}
             <Link to="/admin/settings">
               <li>
                 <SettingsOutlinedIcon className="icon" />

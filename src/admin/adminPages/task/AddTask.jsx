@@ -70,8 +70,17 @@ const AddTask = () => {
   };
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setSelectedFiles(files); // Зберігаємо файли у стані
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    // Перевірка на кирилицю
+    const hasCyrillic = /[а-яА-ЯіїєґЁё]/.test(file.name);
+    if (hasCyrillic) {
+      alert("Назва файлу не повинна містити кирилицю. Перейменуйте файл латинськими літерами.");
+      return;
+    }
+  
+    setSelectedFiles(file);
   };
 
   const handleClick = async (e) => {

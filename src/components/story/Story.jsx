@@ -1,6 +1,5 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import Modal from "react-modal";
-import axiosInstance from "../../axiosInstance";
 import "./story.scss";
 
 const customStyles = {
@@ -9,65 +8,45 @@ const customStyles = {
     left: "50%",
     right: "auto",
     bottom: "auto",
-    backgroundColor: "var(--block-bg) !important", // Темний фон
-    color: "var(--header-tex) !important", // Білий текст
-    border: "1px solid #444", // Темна рамка
+    backgroundColor: "#1e1e1e",
+    color: "#fff",
     borderRadius: "10px",
-    padding: "20px",
+    padding: "0",
     transform: "translate(-50%, -50%)",
+    width: "90%",
+    maxWidth: "600px",
+    overflow: "hidden",
   },
   overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.75)", // Темний прозорий фон
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
     zIndex: 1000,
   },
 };
 
 Modal.setAppElement("#root");
 
-function Story() {
-    let subtitle;
-    const [modalIsOpen, setIsOpen] = useState(false);
-  
-  
-    function openModal() {
-      setIsOpen(true);
-    }
-  
-    function afterOpenModal() {
-      subtitle.style.color = "#555";
-    }
-  
-    function closeModal() {
-      setIsOpen(false);
-      setMultiplier1("");
-      setMultiplier2("");
-      setResult("");
-    }
-  
-    
-  
-    return (
-      <div className="userProfile">
-        <div className="containerUserProfile">
-          <span onClick={openModal}>Add New Story</span>
-          <Modal
-            isOpen={modalIsOpen}
-            onAfterOpen={afterOpenModal}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel="Приклад модального вікна"
-          >
-            <span
-              className="welcomeUserProfile"
-              ref={(_subtitle) => (subtitle = _subtitle)}
-            >
-             
-            </span>
-            
-          </Modal>
+function Story({ isOpen, onClose, story }) {
+  if (!story) return null;
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      style={customStyles}
+      contentLabel="Story Modal"
+    >
+      <div className="storyModal">
+        
+        <div className="videoWrapper">
+          <video src={story.video} controls autoPlay style={{ width: "100%" }} />
         </div>
+        <div className="descriptionWrapper">
+          <p>{story.description || "No description provided."}</p>
+        </div>
+        <button className="closeBtn" onClick={onClose}>✖</button>
       </div>
-    );
+    </Modal>
+  );
 }
 
-export default Story
+export default Story;

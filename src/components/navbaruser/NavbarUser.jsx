@@ -166,24 +166,24 @@ function NavbarUser({ userData }) {
               <DarkModeOutlinedIcon className="icon" />
             )}
           </div>
-          <div className="item">
+          {/* <div className="item">
             <FullscreenExitOutlinedIcon className="icon" />
-          </div>
+          </div> */}
           <Link to="/messenger">
             <div className="item">
               <NotificationsOutlinedIcon className="icon" />
               {unreadCount > 0 && <div className="counter">{unreadCount}</div>}
             </div>
           </Link>
-          <Link to="/social">
+          {/* <Link to="/social">
             <div className="item">
               <ChatBubbleOutlineOutlinedIcon className="icon" />
               <div className="counter">2</div>
             </div>
-          </Link>
-          <div className="item">
+          </Link> */}
+          {/* <div className="item">
             <ListOutlinedIcon className="icon" />
-          </div>
+          </div> */}
           <div className="item">
             <img src={userData.img} alt="" className="avatar" />
           </div>

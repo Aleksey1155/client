@@ -1,70 +1,88 @@
 import { useState, useEffect } from "react";
 import "./stories.scss";
 import axiosInstance from "../../axiosInstance";
+import Story from "../story/Story";
 
-
-const stories = [
-    {
-      id: 1,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 2,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/27746385/pexels-photo-27746385.jpeg",
-    },
-    {
-      id: 3,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/28170073/pexels-photo-28170073.jpeg",
-    },
-    {
-      id: 4,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/11345329/pexels-photo-11345329.jpeg",
-    },
-  ];
-
-function Stories({userId}) {
-  
-
-  const [user, setUser] = useState([]);
+function Stories({ userData }) {
+  const [stories, setStories] = useState([]);
+  const [selectedStory, setSelectedStory] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const visibleCount = 3;
 
   useEffect(() => {
-    const fetchAllUsers = async () => {
+    const fetchAllStories = async () => {
       try {
-        const res = await axiosInstance.get(`/users/${userId}`);
-        setUser(res.data);
-        // console.log(res.data)
+        const res = await axiosInstance.get("/stories");
+        setStories(res.data.reverse());
       } catch (err) {
         console.log(err);
       }
     };
 
-    fetchAllUsers();
-  }, [userId]);
+    fetchAllStories();
+  }, []);
 
+  const openStoryModal = (story) => setSelectedStory(story);
+  const closeStoryModal = () => setSelectedStory(null);
 
-  // console.log("---------" + userId)
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
 
-// console.log(user)
+  const handleNext = () => {
+    setCurrentIndex((prev) =>
+      Math.min(prev + 1, stories.length - visibleCount)
+    );
+  };
 
+  const visibleStories = stories.slice(currentIndex, currentIndex + visibleCount);
+
+  if (!userData) return <div className="stories">Loading...</div>;
 
   return (
     <div className="stories">
-     {/* <h1> USER NAME: {user.name}</h1> */}
-        <div className="story">
-          <img src={user.img} alt="" />
-          <span>{user.name}</span>
-          <button>+</button>
+      <div className="storyUser">
+        <img src={userData?.img} alt="" />
+        <span>{userData?.name}</span>
+        <button>+</button>
+      </div>
+
+      <div className="sliderContainer">
+        {stories.length > visibleCount && (
+          <button className="navButton left" onClick={handlePrev} disabled={currentIndex === 0}>
+            &#8592;
+          </button>
+        )}
+
+        <div className="sliderWindow">
+          {visibleStories.map((story) => (
+            <div className="story" key={story.id} onClick={() => openStoryModal(story)}>
+              {story.video.endsWith(".mp4") ||
+              story.video.endsWith(".webm") ||
+              story.video.endsWith(".ogg") ? (
+                <video src={story.video} muted width="100%" />
+              ) : (
+                <img src={story.video} alt="story" />
+              )}
+              <span>added by: {story.name}</span>
+            </div>
+          ))}
         </div>
-      {stories.map((story) => (
-        <div className="story" key={story.id}>
-          <img src={story.img} alt="" />
-          <span>{user.name}</span>
-        </div>
-      ))}
+
+        {stories.length > visibleCount && (
+          <button
+            className="navButton right"
+            onClick={handleNext}
+            disabled={currentIndex >= stories.length - visibleCount}
+          >
+            &#8594;
+          </button>
+        )}
+      </div>
+
+      {selectedStory && (
+        <Story isOpen={!!selectedStory} onClose={closeStoryModal} story={selectedStory} />
+      )}
     </div>
   );
 }

@@ -53,8 +53,11 @@ function AddStory({ userData }) {
   let subtitle;
 
   const handleChange = (e) => {
-    setStory((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    if (name === "description" && value.length > 1000) return;
+    setStory((prev) => ({ ...prev, [name]: value }));
   };
+  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -250,6 +253,10 @@ function AddStory({ userData }) {
               onChange={handleChange}
               name="description"
             />
+            <p style={{ textAlign: "right", fontSize: "20px", color: "#888" }}>
+            counter {story.description.length}/1000
+</p>
+
           </div>
         </Modal>
       </div>

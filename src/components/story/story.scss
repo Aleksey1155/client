@@ -1,0 +1,44 @@
+.storyModal {
+    position: relative;
+  
+    .videoWrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* Пропорція 16:9, або заміни на 75% для 4:3 */
+      background: black;
+    
+      video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* або cover, якщо хочеш обрізання */
+        background: black;
+      }
+    }
+    
+    
+  
+    .descriptionWrapper {
+      padding: 15px;
+      background-color: #111;
+      font-size: 16px;
+      border-top: 1px solid #333;
+
+      
+    }
+  
+    .closeBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: black;
+      border-radius: 50%;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  }
+  

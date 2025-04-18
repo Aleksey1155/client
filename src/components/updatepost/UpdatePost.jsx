@@ -63,11 +63,19 @@ function UpdatePost({ post, userData }) {
       console.error("Помилка при оновленні поста:", err);
     }
   };
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    // Перевірка на кирилицю
+    const hasCyrillic = /[а-яА-ЯіїєґЁё]/.test(file.name);
+    if (hasCyrillic) {
+      alert("Назва файлу не повинна містити кирилицю. Перейменуйте файл латинськими літерами.");
+      return;
+    }
+  
     setSelectedFile(file);
   };
-
   const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file");

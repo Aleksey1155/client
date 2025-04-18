@@ -169,9 +169,9 @@ function NavbarAdmin({ userData }) {
               )}
             </div>
 
-            <div className="itemNavbarAdmin">
+            {/* <div className="itemNavbarAdmin">
               <FullscreenExitOutlinedIcon className="iconNavbarAdmin" />
-            </div>
+            </div> */}
             <Link to="/admin/messenger">
               <div className="itemNavbarAdmin">
                 <NotificationsOutlinedIcon className="iconNavbarAdmin" />
@@ -181,15 +181,15 @@ function NavbarAdmin({ userData }) {
               </div>
             </Link>
 
-            <Link to="/admin/social">
+            {/* <Link to="/admin/social">
               <div className="itemNavbarAdmin">
                 <ChatBubbleOutlineOutlinedIcon className="iconNavbarAdmin" />
                 <div className="counterNavbarAdmin">2</div>
               </div>
-            </Link>
-            <div className="itemNavbarAdmin">
+            </Link> */}
+            {/* <div className="itemNavbarAdmin">
               <ListOutlinedIcon className="iconNavbarAdmin" />
-            </div>
+            </div> */}
             <div className="itemNavbarAdmin">
               <img src={userData.img} alt="" className="avatarNavbarAdmin" />
             </div>

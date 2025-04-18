@@ -21,22 +21,7 @@ const Assignments = () => {
   const assignmentColumns = [
     { field: "id", headerName: t("assignments.id"), width: 12 }, // Ключ: "assignments.id"
     { field: "task_title", headerName: t("assignments.task"), width: 200 }, // Ключ: "assignments.task"
-    {
-      field: "image_url",
-      headerName: t("assignments.image"), // Ключ: "assignments.image"
-      width: 0,
-      renderCell: (params) => {
-        return (
-          <div className="cellWithImg">
-            {params.row.image_url ? (
-              <img className="cellImg" src={params.row.image_url} alt="" />
-            ) : (
-              <span>{t("assignments.noImage")}</span> // Ключ: "assignments.noImage"
-            )}
-          </div>
-        );
-      },
-    },
+    
     {
       field: "user_name",
       headerName: t("assignments.user"), // Ключ: "assignments.user"
@@ -103,7 +88,7 @@ const Assignments = () => {
     {
       field: "action",
       headerName: t("assignments.action"), // Ключ: "assignments.action"
-      width: 200,
+      width: 250,
       renderCell: (params) => {
         return (
           <div className="cellAction">

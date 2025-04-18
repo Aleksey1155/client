@@ -42,7 +42,7 @@ function Social() {
         
         <div className="containerSocial">
         <span className="title">{t("socialPage")}</span>
-          <Stories userId = {userData} />
+          <Stories userData = {userData} />
           <Posts userData = {userData} />
        
         
