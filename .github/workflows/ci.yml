@@ -23,7 +23,7 @@ jobs:
       - name: Start backend
         run: |
           npm start &
-          sleep 5 # Зачекати 5 секунд
+          sleep 5 
         working-directory: ./backend
 
       - name: Start Vite server
