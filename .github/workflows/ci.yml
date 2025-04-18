@@ -34,14 +34,7 @@ jobs:
       # (опційно) Збереження скріншотів
       - name: Upload screenshots
         if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshots
-          path: screenshots/
-
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: screenshots/

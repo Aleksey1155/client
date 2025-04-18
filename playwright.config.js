@@ -5,8 +5,8 @@ export default defineConfig({
   testDir: './tests/e2e',
   use: {
     baseURL: 'http://localhost:5173',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    screenshot: 'on',
+    video: 'on',
     reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
   },
 });
