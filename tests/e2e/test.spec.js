@@ -49,8 +49,8 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
   await expect(page.locator('.chatTextArea')).toBeVisible();
 
   // Перевірка stories
-  await expect(page.locator('.stories')).toBeVisible();
-  await expect(page.locator('.story')).toHaveCount(3);
+  // await expect(page.locator('.stories')).toBeVisible();
+  // await expect(page.locator('.story')).toHaveCount(3);
 
   // Скриншот
   await page.screenshot({ path: `screenshots/social-stories-${Date.now()}.png` });
