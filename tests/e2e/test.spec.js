@@ -30,7 +30,7 @@ test("Успішний логін користувача", async ({ page }) => {
 });
 
 
-
+//add process.env.JWT_SECRET
 // test('Авторизація та додавання повідомлення через автоматичний вхід', async ({ page }) => {
 //   // Переходимо на сторінку логіну
 //   await page.goto('http://localhost:5173/login');
