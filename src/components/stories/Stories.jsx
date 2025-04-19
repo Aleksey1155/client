@@ -8,11 +8,12 @@ function Stories({ userData }) {
   const [selectedStory, setSelectedStory] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCount = 3;
-
+  console.log("stories", stories.video)
   useEffect(() => {
     const fetchAllStories = async () => {
       try {
         const res = await axiosInstance.get("/stories");
+        console.log("res.data", res.data)
         setStories(res.data.reverse());
       } catch (err) {
         console.log(err);
