@@ -43,11 +43,11 @@ function Social() {
         <div className="containerSocial">
         <span className="title">{t("socialPage")}</span>
           <Stories userData = {userData} />
-          <Posts userData = {userData} />
+          {/* <Posts userData = {userData} /> */}
        
         
         </div>
-          {/* <GeneralChat userData = {userData} /> */}
+          <GeneralChat userData = {userData} />
           
         </div>
       
