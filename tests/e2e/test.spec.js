@@ -42,6 +42,13 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
     localStorage.setItem('token', token);
   }, fakeToken);
 
+  console.log("Mocking stories");
+
+  page.on('console', msg => {
+    console.log(`BROWSER LOG: ${msg.type()}: ${msg.text()}`);
+  });
+  
+
   // Переходимо одразу на потрібну сторінку
   await page.goto('http://localhost:5173/admin/social');
 
@@ -50,6 +57,8 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
 
   // Скриншот
   await page.screenshot({ path: `screenshots/social-stories-${Date.now()}.png` });
+
+  await expect(page.locator('.chatTextArea')).toBeVisible({ timeout: 10000 });
 });
 
   

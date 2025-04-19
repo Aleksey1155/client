@@ -8,7 +8,10 @@ function Stories({ userData }) {
   const [selectedStory, setSelectedStory] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCount = 3;
-  console.log("stories", stories.video)
+
+  console.log("stories", stories)
+  console.log("Array.isArray(stories)", Array.isArray(stories));
+
   useEffect(() => {
     const fetchAllStories = async () => {
       try {
