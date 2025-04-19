@@ -11,13 +11,13 @@ import UserProfile from "../../pages/userprofile/UserProfile";
 function Posts({ userData }) {
   const [posts, setPosts] = useState([]);
 
-  //  console.log("DATA POSTS", posts);
+  console.log("DATA POSTS", posts);
 
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
         const res = await axiosInstance.get("/posts");
-        setPosts(res.data);
+        setPosts(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.log(err);
       }
@@ -36,9 +36,12 @@ function Posts({ userData }) {
           <AddStory userData={userData} />
         </button>
       </div>
-      {[...posts].reverse().map((post) => (
-        <Post post={post} key={post.id} userData={userData} />
-      ))}
+      {Array.isArray(posts) &&
+        [...posts]
+          .reverse()
+          .map((post) => (
+            <Post post={post} key={post.id} userData={userData} />
+          ))}
     </div>
   );
 }
