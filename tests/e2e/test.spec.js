@@ -6,38 +6,56 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
     await page.screenshot({ path: `screenshots/login-${Date.now()}.png` });
   });
 
-  test('Відкриття сторінки чату з моканим токеном, користувачем', async ({ page }) => {
-    // Мокаємо /me
-    await page.route('**/me', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          id: 1,
-          email: 'euromaster.dn.ua@gmail.com',
-          role_name: 'admin',
-          name: 'admin',
-          img: "/tests/img/users/admin.jpg"
-        }),
-      });
+  test('Відкриття сторінки чату з моканим токеном, користувачем і сторіз', async ({ page }) => {
+  // Мокаємо /me
+  await page.route('**/me', async route => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        id: 1,
+        email: 'euromaster.dn.ua@gmail.com',
+        role_name: 'admin',
+        name: 'admin',
+        img: "/tests/img/users/admin.jpg"
+      }),
     });
-  
-  
-    // Встановлюємо токен ПЕРЕД переходом
-    const fakeToken = 'mocked.token.value';
-    await page.addInitScript((token) => {
-      localStorage.setItem('token', token);
-    }, fakeToken);
-  
-    // Переходимо одразу на потрібну сторінку
-    await page.goto('http://localhost:5173/admin/');
-  
-    
-  
-    // Скриншот
-    await page.screenshot({ path: `screenshots/home-${Date.now()}.png` });
   });
+
+  // Мокаємо /stories
+  await page.route('**/stories', async route => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([
+        { id: 1, video: "/tests/img/stories/video_1.jpg", name: "Admin" },
+        { id: 2, video: "/tests/img/stories/video_2.jpg", name: "User2" },
+        { id: 3, video: "/tests/img/stories/video_3.jpg", name: "User3" },
+        { id: 4, video: "/tests/img/stories/video_4.jpg", name: "User4" }
+      ])
+    });
+  });
+
+  // Встановлюємо токен ПЕРЕД переходом
+  const fakeToken = 'mocked.token.value';
+  await page.addInitScript((token) => {
+    localStorage.setItem('token', token);
+  }, fakeToken);
+
+  // Переходимо одразу на потрібну сторінку
+  await page.goto('http://localhost:5173/admin/social');
+
   
+  await expect(page.locator('.chatTextArea')).toBeVisible();
+
+  // Перевірка stories
+  await expect(page.locator('.stories')).toBeVisible();
+  await expect(page.locator('.story')).toHaveCount(3);
+
+  // Скриншот
+  await page.screenshot({ path: `screenshots/social-stories-${Date.now()}.png` });
+});
+
   
 // test("Успішний логін користувача", async ({ page }) => {
 //   await page.goto("http://localhost:5173/login");
