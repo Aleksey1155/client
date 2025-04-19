@@ -6,28 +6,28 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
     await page.screenshot({ path: `screenshots/login-${Date.now()}.png` });
   });
 
-// test("Успішний логін користувача", async ({ page }) => {
-//   await page.goto("http://localhost:5173/login");
+test("Успішний логін користувача", async ({ page }) => {
+  await page.goto("http://localhost:5173/login");
 
-//   // Вводимо коректний логін і пароль
-//   await page.fill('input[name="email"]', "kondycka@gmail.com");
-//   await page.fill('input[name="password"]', "12345");
+  // Вводимо коректний логін і пароль
+  await page.fill('input[name="email"]', "kondycka@gmail.com");
+  await page.fill('input[name="password"]', "12345");
 
-//   // Натискаємо кнопку "Login"
-//   await page.click(".login-button");
+  // Натискаємо кнопку "Login"
+  await page.click(".login-button");
 
-//   // Чекаємо, щоб з'явився токен у localStorage
-//   await page.waitForFunction(() => localStorage.getItem("token") !== null);
+  // Чекаємо, щоб з'явився токен у localStorage
+  await page.waitForFunction(() => localStorage.getItem("token") !== null);
 
-//   // Переконуємося, що користувача перенаправлено
-//   await expect(page).toHaveURL(/\/$/);
+  // Переконуємося, що користувача перенаправлено
+  await expect(page).toHaveURL(/\/$/);
 
-//   // Додаємо затримку на кілька секунд, щоб усе встигло завантажитися
-//   await page.waitForTimeout(2000); // 2000 мс (2 секунди)
+  // Додаємо затримку на кілька секунд, щоб усе встигло завантажитися
+  await page.waitForTimeout(2000); // 2000 мс (2 секунди)
 
-//   // Скіншот вікна в хром
-//   await page.screenshot({ path: `screenshots/login-${Date.now()}.png` });
-// });
+  // Скіншот вікна в хром
+  await page.screenshot({ path: `screenshots/login-${Date.now()}.png` });
+});
 
 
 

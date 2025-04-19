@@ -1,47 +1,76 @@
-name: Frontend CI + Playwright
+name: Client CI + Playwright
 
 on:
   push:
     branches: [main]
 
 jobs:
-  test-and-deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout client
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Checkout backend
+        uses: actions/checkout@v3
         with:
-          node-version: "18"
+          repository: Aleksey1155/backend
+          path: backend
 
-      - run: npm ci
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm ci
 
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
 
-      - name: Start Vite server
+      - name: Create .env file for backend
+        working-directory: ./backend
+        run: |
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "mongodb=${{ secrets.MONGODB }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+
+      - name: Start backend server
+        working-directory: ./backend
+        run: npm start &
+        env:
+          PORT: ${{ secrets.PORT }}
+          MONGODB: ${{ secrets.MONGODB }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+
+      - name: Start Vite frontend
+        working-directory: ./client
         run: npm run dev &
         env:
           CI: true
 
-      - name: Wait for server to be ready
+      - name: Wait for frontend to be ready
         run: npx wait-on http://localhost:5173
 
+      - name: Wait for backend to be ready
+        run: npx wait-on http://localhost:3001
+
+      - name: Install Playwright Browsers
+        working-directory: ./client
+        run: npx playwright install --with-deps
+
       - name: Run Playwright tests
+        working-directory: ./client
         run: npx playwright test
 
-      # (опційно) Збереження скріншотів
-      - name: Upload screenshots
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
-          path: screenshots/
-
-
-
-      - name: Deploy to Render
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
-
+          name: playwright-test-results
+          path: ./client/test-results/
