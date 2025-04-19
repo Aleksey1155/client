@@ -45,10 +45,14 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
 
-      - name: Start Vite frontend
-        run: npm run dev &
-        env:
-          CI: true
+      - name: Build frontend
+        run: npm run build
+
+      - name: Install serve
+        run: npm install -g serve
+
+      - name: Start frontend server
+        run: serve -s dist -l 5173 &
 
       - name: Wait for frontend to be ready
         run: npx wait-on http://localhost:5173
