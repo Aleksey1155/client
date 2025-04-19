@@ -28,10 +28,10 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify([
-        { id: 1, video: "/tests/img/stories/video_1.jpg", name: "Admin" },
-        { id: 2, video: "/tests/img/stories/video_2.jpg", name: "User2" },
-        { id: 3, video: "/tests/img/stories/video_3.jpg", name: "User3" },
-        { id: 4, video: "/tests/img/stories/video_4.jpg", name: "User4" }
+        { id: 1, video: "../../img/stories/video_1.jpg", name: "Admin" },
+        { id: 2, video: "../../img/stories/video_2.jpg", name: "User2" },
+        { id: 3, video: "../../img/stories/video_3.jpg", name: "User3" },
+        { id: 4, video: "../../img/stories/video_4.jpg", name: "User4" }
       ])
     });
   });
@@ -46,7 +46,7 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
   await page.goto('http://localhost:5173/admin/social');
 
   
-
+  await page.waitForTimeout(2000); // 2 секунди
 
   // Скриншот
   await page.screenshot({ path: `screenshots/social-stories-${Date.now()}.png` });
