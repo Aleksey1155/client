@@ -58,7 +58,7 @@ test('Screenshot Сторінки Логін', async ({ page }) => {
   // Скриншот
   await page.screenshot({ path: `screenshots/social-stories-${Date.now()}.png` });
 
-  await expect(page.locator('.chatTextArea')).toBeVisible({ timeout: 10000 });
+  await expect(page.locator('.sliderWindow')).toBeVisible({ timeout: 10000 });
 });
 
   
